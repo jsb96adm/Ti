@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tarefas — Monitoramento por Unidade · Maximiano 2026</title>
+<style>
+:root{
+  --dk:#06101E;--nv:#0D1B3E;--nv2:#112252;--nv3:#1A3060;
+  --gd:#F5A623;--gd2:#FFD080;
+  --wh:#FFFFFF;--muted:#7A8FB5;--card:#0F1F45;
+  --border:rgba(245,166,35,.18);--border2:rgba(255,255,255,.07);
+  --green2:#5FCF8A;--red2:#FF7070;--amber2:#FFB84A;--teal:#0D9488;
+  --blue2:#4F8EF7;--r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--dk);color:var(--wh);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.65;overflow-x:hidden}
+.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(245,166,35,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,.03) 1px,transparent 1px);background-size:72px 72px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:.75rem 2rem;background:rgba(6,16,30,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:1.05rem;letter-spacing:.12em;color:var(--gd);text-transform:uppercase}
+.nav-brand span{color:rgba(255,255,255,.3);margin:0 .4rem}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.nav-pill{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border2);padding:.2rem .7rem;border-radius:20px}
+.nav-back{display:flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:.35rem .85rem;border:1px solid var(--border2);border-radius:6px;transition:all .2s}
+.nav-back:hover{color:var(--gd);border-color:var(--border)}
+
+/* HERO */
+.hero{position:relative;z-index:1;padding:100px 0 48px;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,112,112,.07),transparent 60%),var(--dk);overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(245,166,35,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,.035) 1px,transparent 1px);background-size:60px 60px}
+.hero-inner{max-width:1100px;margin:0 auto;padding:3rem 2rem;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,112,112,.08);border:1px solid rgba(255,112,112,.3);border-radius:20px;padding:.35rem 1rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red2);margin-bottom:1.25rem;font-weight:700}
+.badge-pulse{width:6px;height:6px;border-radius:50%;background:var(--red2);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero-title{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:clamp(2.4rem,5vw,4.2rem);line-height:.9;color:var(--wh)}
+.hero-title em{color:var(--red2);font-style:normal;display:block}
+.hero-rule{display:flex;align-items:center;gap:12px;margin:18px 0}
+.hr-line{width:60px;height:.5px;background:var(--border)}
+.hr-diamond{width:6px;height:6px;background:var(--gd);transform:rotate(45deg);flex-shrink:0}
+.hero-sub{font-size:.88rem;color:rgba(255,255,255,.5);max-width:600px;line-height:1.75}
+
+/* KPI STRIP */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:2rem;max-width:700px}
+@media(max-width:600px){.kpi-strip{grid-template-columns:repeat(2,1fr)}}
+.kpi-cell{background:rgba(13,27,62,.7);padding:.9rem .8rem;text-align:center}
+.kpi-val{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:1.5rem;line-height:1}
+.kpi-val.rd{color:var(--red2)}.kpi-val.am{color:var(--amber2)}.kpi-val.gr{color:var(--green2)}.kpi-val.gd{color:var(--gd)}
+.kpi-lbl{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+
+/* TERMÔMETRO */
+.termo{background:linear-gradient(135deg,rgba(255,112,112,.07),rgba(255,184,74,.05));border:1px solid rgba(255,112,112,.22);border-left:4px solid var(--red2);border-radius:var(--r);padding:1.4rem 1.75rem;display:flex;gap:1.2rem;align-items:flex-start}
+.termo-icon{width:44px;height:44px;border-radius:50%;background:rgba(255,112,112,.1);border:1.5px solid rgba(255,112,112,.3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;margin-top:.1rem}
+.termo-title{font-size:.56rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--red2);margin-bottom:.35rem}
+.termo-body{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:1rem;color:var(--wh);margin-bottom:.45rem}
+.termo-desc{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.65}
+.termo-bar-row{display:flex;align-items:center;gap:.75rem;margin-top:.85rem;flex-wrap:wrap}
+.termo-bar-bg{height:8px;width:160px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+.termo-bar-fill{height:100%;background:linear-gradient(90deg,var(--red2),var(--amber2));border-radius:4px}
+.meta-label{font-size:.62rem;color:var(--amber2);font-weight:700}
+.gap-label{font-size:.62rem;color:var(--red2);font-weight:600}
+.date-pill{font-size:.58rem;background:rgba(255,112,112,.1);border:1px solid rgba(255,112,112,.22);color:var(--red2);padding:.15rem .55rem;border-radius:20px;font-weight:700}
+
+/* COMUNICADO */
+.comunicado{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:var(--r);padding:1.2rem 1.6rem;position:relative;overflow:hidden}
+.comunicado::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gd),transparent)}
+.com-label{font-size:.55rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gd);margin-bottom:.45rem}
+.com-text{font-size:.87rem;color:rgba(255,255,255,.82);line-height:1.75;font-style:italic}
+
+/* LINHA DO TEMPO */
+.timeline-wrap{background:rgba(13,27,62,.55);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem 1.75rem}
+.tl-label{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);margin-bottom:1.1rem}
+.tl-track{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:.25rem}
+.tl-node{flex-shrink:0;text-align:center;min-width:105px}
+.tl-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .5rem;font-size:.75rem}
+.tl-nc-red{background:rgba(255,112,112,.15);border:2px solid var(--red2)}
+.tl-nc-am{background:rgba(255,184,74,.1);border:2px solid var(--amber2)}
+.tl-nc-bl{background:rgba(79,142,247,.1);border:2px solid var(--blue2)}
+.tl-nc-gd{background:rgba(245,166,35,.15);border:2px solid var(--gd)}
+.tl-val{font-size:.62rem;font-weight:700}
+.tl-val.rd{color:var(--red2)}.tl-val.am{color:var(--amber2)}.tl-val.bl{color:var(--blue2)}.tl-val.gd{color:var(--gd)}
+.tl-sub{font-size:.55rem;color:var(--muted);margin-top:.2rem;line-height:1.4}
+.tl-line{flex:1;height:2px;min-width:24px}
+.tl-line-r-a{background:linear-gradient(90deg,var(--red2),var(--amber2))}
+.tl-line-a-b{background:linear-gradient(90deg,var(--amber2),var(--blue2))}
+.tl-line-b-g{background:linear-gradient(90deg,var(--blue2),var(--gd))}
+
+/* CARDS DE UNIDADE */
+.units-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.unit-card{border-radius:var(--r);overflow:hidden;border:1px solid}
+.uc-red{border-color:rgba(255,112,112,.25);background:rgba(255,112,112,.04)}
+.uc-am{border-color:rgba(255,184,74,.2);background:rgba(255,184,74,.03)}
+.uc-gr{border-color:rgba(95,207,138,.2);background:rgba(95,207,138,.03)}
+
+/* HEADER DO CARD — CLICÁVEL */
+.uc-head{padding:1.25rem 1.4rem;cursor:pointer;user-select:none;transition:background .18s}
+.uc-head:hover{background:rgba(255,255,255,.025)}
+.uc-head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+.uc-name{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:1.05rem;color:var(--wh);letter-spacing:.05em}
+.uc-badge{font-size:.58rem;font-weight:700;letter-spacing:.1em;padding:.2rem .65rem;border-radius:12px}
+.ucb-rd{background:rgba(255,112,112,.12);color:var(--red2);border:1px solid rgba(255,112,112,.25)}
+.ucb-am{background:rgba(255,184,74,.1);color:var(--amber2);border:1px solid rgba(255,184,74,.25)}
+.ucb-gr{background:rgba(95,207,138,.1);color:var(--green2);border:1px solid rgba(95,207,138,.25)}
+
+/* COMPARATIVO 08 vs 14 */
+.uc-compare{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.85rem}
+.uc-comp-box{background:rgba(255,255,255,.03);border-radius:8px;padding:.55rem .7rem;text-align:center}
+.uc-comp-box.highlight-rd{background:rgba(255,112,112,.07)}
+.uc-comp-box.highlight-am{background:rgba(255,184,74,.06)}
+.uc-comp-val{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:1.45rem;line-height:1}
+.uc-comp-dt{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem}
+
+/* BARRA DE CONFORMIDADE */
+.uc-bar-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem}
+.uc-bar-label{font-size:.68rem;color:rgba(255,255,255,.5)}
+.uc-bar-pct{font-size:.72rem;font-weight:700}
+.uc-bar-bg{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-bottom:.25rem}
+.uc-bar-fill{height:100%;border-radius:3px}
+.uc-bar-footer{display:flex;justify-content:space-between}
+.uc-bar-meta{font-size:.56rem;color:var(--muted)}
+
+/* TOGGLE ROW */
+.uc-toggle{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.4rem;border-top:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .15s}
+.uc-toggle:hover{background:rgba(255,255,255,.02)}
+.uc-toggle-label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.uc-arrow{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .2s}
+.unit-card.open .uc-arrow{transform:rotate(180deg);background:rgba(245,166,35,.08);border-color:rgba(245,166,35,.2)}
+
+/* PAINEL INTERNO */
+.uc-panel{display:none;padding:.25rem 1.4rem 1.4rem}
+.unit-card.open .uc-panel{display:block}
+
+/* TABS DENTRO DO PAINEL */
+.tab-bar{display:flex;gap:.25rem;margin-bottom:1rem;border-bottom:1px solid var(--border2);padding-bottom:.5rem}
+.tab-btn{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .8rem;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .18s}
+.tab-btn.active{background:rgba(245,166,35,.1);color:var(--gd);border:1px solid rgba(245,166,35,.2)}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.04);color:var(--wh)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* TABELA COLABORADORES */
+.col-table{width:100%;border-collapse:collapse;font-size:.76rem}
+.col-table thead th{text-align:left;padding:.45rem .6rem;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border2)}
+.col-table tbody tr{border-bottom:.5px solid rgba(255,255,255,.04);transition:background .15s}
+.col-table tbody tr:hover{background:rgba(255,255,255,.025)}
+.col-table tbody td{padding:.5rem .6rem;color:rgba(255,255,255,.75);vertical-align:middle}
+.col-name{font-weight:500;color:var(--wh)!important}
+.pct-badge{font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:4px}
+.pb-rd{background:rgba(255,112,112,.1);color:var(--red2)}
+.pb-am{background:rgba(255,184,74,.1);color:var(--amber2)}
+.pb-gr{background:rgba(95,207,138,.1);color:var(--green2)}
+
+/* EVOLUÇÃO VISUAL */
+.evo-wrap{display:flex;flex-direction:column;gap:.6rem}
+.evo-row{display:flex;align-items:center;gap:.75rem}
+.evo-name{font-size:.72rem;color:rgba(255,255,255,.7);min-width:140px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evo-bar-wrap{flex:1;position:relative;height:8px}
+.evo-bar-before{position:absolute;top:0;left:0;height:100%;border-radius:3px;background:rgba(255,255,255,.12)}
+.evo-bar-after{position:absolute;top:0;left:0;height:100%;border-radius:3px;opacity:.85}
+.evo-val{font-size:.65rem;font-weight:700;min-width:36px;text-align:right;flex-shrink:0}
+.evo-delta{font-size:.6rem;min-width:50px;text-align:right;flex-shrink:0}
+.evo-legend{display:flex;gap:1rem;margin-bottom:.75rem}
+.evo-legend-item{display:flex;align-items:center;gap:.35rem;font-size:.6rem;color:var(--muted)}
+.evo-legend-dot{width:10px;height:6px;border-radius:2px}
+
+/* UTILS */
+.container{max-width:1100px;margin:0 auto;padding:0 2rem}
+.section{position:relative;padding:3.5rem 0;z-index:1}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);position:relative;z-index:1}
+.sec-header{margin-bottom:1.75rem}
+.sec-tag{font-size:.6rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gd);display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.sec-tag::before{content:'';width:16px;height:2px;background:var(--gd);border-radius:1px}
+.sec-ttl{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:clamp(1.7rem,3vw,2.5rem);color:var(--wh)}
+.sec-ttl em{color:var(--gd);font-style:normal}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .55s,transform .55s}
+.rv.vis{opacity:1;transform:none}
+.d1{transition-delay:.05s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}
+footer{position:relative;z-index:1;text-align:center;padding:24px 24px 40px;border-top:1px solid var(--border2)}
+footer p{font-size:.6rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;line-height:2;opacity:.5}
+@media(max-width:600px){.container{padding:0 1rem}.units-grid{grid-template-columns:1fr}.evo-name{min-width:100px}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-brand">Maximiano <span>·</span> Advogados</div>
+  <div class="nav-right">
+    <span class="nav-pill">Tarefas · 14/05/2026</span>
+    <a href="index.html" class="nav-back">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M6 2L3 5L6 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Projetos
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge rv"><span class="badge-pulse"></span> Monitoramento · Atualizado 14/05/2026</div>
+    <h1 class="hero-title rv d1">TAREFAS<em>POR UNIDADE</em></h1>
+    <div class="hero-rule rv d2"><div class="hr-line"></div><div class="hr-diamond"></div><div class="hr-line"></div></div>
+    <p class="hero-sub rv d2">Evolução de conformidade entre <strong style="color:var(--wh)">08/05 e 14/05/2026</strong>. Meta de 80% não atingida em nenhuma unidade. Tarefas vencidas aumentaram no período.</p>
+    <div class="kpi-strip rv d3">
+      <div class="kpi-cell"><div class="kpi-val rd">1.069</div><div class="kpi-lbl">Vencidas 14/05</div></div>
+      <div class="kpi-cell"><div class="kpi-val am">51,2%</div><div class="kpi-lbl">Conformidade</div></div>
+      <div class="kpi-cell"><div class="kpi-val gd">80%</div><div class="kpi-lbl">Meta</div></div>
+      <div class="kpi-cell"><div class="kpi-val" style="color:var(--red2)">+223</div><div class="kpi-lbl">Novas vencidas</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TERMÔMETRO + COMUNICADO -->
+<div class="section">
+  <div class="container">
+    <div class="rv" style="display:flex;flex-direction:column;gap:1.25rem">
+      <div class="termo">
+        <div class="termo-icon">🌡️</div>
+        <div style="flex:1">
+          <div class="termo-title">Termômetro de Urgência — Tarefas Vencidas</div>
+          <div class="termo-body">O acúmulo de tarefas vencidas atrasa diretamente a evolução do sistema</div>
+          <div class="termo-desc">Cada tarefa pendente representa um processo que o advogado ainda não registrou corretamente. <strong style="color:var(--wh)">Enquanto os cards não estiverem em dia, a configuração final dos funis não pode ser concluída</strong> — as automações precisam de dados reais para serem validadas. A meta é <strong style="color:var(--amber2)">80% de conformidade</strong>.</div>
+          <div class="termo-bar-row">
+            <div class="termo-bar-bg"><div class="termo-bar-fill" style="width:51.2%"></div></div>
+            <span class="meta-label">51,2% conformes</span>
+            <span class="gap-label">Meta 80% · Gap −28,8pp</span>
+            <span class="date-pill">14/05/2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="comunicado">
+        <div class="com-label">📢 Comunicado Interno — Canal INDICADORES-KPI-BSC · 14/05/2026</div>
+        <div class="com-text">"Evoluímos 3% em 1 semana entre tarefas no prazo, ritmo pequeno dentro da tamanha demanda. Líderes, precisamos de uma dedicação ainda maior para agilizar e regularizar essas pendências. Lembrando que quanto mais organizados formos, menor será o índice de atendimentos sem agendamento, menor o número de chat e telefonia e maior a satisfação dos clientes."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CARDS POR UNIDADE -->
+<div class="section">
+  <div class="container">
+    <div class="sec-header rv">
+      <div class="sec-tag">Evolução por Unidade · 08/05 → 14/05</div>
+      <h2 class="sec-ttl">PENDÊNCIAS <em>POR UNIDADE</em></h2>
+    </div>
+    <div class="units-grid">
+
+      <!-- POÇOS DE CALDAS -->
+      <div class="unit-card uc-red rv d1" id="uc-pocos">
+        <div class="uc-head" onclick="toggleUnit('uc-pocos')">
+          <div class="uc-head-row">
+            <div class="uc-name">POÇOS DE CALDAS</div>
+            <span class="uc-badge ucb-rd">CRÍTICO</span>
+          </div>
+          <div class="uc-compare">
+            <div class="uc-comp-box">
+              <div class="uc-comp-val" style="color:var(--muted)">564</div>
+              <div class="uc-comp-dt" style="color:var(--muted)">vencidas 08/05</div>
+            </div>
+            <div class="uc-comp-box highlight-rd">
+              <div class="uc-comp-val" style="color:var(--red2)">658</div>
+              <div class="uc-comp-dt" style="color:var(--red2)">vencidas 14/05 ▲+94</div>
+            </div>
+          </div>
+          <div class="uc-bar-row"><span class="uc-bar-label">Conformidade atual</span><span class="uc-bar-pct" style="color:var(--red2)">27,5%</span></div>
+          <div class="uc-bar-bg"><div class="uc-bar-fill" style="width:27.5%;background:var(--red2)"></div></div>
+          <div class="uc-bar-footer"><span class="uc-bar-meta">0%</span><span class="uc-bar-meta" style="color:var(--amber2)">meta: 80%</span></div>
+        </div>
+        <div class="uc-toggle" onclick="toggleUnit('uc-pocos')">
+          <span class="uc-toggle-label">Ver detalhes por colaborador</span>
+          <div class="uc-arrow"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#7A8FB5" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="uc-panel">
+          <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('pocos','colab')">Colaboradores</button>
+            <button class="tab-btn" onclick="switchTab('pocos','evo')">Evolução</button>
+          </div>
+          <div class="tab-content active" id="pocos-colab">
+            <table class="col-table">
+              <thead><tr><th>Colaborador</th><th>Total</th><th>Conf.</th><th>Venc.</th><th>%</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">Rafael de Lima Santos</td><td style="color:var(--muted)">474</td><td style="color:var(--green2)">156</td><td style="color:var(--red2);font-weight:700">318</td><td><span class="pct-badge pb-rd">67,1%</span></td></tr>
+                <tr><td class="col-name">Augusto Cézar C. da Silva</td><td style="color:var(--muted)">316</td><td style="color:var(--green2)">38</td><td style="color:var(--red2);font-weight:700">278</td><td><span class="pct-badge pb-rd">88,0%</span></td></tr>
+                <tr><td class="col-name">Iago H. Morais Camargo</td><td style="color:var(--muted)">41</td><td style="color:var(--green2)">25</td><td style="color:var(--amber2);font-weight:700">16</td><td><span class="pct-badge pb-am">39,0%</span></td></tr>
+                <tr><td class="col-name">Gabriela de A. Cintra</td><td style="color:var(--muted)">26</td><td style="color:var(--green2)">20</td><td style="color:var(--amber2);font-weight:700">6</td><td><span class="pct-badge pb-am">23,1%</span></td></tr>
+                <tr><td class="col-name">Isadora F. Rampazo</td><td style="color:var(--muted)">2</td><td style="color:var(--muted)">0</td><td style="color:var(--amber2);font-weight:700">2</td><td><span class="pct-badge pb-am">100%</span></td></tr>
+                <tr><td class="col-name">João Gabriel M. Santos</td><td style="color:var(--muted)">6</td><td style="color:var(--green2)">6</td><td style="color:var(--green2)">0</td><td><span class="pct-badge pb-gr">0%</span></td></tr>
+                <tr><td class="col-name" style="color:var(--muted)">Kathury, Marcelo, Pedro</td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td><td style="color:var(--green2)">0</td><td><span class="pct-badge pb-gr">0%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-content" id="pocos-evo">
+            <div class="evo-legend"><div class="evo-legend-item"><div class="evo-legend-dot" style="background:rgba(255,255,255,.2)"></div>08/05</div><div class="evo-legend-item"><div class="evo-legend-dot" style="background:var(--red2)"></div>14/05</div></div>
+            <div class="evo-wrap">
+              <div class="evo-row"><div class="evo-name">Rafael</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:59.7%"></div><div class="evo-bar-after" style="width:67.1%;background:var(--red2)"></div></div><div class="evo-val" style="color:var(--red2)">318</div><div class="evo-delta" style="color:var(--red2)">▲+38</div></div>
+              <div class="evo-row"><div class="evo-name">Augusto</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:87.9%"></div><div class="evo-bar-after" style="width:88%;background:var(--red2)"></div></div><div class="evo-val" style="color:var(--red2)">278</div><div class="evo-delta" style="color:var(--muted)">≈ igual</div></div>
+              <div class="evo-row"><div class="evo-name">Iago</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:0%"></div><div class="evo-bar-after" style="width:39%;background:var(--amber2)"></div></div><div class="evo-val" style="color:var(--amber2)">16</div><div class="evo-delta" style="color:var(--red2)">▲ novo</div></div>
+              <div class="evo-row"><div class="evo-name">João Gabriel</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:75%"></div><div class="evo-bar-after" style="width:0%;background:var(--green2)"></div></div><div class="evo-val" style="color:var(--green2)">0</div><div class="evo-delta" style="color:var(--green2)">▼ zerou</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTELHOS -->
+      <div class="unit-card uc-am rv d2" id="uc-botelhos">
+        <div class="uc-head" onclick="toggleUnit('uc-botelhos')">
+          <div class="uc-head-row">
+            <div class="uc-name">BOTELHOS</div>
+            <span class="uc-badge ucb-am">ATENÇÃO</span>
+          </div>
+          <div class="uc-compare">
+            <div class="uc-comp-box">
+              <div class="uc-comp-val" style="color:var(--muted)">170</div>
+              <div class="uc-comp-dt" style="color:var(--muted)">vencidas 08/05</div>
+            </div>
+            <div class="uc-comp-box highlight-am">
+              <div class="uc-comp-val" style="color:var(--amber2)">240</div>
+              <div class="uc-comp-dt" style="color:var(--amber2)">vencidas 14/05 ▲+70</div>
+            </div>
+          </div>
+          <div class="uc-bar-row"><span class="uc-bar-label">Conformidade atual</span><span class="uc-bar-pct" style="color:var(--amber2)">68,1%</span></div>
+          <div class="uc-bar-bg"><div class="uc-bar-fill" style="width:68.1%;background:var(--amber2)"></div></div>
+          <div class="uc-bar-footer"><span class="uc-bar-meta">0%</span><span class="uc-bar-meta" style="color:var(--amber2)">meta: 80%</span></div>
+        </div>
+        <div class="uc-toggle" onclick="toggleUnit('uc-botelhos')">
+          <span class="uc-toggle-label">Ver detalhes por colaborador</span>
+          <div class="uc-arrow"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#7A8FB5" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="uc-panel">
+          <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('botelhos','colab')">Colaboradores</button>
+            <button class="tab-btn" onclick="switchTab('botelhos','evo')">Evolução</button>
+          </div>
+          <div class="tab-content active" id="botelhos-colab">
+            <table class="col-table">
+              <thead><tr><th>Colaborador</th><th>Total</th><th>Conf.</th><th>Venc.</th><th>%</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">Paulo Barreiro de S. Jr.</td><td style="color:var(--muted)">141</td><td style="color:var(--green2)">23</td><td style="color:var(--red2);font-weight:700">118</td><td><span class="pct-badge pb-rd">83,7%</span></td></tr>
+                <tr><td class="col-name">Raphaela M. A. Oliveira</td><td style="color:var(--muted)">74</td><td style="color:var(--green2)">3</td><td style="color:var(--red2);font-weight:700">71</td><td><span class="pct-badge pb-rd">95,9%</span></td></tr>
+                <tr><td class="col-name">João Victor A. de Souza</td><td style="color:var(--muted)">34</td><td style="color:var(--muted)">0</td><td style="color:var(--red2);font-weight:700">34</td><td><span class="pct-badge pb-rd">100%</span></td></tr>
+                <tr><td class="col-name">Ulianny Freitas</td><td style="color:var(--muted)">81</td><td style="color:var(--green2)">77</td><td style="color:var(--amber2);font-weight:700">4</td><td><span class="pct-badge pb-am">4,9%</span></td></tr>
+                <tr><td class="col-name">Ivana Aparecida da Costa</td><td style="color:var(--muted)">32</td><td style="color:var(--green2)">30</td><td style="color:var(--amber2);font-weight:700">2</td><td><span class="pct-badge pb-am">6,3%</span></td></tr>
+                <tr><td class="col-name">Fernanda P. V. Souza</td><td style="color:var(--muted)">44</td><td style="color:var(--green2)">41</td><td style="color:var(--amber2);font-weight:700">3</td><td><span class="pct-badge pb-am">6,8%</span></td></tr>
+                <tr><td class="col-name">Miriã Marques</td><td style="color:var(--muted)">9</td><td style="color:var(--green2)">8</td><td style="color:var(--amber2);font-weight:700">1</td><td><span class="pct-badge pb-am">11,1%</span></td></tr>
+                <tr><td class="col-name">Geovani C. Barbosa</td><td style="color:var(--muted)">9</td><td style="color:var(--green2)">6</td><td style="color:var(--amber2);font-weight:700">3</td><td><span class="pct-badge pb-am">33,3%</span></td></tr>
+                <tr><td class="col-name" style="color:var(--muted)">Natalia, Jaqueline, José G., Gabriela S.</td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td><td style="color:var(--green2)">0–2</td><td><span class="pct-badge pb-gr">≤2%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-content" id="botelhos-evo">
+            <div class="evo-legend"><div class="evo-legend-item"><div class="evo-legend-dot" style="background:rgba(255,255,255,.2)"></div>08/05</div><div class="evo-legend-item"><div class="evo-legend-dot" style="background:var(--amber2)"></div>14/05</div></div>
+            <div class="evo-wrap">
+              <div class="evo-row"><div class="evo-name">Paulo Barreiro</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:82.1%"></div><div class="evo-bar-after" style="width:83.7%;background:var(--amber2)"></div></div><div class="evo-val" style="color:var(--amber2)">118</div><div class="evo-delta" style="color:var(--red2)">▲+40</div></div>
+              <div class="evo-row"><div class="evo-name">Raphaela</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:97.2%"></div><div class="evo-bar-after" style="width:95.9%;background:var(--red2)"></div></div><div class="evo-val" style="color:var(--red2)">71</div><div class="evo-delta" style="color:var(--muted)">≈ igual</div></div>
+              <div class="evo-row"><div class="evo-name">João Victor</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:92.3%"></div><div class="evo-bar-after" style="width:100%;background:var(--red2)"></div></div><div class="evo-val" style="color:var(--red2)">34</div><div class="evo-delta" style="color:var(--red2)">▲+22</div></div>
+              <div class="evo-row"><div class="evo-name">Ulianny</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:0%"></div><div class="evo-bar-after" style="width:4.9%;background:var(--green2)"></div></div><div class="evo-val" style="color:var(--green2)">4</div><div class="evo-delta" style="color:var(--green2)">▼ melhorou</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CABO VERDE -->
+      <div class="unit-card uc-am rv d3" id="uc-caboverde">
+        <div class="uc-head" onclick="toggleUnit('uc-caboverde')">
+          <div class="uc-head-row">
+            <div class="uc-name">CABO VERDE</div>
+            <span class="uc-badge ucb-am">ATENÇÃO</span>
+          </div>
+          <div class="uc-compare">
+            <div class="uc-comp-box">
+              <div class="uc-comp-val" style="color:var(--muted)">112</div>
+              <div class="uc-comp-dt" style="color:var(--muted)">vencidas 08/05</div>
+            </div>
+            <div class="uc-comp-box highlight-am">
+              <div class="uc-comp-val" style="color:var(--amber2)">167</div>
+              <div class="uc-comp-dt" style="color:var(--amber2)">vencidas 14/05 ▲+55</div>
+            </div>
+          </div>
+          <div class="uc-bar-row"><span class="uc-bar-label">Conformidade atual</span><span class="uc-bar-pct" style="color:var(--amber2)">60,1%</span></div>
+          <div class="uc-bar-bg"><div class="uc-bar-fill" style="width:60.1%;background:var(--amber2)"></div></div>
+          <div class="uc-bar-footer"><span class="uc-bar-meta">0%</span><span class="uc-bar-meta" style="color:var(--amber2)">meta: 80%</span></div>
+        </div>
+        <div class="uc-toggle" onclick="toggleUnit('uc-caboverde')">
+          <span class="uc-toggle-label">Ver detalhes por colaborador</span>
+          <div class="uc-arrow"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#7A8FB5" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="uc-panel">
+          <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('caboverde','colab')">Colaboradores</button>
+            <button class="tab-btn" onclick="switchTab('caboverde','evo')">Evolução</button>
+          </div>
+          <div class="tab-content active" id="caboverde-colab">
+            <table class="col-table">
+              <thead><tr><th>Colaborador</th><th>Total</th><th>Conf.</th><th>Venc.</th><th>%</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">Giovane de Souza Lopes</td><td style="color:var(--muted)">63</td><td style="color:var(--green2)">16</td><td style="color:var(--red2);font-weight:700">47</td><td><span class="pct-badge pb-rd">74,6%</span></td></tr>
+                <tr><td class="col-name">Tayna Melo</td><td style="color:var(--muted)">178</td><td style="color:var(--green2)">104</td><td style="color:var(--amber2);font-weight:700">74</td><td><span class="pct-badge pb-am">41,6%</span></td></tr>
+                <tr><td class="col-name">Jackeline Lima</td><td style="color:var(--muted)">144</td><td style="color:var(--green2)">108</td><td style="color:var(--amber2);font-weight:700">36</td><td><span class="pct-badge pb-am">25,0%</span></td></tr>
+                <tr><td class="col-name">Fernanda Ribeiro</td><td style="color:var(--muted)">34</td><td style="color:var(--green2)">24</td><td style="color:var(--amber2);font-weight:700">10</td><td><span class="pct-badge pb-am">29,4%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-content" id="caboverde-evo">
+            <div class="evo-legend"><div class="evo-legend-item"><div class="evo-legend-dot" style="background:rgba(255,255,255,.2)"></div>08/05</div><div class="evo-legend-item"><div class="evo-legend-dot" style="background:var(--amber2)"></div>14/05</div></div>
+            <div class="evo-wrap">
+              <div class="evo-row"><div class="evo-name">Giovane</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:72.3%"></div><div class="evo-bar-after" style="width:74.6%;background:var(--red2)"></div></div><div class="evo-val" style="color:var(--red2)">47</div><div class="evo-delta" style="color:var(--red2)">▲+13</div></div>
+              <div class="evo-row"><div class="evo-name">Tayna</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:27.2%"></div><div class="evo-bar-after" style="width:41.6%;background:var(--amber2)"></div></div><div class="evo-val" style="color:var(--amber2)">74</div><div class="evo-delta" style="color:var(--red2)">▲+41</div></div>
+              <div class="evo-row"><div class="evo-name">Jackeline</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:25.8%"></div><div class="evo-bar-after" style="width:25%;background:var(--amber2)"></div></div><div class="evo-val" style="color:var(--amber2)">36</div><div class="evo-delta" style="color:var(--green2)">▼ melhorou</div></div>
+              <div class="evo-row"><div class="evo-name">Fernanda R.</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:41.7%"></div><div class="evo-bar-after" style="width:29.4%;background:var(--amber2)"></div></div><div class="evo-val" style="color:var(--amber2)">10</div><div class="evo-delta" style="color:var(--green2)">▼ melhorou</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOVA RESENDE -->
+      <div class="unit-card uc-am rv d4" id="uc-novaresende">
+        <div class="uc-head" onclick="toggleUnit('uc-novaresende')">
+          <div class="uc-head-row">
+            <div class="uc-name">NOVA RESENDE</div>
+            <span class="uc-badge ucb-am">ATENÇÃO</span>
+          </div>
+          <div class="uc-compare">
+            <div class="uc-comp-box">
+              <div class="uc-comp-val" style="color:var(--green2)">0</div>
+              <div class="uc-comp-dt" style="color:var(--muted)">vencidas 08/05</div>
+            </div>
+            <div class="uc-comp-box highlight-am">
+              <div class="uc-comp-val" style="color:var(--amber2)">6</div>
+              <div class="uc-comp-dt" style="color:var(--amber2)">vencidas 14/05 ▲+6</div>
+            </div>
+          </div>
+          <div class="uc-bar-row"><span class="uc-bar-label">Conformidade atual</span><span class="uc-bar-pct" style="color:var(--amber2)">40,0%</span></div>
+          <div class="uc-bar-bg"><div class="uc-bar-fill" style="width:40%;background:var(--amber2)"></div></div>
+          <div class="uc-bar-footer"><span class="uc-bar-meta">0%</span><span class="uc-bar-meta" style="color:var(--amber2)">meta: 80%</span></div>
+        </div>
+        <div class="uc-toggle" onclick="toggleUnit('uc-novaresende')">
+          <span class="uc-toggle-label">Ver detalhes por colaborador</span>
+          <div class="uc-arrow"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="#7A8FB5" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="uc-panel">
+          <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('novaresende','colab')">Colaboradores</button>
+            <button class="tab-btn" onclick="switchTab('novaresende','evo')">Evolução</button>
+          </div>
+          <div class="tab-content active" id="novaresende-colab">
+            <table class="col-table">
+              <thead><tr><th>Colaborador</th><th>Total</th><th>Conf.</th><th>Venc.</th><th>%</th></tr></thead>
+              <tbody>
+                <tr><td class="col-name">Maísa Fonseca</td><td style="color:var(--muted)">10</td><td style="color:var(--green2)">6</td><td style="color:var(--amber2);font-weight:700">4</td><td><span class="pct-badge pb-am">40,0%</span></td></tr>
+                <tr><td class="col-name" style="color:var(--muted)">Silvio</td><td style="color:var(--muted)">0</td><td style="color:var(--muted)">0</td><td style="color:var(--muted)">0</td><td><span class="pct-badge pb-gr">—</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-content" id="novaresende-evo">
+            <div class="evo-legend"><div class="evo-legend-item"><div class="evo-legend-dot" style="background:var(--green2)"></div>08/05 (em dia)</div><div class="evo-legend-item"><div class="evo-legend-dot" style="background:var(--amber2)"></div>14/05</div></div>
+            <div class="evo-wrap">
+              <div class="evo-row"><div class="evo-name">Maísa Fonseca</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:0%"></div><div class="evo-bar-after" style="width:40%;background:var(--amber2)"></div></div><div class="evo-val" style="color:var(--amber2)">4</div><div class="evo-delta" style="color:var(--red2)">▲+4</div></div>
+              <div class="evo-row"><div class="evo-name" style="color:var(--muted)">Silvio</div><div class="evo-bar-wrap"><div class="evo-bar-before" style="width:0%"></div><div class="evo-bar-after" style="width:0%;background:var(--green2)"></div></div><div class="evo-val" style="color:var(--green2)">0</div><div class="evo-delta" style="color:var(--green2)">— ok</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /units-grid -->
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- LINHA DO TEMPO -->
+<div class="section">
+  <div class="container">
+    <div class="sec-header rv">
+      <div class="sec-tag">Impacto direto na virada de sistema</div>
+      <h2 class="sec-ttl">CAMINHO ATÉ <em>29/06</em></h2>
+    </div>
+    <div class="timeline-wrap rv d1">
+      <div class="tl-label">Regularização das tarefas → Funis finalizados → Virada de sistema</div>
+      <div class="tl-track">
+        <div class="tl-node">
+          <div class="tl-circle tl-nc-red">⚠️</div>
+          <div class="tl-val rd">AGORA</div>
+          <div class="tl-sub">1.069 tarefas<br>vencidas</div>
+        </div>
+        <div class="tl-line tl-line-r-a"></div>
+        <div class="tl-node">
+          <div class="tl-circle tl-nc-am">📋</div>
+          <div class="tl-val am">META</div>
+          <div class="tl-sub">80% conformes<br>por unidade</div>
+        </div>
+        <div class="tl-line tl-line-a-b"></div>
+        <div class="tl-node">
+          <div class="tl-circle tl-nc-bl">🔧</div>
+          <div class="tl-val bl">FUNIS</div>
+          <div class="tl-sub">Configuração<br>final validada</div>
+        </div>
+        <div class="tl-line tl-line-b-g"></div>
+        <div class="tl-node">
+          <div class="tl-circle tl-nc-gd">⚡</div>
+          <div class="tl-val gd">29/06</div>
+          <div class="tl-sub">Virada de<br>sistema</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© Maximiano Advogados · Monitoramento de Tarefas · Maio 2026</p>
+  <p>Material de uso interno e restrito à diretoria e lideranças.</p>
+</footer>
+
+<script>
+function toggleUnit(id){
+  const card=document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+function switchTab(unit, tab){
+  // desativa todos os tabs do mesmo card
+  const card=document.getElementById('uc-'+unit);
+  card.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  card.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  // ativa o selecionado
+  document.getElementById(unit+'-'+tab).classList.add('active');
+  // ativa o botão correto
+  card.querySelectorAll('.tab-btn').forEach(b=>{
+    if((tab==='colab'&&b.textContent==='Colaboradores')||(tab==='evo'&&b.textContent==='Evolução'))
+      b.classList.add('active');
+  });
+}
+
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}});
+},{threshold:0.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
