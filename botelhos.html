@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Maximiano · Auditoria Botelhos MG · 25/05/2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root{
+  --dk:#04111F;--nv:#091A2E;--nv2:#0E2441;--nv3:#152D50;
+  --red:#F05252;--red2:#FF6B6B;--red-dim:rgba(240,82,82,.1);--red-border:rgba(240,82,82,.22);
+  --amber:#F5A030;--amber2:#FFB84D;--amber-dim:rgba(245,160,48,.1);
+  --orange:#F97316;--orange-dim:rgba(249,115,22,.1);
+  --green:#22C55E;--green-dim:rgba(34,197,94,.1);
+  --muted:#6B84A8;--body:rgba(255,255,255,.65);
+  --card:#0A1F38;--border:rgba(240,82,82,.18);--border2:rgba(255,255,255,.06);
+  --r:12px;--sb:248px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;overflow-x:hidden;display:flex}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  position:fixed;top:0;left:0;bottom:0;width:var(--sb);
+  background:rgba(9,26,46,.97);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:900;overflow-y:auto;
+}
+.sb-brand{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border)}
+.sb-back{display:flex;align-items:center;gap:.5rem;font-size:.68rem;color:var(--muted);text-decoration:none;margin-bottom:.6rem;transition:color .2s}
+.sb-back:hover{color:var(--red2)}
+.sb-back svg{width:12px;height:12px}
+.sb-brand-name{font-weight:800;font-size:.92rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red2);line-height:1.2}
+.sb-brand-sub{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.sb-unit-badge{margin:.8rem 1.2rem;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.25);border-radius:8px;padding:.6rem .9rem}
+.sb-ub-rank{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
+.sb-ub-name{font-weight:800;font-size:1rem;color:var(--red2)}
+.sb-ub-meta{font-size:.62rem;color:rgba(255,255,255,.35);margin-top:.15rem}
+.sb-period{margin:.6rem 1.2rem;background:rgba(240,82,82,.06);border:1px solid rgba(240,82,82,.18);border-radius:6px;padding:.35rem .75rem;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red2);font-weight:700;text-align:center;display:flex;align-items:center;gap:.4rem;justify-content:center}
+.sb-period-dot{width:6px;height:6px;border-radius:50%;background:var(--red2);animation:blink 1.5s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.sb-nav{padding:.5rem 0;flex:1}
+.sb-section{padding:.3rem 1.2rem .1rem;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem;font-weight:700}
+.sb-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.2rem;font-size:.73rem;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--red2);background:rgba(240,82,82,.06);border-left-color:var(--red2)}
+.sb-link svg{width:14px;height:14px;opacity:.6;flex-shrink:0}
+.sb-link:hover svg,.sb-link.active svg{opacity:1}
+.sb-divider{height:1px;background:var(--border);margin:.6rem 1.2rem}
+.sb-stat{padding:.5rem 1.2rem;display:flex;flex-direction:column;gap:.55rem;margin-bottom:.4rem}
+.sb-stat-row{display:flex;justify-content:space-between;align-items:center}
+.sb-stat-lbl{font-size:.6rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.sb-stat-val{font-size:.78rem;font-weight:700;color:var(--red2)}
+.sb-other{display:flex;flex-direction:column;gap:.2rem;padding:.3rem 1.2rem}
+.sb-other-link{display:flex;align-items:center;gap:.5rem;font-size:.7rem;color:rgba(255,255,255,.38);text-decoration:none;padding:.3rem 0;transition:color .2s;border-bottom:1px solid rgba(255,255,255,.04)}
+.sb-other-link:hover{color:rgba(255,255,255,.7)}
+.sb-other-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sb-footer{padding:.8rem 1.2rem;border-top:1px solid var(--border);font-size:.58rem;color:var(--muted);text-align:center;line-height:1.5}
+
+/* ── MAIN ── */
+#main{margin-left:var(--sb);flex:1;min-width:0}
+
+/* ── HERO UNIDADE ── */
+#hero{
+  min-height:85vh;display:flex;align-items:center;padding:5rem 0 3.5rem;
+  background:
+    radial-gradient(ellipse 70% 50% at 60% 0%,rgba(240,82,82,.12) 0%,transparent 65%),
+    radial-gradient(ellipse 28% 30% at 95% 80%,rgba(245,160,48,.08) 0%,transparent 55%),
+    var(--dk);
+  position:relative;overflow:hidden;
+}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(240,82,82,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(240,82,82,.022) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;padding:0 2.5rem;display:grid;grid-template-columns:1.3fr 1fr;gap:3.5rem;align-items:center;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.28);border-radius:20px;padding:.32rem .9rem;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red2);margin-bottom:1rem;font-weight:700}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--red2);animation:blink 1.5s infinite}
+.hero-title{font-weight:900;font-size:clamp(2.4rem,4.5vw,4rem);line-height:.9;color:#fff;letter-spacing:-.025em;margin-bottom:.8rem}
+.hero-title em{color:var(--red2);font-style:normal}
+.hero-title span{display:block;font-size:.4em;font-weight:400;color:rgba(255,255,255,.35);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem}
+.hero-alert{font-size:.8rem;color:rgba(255,110,110,.85);background:rgba(240,82,82,.07);border:1px solid rgba(240,82,82,.2);border-left:3px solid var(--red);border-radius:6px;padding:.6rem .95rem;line-height:1.55;margin-bottom:.7rem}
+.hero-sub{font-size:.85rem;color:rgba(255,255,255,.38);max-width:440px;line-height:1.78}
+.hero-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:1.6rem;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(9,26,46,.8);padding:1.05rem 1.25rem;transition:background .2s;position:relative;overflow:hidden}
+.hk::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.hk.hk-red::before{background:linear-gradient(90deg,var(--red),var(--red2))}
+.hk.hk-amber::before{background:linear-gradient(90deg,var(--amber),var(--amber2))}
+.hk.hk-orange::before{background:linear-gradient(90deg,var(--orange),#fb923c)}
+.hk.hk-muted::before{background:rgba(255,255,255,.1)}
+.hk:hover{background:rgba(21,45,80,.85)}
+.hk-val{font-weight:900;font-size:1.65rem;line-height:1;letter-spacing:-.02em}
+.hk.hk-red .hk-val{color:var(--red2)}
+.hk.hk-amber .hk-val{color:var(--amber)}
+.hk.hk-orange .hk-val{color:var(--orange)}
+.hk.hk-muted .hk-val{color:rgba(255,255,255,.45)}
+.hk-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.hk-sub{font-size:.65rem;color:rgba(255,255,255,.22);margin-top:.1rem}
+
+/* VIS WRAP */
+.hero-vis{display:flex;align-items:center;justify-content:center}
+.vis-wrap{position:relative;width:270px;height:270px}
+.vis-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(240,82,82,.2);animation:spin 45s linear infinite}
+.vis-ring2{position:absolute;inset:26px;border-radius:50%;border:1px dashed rgba(245,160,48,.13);animation:spin 28s linear infinite reverse}
+.vis-ring3{position:absolute;inset:52px;border-radius:50%;border:1px solid rgba(249,115,22,.07);animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.vis-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:128px;height:128px;border-radius:50%;background:linear-gradient(135deg,rgba(240,82,82,.4),rgba(9,26,46,.96));border:1px solid rgba(240,82,82,.28);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 55px rgba(240,82,82,.16)}
+.vis-core-v{font-weight:900;font-size:1.85rem;color:var(--red2);line-height:1;letter-spacing:-.03em}
+.vis-core-l{font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.2rem;text-align:center;line-height:1.4}
+.vis-dot{position:absolute;width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.48rem;letter-spacing:.04em;text-transform:uppercase;font-weight:700;text-align:center;line-height:1.3}
+.vd1{top:-21px;left:calc(50% - 21px);color:var(--red2)}
+.vd2{bottom:-21px;left:calc(50% - 21px);color:var(--amber)}
+.vd3{left:-21px;top:calc(50% - 21px);color:var(--orange)}
+.vd4{right:-21px;top:calc(50% - 21px);color:rgba(255,255,255,.35)}
+.vis-pulse{position:absolute;width:9px;height:9px;border-radius:50%;animation:pulse-dot 2s ease-in-out infinite}
+.vp1{top:0;left:50%;margin-left:-4.5px;background:var(--red2);animation-delay:0s}
+.vp2{bottom:0;left:50%;margin-left:-4.5px;background:var(--amber);animation-delay:.7s}
+.vp3{left:0;top:50%;margin-top:-4.5px;background:var(--orange);animation-delay:1.4s}
+@keyframes pulse-dot{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.2;transform:scale(.4)}}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-vis{display:none}}
+
+/* ── LAYOUT ── */
+section{position:relative;padding:4.5rem 0}
+.sec-alt{background:var(--nv)}
+.container{max-width:1120px;margin:0 auto;padding:0 2.5rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(240,82,82,.18),transparent)}
+.sec-label{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--red);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.7rem,3.2vw,2.4rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--red2);font-style:normal}
+.sec-body{margin-top:.65rem;color:rgba(255,255,255,.42);max-width:580px;font-size:.86rem;line-height:1.75}
+
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin:1.5rem 0}
+.ks5{grid-template-columns:repeat(5,1fr)}
+.ks4{grid-template-columns:repeat(4,1fr)}
+.ks3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.ks5,.ks4{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:rgba(9,26,46,.88);padding:1.2rem .9rem;text-align:center;transition:background .2s;position:relative}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.k-red::after{background:var(--red)}
+.kpi.k-amber::after{background:var(--amber)}
+.kpi.k-orange::after{background:var(--orange)}
+.kpi.k-muted::after{background:rgba(255,255,255,.12)}
+.kpi:hover{background:rgba(21,45,80,.85)}
+.kval{font-weight:900;font-size:1.65rem;line-height:1;letter-spacing:-.02em}
+.kpi.k-red .kval{color:var(--red2)}
+.kpi.k-amber .kval{color:var(--amber)}
+.kpi.k-orange .kval{color:var(--orange)}
+.kpi.k-muted .kval{color:rgba(255,255,255,.45)}
+.klbl{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.25rem}
+.ksub{font-size:.65rem;color:rgba(255,255,255,.25);margin-top:.1rem}
+
+/* ── FAIXAS ── */
+.faixas-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin:1.2rem 0 1.8rem}
+.faixa-pill{border-radius:10px;padding:1rem .8rem;text-align:center;border:1px solid transparent;transition:transform .2s}
+.faixa-pill:hover{transform:translateY(-3px)}
+.faixa-num{font-weight:900;font-size:1.9rem;line-height:1;letter-spacing:-.02em}
+.faixa-lbl{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem}
+.f-green{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2)}.f-green .faixa-num{color:#22C55E}.f-green .faixa-lbl{color:rgba(34,197,94,.5)}
+.f-yellow{background:rgba(250,204,21,.07);border-color:rgba(250,204,21,.18)}.f-yellow .faixa-num{color:#FACC15}.f-yellow .faixa-lbl{color:rgba(250,204,21,.5)}
+.f-amber{background:rgba(245,160,48,.08);border-color:rgba(245,160,48,.2)}.f-amber .faixa-num{color:var(--amber)}.f-amber .faixa-lbl{color:rgba(245,160,48,.5)}
+.f-orange{background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.2)}.f-orange .faixa-num{color:var(--orange)}.f-orange .faixa-lbl{color:rgba(249,115,22,.5)}
+.f-red{background:rgba(240,82,82,.08);border-color:rgba(240,82,82,.2)}.f-red .faixa-num{color:var(--red2)}.f-red .faixa-lbl{color:rgba(240,82,82,.5)}
+
+/* ── GRÁFICOS ── */
+.charts-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:1.4rem;margin:1.4rem 0}
+@media(max-width:800px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:rgba(9,26,46,.6);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem}
+.chart-card-title{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem}
+.chart-card-title::before{content:'';width:10px;height:2px;background:var(--red);border-radius:1px}
+
+/* ── RANKING RESPONSÁVEIS ── */
+.rank-list{display:flex;flex-direction:column;gap:.7rem;margin:1.4rem 0}
+.rank-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:48px 1fr auto auto auto 44px;grid-template-rows:auto auto;align-items:stretch;transition:border-color .2s,transform .15s}
+.rank-card:hover{border-color:rgba(240,82,82,.2);transform:translateX(3px)}
+.rank-card.rk1{border-left:3px solid var(--red2)}
+.rank-card.rk2{border-left:3px solid var(--amber)}
+.rank-card.rk3{border-left:3px solid var(--orange)}
+.rank-card.rk4,.rank-card.rk5,.rank-card.rk-other{border-left:3px solid rgba(255,255,255,.08)}
+.rk-num{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;padding:.75rem .4rem;border-right:1px solid var(--border2)}
+.rk1 .rk-num{color:var(--red2)}.rk2 .rk-num{color:var(--amber)}.rk3 .rk-num{color:var(--orange)}
+.rk4 .rk-num,.rk5 .rk-num,.rk-other .rk-num{color:rgba(255,255,255,.15)}
+.rk-main{padding:.8rem 1rem;flex:1;min-width:0}
+.rk-name{font-weight:700;font-size:.83rem;color:rgba(255,255,255,.88);margin-bottom:.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-bar-wrap{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.rk-bar{height:100%;border-radius:2px;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.rk-meta{font-size:.58rem;color:var(--muted);margin-top:.3rem}
+.rk-col{padding:.8rem .9rem;display:flex;flex-direction:column;justify-content:center;text-align:right;border-left:1px solid var(--border2);min-width:78px}
+.rk-col-val{font-weight:800;font-size:1.1rem;line-height:1;letter-spacing:-.01em}
+.rk-col-lbl{font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.1rem}
+
+/* ── EXPAND BUTTON ── */
+.rk-expand-btn{
+  display:flex;align-items:center;justify-content:center;
+  padding:.8rem .75rem;border-left:1px solid var(--border2);
+  cursor:pointer;background:transparent;border-top:none;border-bottom:none;border-right:none;
+  color:var(--muted);transition:color .2s,background .2s;flex-shrink:0;width:44px;
+}
+.rk-expand-btn:hover{color:var(--red2);background:rgba(240,82,82,.06)}
+.rk-expand-btn svg{width:15px;height:15px;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.rk-expand-btn.open svg{transform:rotate(180deg)}
+.rk-expand-btn.open{color:var(--red2)}
+
+/* ── EXPANDED PANEL ── */
+.rk-panel{
+  display:none;grid-column:1/-1;
+  background:rgba(4,17,31,.7);border-top:1px solid rgba(240,82,82,.12);
+  padding:1rem 1.1rem;
+}
+.rk-panel.visible{display:block}
+/* override hover transform when expanded */
+.rank-card:has(.rk-panel.visible){transform:none!important}
+.rk-panel-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.75rem;
+}
+.rk-panel-title{
+  font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--red2);font-weight:700;display:flex;align-items:center;gap:.45rem;
+}
+.rk-panel-title::before{content:'';width:10px;height:2px;background:var(--red2);border-radius:1px}
+.rk-panel-back{
+  display:flex;align-items:center;gap:.35rem;
+  font-size:.6rem;color:var(--muted);cursor:pointer;
+  background:none;border:none;padding:.2rem .5rem;border-radius:5px;
+  transition:color .2s,background .2s;
+}
+.rk-panel-back:hover{color:var(--red2);background:rgba(240,82,82,.07)}
+.rk-panel-back svg{width:12px;height:12px}
+.rk-mini-table{width:100%;border-collapse:collapse;font-size:.72rem}
+.rk-mini-table th{
+  font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);padding:.35rem .6rem;text-align:left;font-weight:700;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.rk-mini-table th.r{text-align:right}
+.rk-mini-table td{padding:.42rem .6rem;vertical-align:middle;border-bottom:1px solid rgba(255,255,255,.03)}
+.rk-mini-table tbody tr:last-child td{border-bottom:none}
+.rk-mini-table tbody tr:hover{background:rgba(240,82,82,.04)}
+.rk-mini-pos{font-size:.62rem;color:var(--muted);font-weight:700;width:22px}
+.rk-mini-id{font-size:.58rem;color:rgba(255,255,255,.22);font-family:monospace}
+.rk-mini-dias{font-weight:900;color:var(--red2);text-align:right;font-size:.85rem;white-space:nowrap}
+/* ── PIPELINE BARS ── */
+.pipe-bars{display:flex;flex-direction:column;gap:.55rem}
+.pb-row{display:grid;grid-template-columns:130px 1fr 50px;align-items:center;gap:.65rem}
+.pb-lbl{font-size:.73rem;color:rgba(255,255,255,.7);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pb-track{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.pb-fill{height:100%;border-radius:4px;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.pb-num{font-size:.72rem;color:var(--muted);font-family:monospace;text-align:right;font-weight:600}
+
+/* ── TOP 10 TABLE ── */
+.top10-wrap{overflow-x:auto;margin-top:1.4rem}
+.top10-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.top10-table th{background:rgba(9,26,46,.95);color:var(--red);font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;padding:.7rem .9rem;text-align:left;font-weight:700;border-bottom:1px solid rgba(240,82,82,.14)}
+.top10-table th.right{text-align:right}
+.top10-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+.top10-table tbody tr:hover{background:rgba(240,82,82,.04)}
+.top10-table tbody tr:last-child{border-bottom:none}
+.top10-table td{padding:.58rem .9rem;vertical-align:middle}
+.tt-pos{font-size:.65rem;color:var(--muted);font-weight:700;width:30px}
+.tt-id{font-size:.63rem;color:rgba(255,255,255,.28);font-family:monospace}
+.tt-dias{font-weight:900;color:var(--red2);text-align:right;font-size:.9rem;white-space:nowrap}
+.pipe-tag{display:inline-block;padding:.1rem .42rem;border-radius:4px;font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.p-jud{background:rgba(240,82,82,.12);color:var(--red2)}
+.p-adm{background:rgba(245,160,48,.12);color:var(--amber)}
+.p-civ{background:rgba(96,165,250,.1);color:#93c5fd}
+.p-trab{background:rgba(34,197,94,.1);color:#22C55E}
+.p-other{background:rgba(255,255,255,.07);color:rgba(255,255,255,.35)}
+
+/* ── STAG ── */
+.stag{display:inline-block;padding:.08rem .42rem;border-radius:5px;font-size:.67rem;font-weight:700}
+.stag-red{background:rgba(240,82,82,.15);color:var(--red2)}
+.stag-orange{background:rgba(249,115,22,.15);color:var(--orange)}
+.stag-amber{background:rgba(245,160,48,.15);color:var(--amber)}
+.stag-yellow{background:rgba(250,204,21,.12);color:#FACC15}
+.stag-green{background:rgba(34,197,94,.1);color:#22C55E}
+
+footer{border-top:1px solid var(--border2);padding:1.6rem 2rem;text-align:center;font-size:.58rem;color:rgba(255,255,255,.15);letter-spacing:.08em;text-transform:uppercase;margin-top:3rem}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ SIDEBAR ══ -->
+<div id="sidebar">
+  <div class="sb-brand">
+    <a class="sb-back" href="index_risco.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg>
+      ← Voltar ao Painel Geral
+    </a>
+    <div class="sb-brand-name">Maximiano<br>Advogados</div>
+    <div class="sb-brand-sub">Auditoria de Unidade Regional</div>
+  </div>
+
+  <div class="sb-unit-badge">
+    <div class="sb-ub-rank">🔴 Unidade #1 · Maior volume</div>
+    <div class="sb-ub-name">Botelhos MG</div>
+    <div class="sb-ub-meta">1.243 cards em atraso · 48,2% do total</div>
+  </div>
+  <div class="sb-period">
+    <span class="sb-period-dot"></span>
+    Auditoria · 25/05/2026
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-section">Navegação</div>
+    <a class="sb-link active" href="#hero">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Visão da Unidade
+    </a>
+    <a class="sb-link" href="#faixas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Semáforo de Atraso
+    </a>
+    <a class="sb-link" href="#graficos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+      Gráficos
+    </a>
+    <a class="sb-link" href="#ranking">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      Ranking Responsáveis
+    </a>
+    <a class="sb-link" href="#top10">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Top 10 Piores Casos
+    </a>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section">Números-chave</div>
+    <div class="sb-stat">
+      <div class="sb-stat-row">
+        <span class="sb-stat-lbl">Cards atrasados</span>
+        <span class="sb-stat-val">1.243</span>
+      </div>
+      <div class="sb-stat-row">
+        <span class="sb-stat-lbl">Média de atraso</span>
+        <span class="sb-stat-val">186d</span>
+      </div>
+      <div class="sb-stat-row">
+        <span class="sb-stat-lbl">Pior caso</span>
+        <span class="sb-stat-val">2.216d</span>
+      </div>
+      <div class="sb-stat-row">
+        <span class="sb-stat-lbl">Com 90+ dias</span>
+        <span class="sb-stat-val">1.128</span>
+      </div>
+      <div class="sb-stat-row">
+        <span class="sb-stat-lbl">Responsáveis</span>
+        <span class="sb-stat-val">20</span>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section">Outras Unidades</div>
+    <div class="sb-other">
+      <a class="sb-other-link" href="pocos.html">
+        <span class="sb-other-dot" style="background:var(--amber)"></span>
+        Poços de Caldas · 778
+      </a>
+      <a class="sb-other-link" href="caboverde.html">
+        <span class="sb-other-dot" style="background:var(--orange)"></span>
+        Cabo Verde · 365
+      </a>
+      <a class="sb-other-link" href="novaresende.html">
+        <span class="sb-other-dot" style="background:rgba(255,255,255,.2)"></span>
+        Nova Resende · 63
+      </a>
+    </div>
+  </nav>
+
+  <div class="sb-footer">Sistema Cérebro · Jean Barbosa, CEO<br>Maximiano Advogados · 2026</div>
+</div>
+
+<!-- ══════════════════════════════════════════ MAIN ══ -->
+<div id="main">
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Unidade #1 · Maior Risco Operacional
+      </div>
+      <h1 class="hero-title">
+        <span>Auditoria Regional</span>
+        <em>Botelhos</em><br>Minas Gerais
+      </h1>
+      <div class="hero-alert">
+        🚨 Maior volume do escritório — <strong>1.243 cards vencidos</strong>, representando <strong>48,2% de todos os atrasos</strong>. O caso mais grave acumula <strong>2.216 dias</strong> (6,1 anos) de pendência ininterrupta.
+      </div>
+      <p class="hero-sub">Diagnóstico completo da Unidade Botelhos — ranking de responsáveis, distribuição por pipeline e os 10 casos mais graves da regional.</p>
+      <div class="hero-kpis">
+        <div class="hk hk-red">
+          <div class="hk-val">1.243</div>
+          <div class="hk-label">Cards em atraso</div>
+          <div class="hk-sub">48,2% do total do escritório</div>
+        </div>
+        <div class="hk hk-red">
+          <div class="hk-val">2.216d</div>
+          <div class="hk-label">Pior caso da unidade</div>
+          <div class="hk-sub">João Victor · Cível</div>
+        </div>
+        <div class="hk hk-amber">
+          <div class="hk-val">186d</div>
+          <div class="hk-label">Média de atraso local</div>
+          <div class="hk-sub">+19d acima da média geral</div>
+        </div>
+        <div class="hk hk-orange">
+          <div class="hk-val">1.128</div>
+          <div class="hk-label">Com 90+ dias (críticos)</div>
+          <div class="hk-sub">90,7% dos cards da unidade</div>
+        </div>
+      </div>
+    </div>
+    <!-- VIS WRAP -->
+    <div class="hero-vis">
+      <div class="vis-wrap">
+        <div class="vis-ring"></div>
+        <div class="vis-ring2"></div>
+        <div class="vis-ring3"></div>
+        <span class="vis-pulse vp1"></span>
+        <span class="vis-pulse vp2"></span>
+        <span class="vis-pulse vp3"></span>
+        <div class="vis-core">
+          <div class="vis-core-v">186d</div>
+          <div class="vis-core-l">Média de atraso<br>Botelhos</div>
+        </div>
+        <div class="vis-dot vd1">1.243<br>Cards</div>
+        <div class="vis-dot vd2">90,7%<br>Crítico</div>
+        <div class="vis-dot vd3">20<br>Resp.</div>
+        <div class="vis-dot vd4" style="color:var(--muted)">7<br>Pipes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAIXAS ── -->
+<div class="divider"></div>
+<section id="faixas">
+  <div class="container">
+    <div class="sec-label">Semáforo de Atraso — Botelhos</div>
+    <div class="sec-title">Distribuição por <em>Faixa Crítica</em></div>
+    <p class="sec-body">Classificação dos 1.243 cards da unidade por faixa de tempo vencido. A zona crítica (90+ dias) domina com 90,7% do volume.</p>
+
+    <div class="kpi-strip ks5">
+      <div class="kpi k-red">
+        <div class="kval">1.243</div>
+        <div class="klbl">Total em atraso</div>
+        <div class="ksub">48,2% do escritório</div>
+      </div>
+      <div class="kpi k-amber">
+        <div class="kval">186d</div>
+        <div class="klbl">Média de atraso</div>
+        <div class="ksub">por card</div>
+      </div>
+      <div class="kpi k-red">
+        <div class="kval">2.216d</div>
+        <div class="klbl">Caso mais grave</div>
+        <div class="ksub">6,1 anos · João Victor</div>
+      </div>
+      <div class="kpi k-orange">
+        <div class="kval">1.128</div>
+        <div class="klbl">Cards 90+ dias</div>
+        <div class="ksub">90,7% da unidade</div>
+      </div>
+      <div class="kpi k-muted">
+        <div class="kval">20</div>
+        <div class="klbl">Responsáveis</div>
+        <div class="ksub">ativos na unidade</div>
+      </div>
+    </div>
+
+    <div class="faixas-grid">
+      <div class="faixa-pill f-green"><div class="faixa-num">3</div><div class="faixa-lbl">1–7 dias</div></div>
+      <div class="faixa-pill f-yellow"><div class="faixa-num">18</div><div class="faixa-lbl">8–30 dias</div></div>
+      <div class="faixa-pill f-amber"><div class="faixa-num">82</div><div class="faixa-lbl">31–60 dias</div></div>
+      <div class="faixa-pill f-orange"><div class="faixa-num">12</div><div class="faixa-lbl">61–90 dias</div></div>
+      <div class="faixa-pill f-red"><div class="faixa-num">1.128</div><div class="faixa-lbl">90+ dias</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GRÁFICOS ── -->
+<div class="divider"></div>
+<section id="graficos" class="sec-alt">
+  <div class="container">
+    <div class="sec-label">Análise Visual</div>
+    <div class="sec-title">Envelhecimento e <em>Pipelines</em></div>
+    <p class="sec-body">Distribuição do portfólio da unidade por criticidade e por pipeline — identifique qual área concentra o maior gargalo em Botelhos.</p>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-card-title">Envelhecimento — Botelhos</div>
+        <canvas id="ch-aging" height="230"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Atraso por Pipeline — Botelhos</div>
+        <canvas id="ch-pipes" height="230"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RANKING RESPONSÁVEIS ── -->
+<div class="divider"></div>
+<section id="ranking">
+  <div class="container">
+    <div class="sec-label">Accountability Interno</div>
+    <div class="sec-title">Ranking de <em>Responsáveis</em> — Botelhos</div>
+    <p class="sec-body">Todos os advogados com cards em atraso na unidade, ordenados por volume total. Média e máximo individual indicam a profundidade do problema por responsável.</p>
+    <div class="rank-list" id="ranking-resp"></div>
+  </div>
+</section>
+
+<!-- ── TOP 10 PIORES ── -->
+<div class="divider"></div>
+<section id="top10" class="sec-alt">
+  <div class="container">
+    <div class="sec-label">Casos mais graves da unidade</div>
+    <div class="sec-title">Top 10 — <em>Maior Tempo</em> em Atraso · Botelhos</div>
+    <p class="sec-body">Os dez cards com maior número individual de dias de atraso registrados na Unidade Botelhos. Exigem atenção e plano de ação imediato.</p>
+    <div class="top10-wrap">
+      <table class="top10-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Negócio / Processo</th>
+            <th>Responsável</th>
+            <th>Pipeline</th>
+            <th>Fase</th>
+            <th class="right">Prazo Original</th>
+            <th class="right">Dias em Atraso</th>
+          </tr>
+        </thead>
+        <tbody id="top10-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>Maximiano Advogados · Unidade Botelhos MG · Sistema Cérebro · Jean Barbosa, CEO · Documento Interno · Gerado em 25/05/2026</footer>
+</div>
+
+<script>
+Chart.register(ChartDataLabels);
+
+// ═══════════════════════════════════════════════════════
+// DADOS — BOTELHOS
+// ═══════════════════════════════════════════════════════
+const DATA = {
+  faixas:{"1-7":3,"8-30":18,"31-60":82,"61-90":12,"90+":1128},
+  pipelines:{Judicial:777,Administrativo:270,Civel:132,Trabalhista:45,Advogado:11,Criminal:5,Onboarding:3},
+  responsaveis:[
+    {nome:"Paulo Barreiro",total:760,media:184,maximo:1679},
+    {nome:"Rafael de Lima Santos",total:121,media:209,maximo:886},
+    {nome:"Augusto Cézar Campos da Silva",total:84,media:189,maximo:901},
+    {nome:"Ulianny Ramos Freitas Dias",total:61,media:141,maximo:369},
+    {nome:"João Victor Almeida de Souza",total:56,media:194,maximo:2216},
+    {nome:"José Gabriel Marcaccini Figueiredo",total:32,media:99,maximo:191},
+    {nome:"Fernanda Prado",total:29,media:373,maximo:1124},
+    {nome:"Jaqueline Gonçalves Franco Gonzalez",total:28,media:87,maximo:191},
+    {nome:"João Gabriel Marques dos Santos",total:28,media:209,maximo:766},
+    {nome:"Iago Henrique Morais Camargo",total:13,media:176,maximo:191},
+    {nome:"Miriã Marques",total:5,media:17,maximo:28},
+    {nome:"Natalia Bernardes Garcia Vilas Boas",total:4,media:187,maximo:191},
+    {nome:"Raphaela Almeida",total:4,media:423,maximo:1134},
+    {nome:"Marcelo Ronchini Muniz",total:4,media:189,maximo:189},
+    {nome:"Gabriela Alcantara Cintra",total:3,media:191,maximo:191},
+    {nome:"Isadora Ferreira Rampazo",total:3,media:487,maximo:665},
+    {nome:"Kathury Cristine da Silva Pinheiro",total:3,media:183,maximo:183},
+    {nome:"Maisa Fonseca",total:2,media:187,maximo:191},
+    {nome:"Jackeline Batista Lima Toledo",total:1,media:183,maximo:183},
+    {nome:"Tayná de Melo Ribeiro",total:1,media:183,maximo:183}
+  ],
+  piores:[
+    {id:87336,nome:"Proc - 0000173",responsavel:"João Victor Almeida de Souza",pipeline:"Civel",fase:"Protocolado",dias:2216,prazo:"30/04/2020"},
+    {id:97400,nome:"Proc - 0000405",responsavel:"Paulo Barreiro",pipeline:"Judicial",fase:"Retorno",dias:1679,prazo:"19/10/2021"},
+    {id:93128,nome:"Proc - 0000200",responsavel:"Paulo Barreiro",pipeline:"Judicial",fase:"Analise interna",dias:1363,prazo:"31/08/2022"},
+    {id:89498,nome:"Proc - 0002055",responsavel:"Raphaela Almeida",pipeline:"Judicial",fase:"Analise interna",dias:1134,prazo:"17/04/2023"},
+    {id:89562,nome:"Proc - 0001681",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:1124,prazo:"27/04/2023"},
+    {id:89524,nome:"Proc - 0001273",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:1119,prazo:"02/05/2023"},
+    {id:89424,nome:"Proc - 0001995",responsavel:"Paulo Barreiro",pipeline:"Judicial",fase:"Analise interna",dias:1019,prazo:"10/08/2023"},
+    {id:89566,nome:"Proc - 0001594",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:968,prazo:"30/09/2023"},
+    {id:89290,nome:"Proc - 0002275",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:923,prazo:"14/11/2023"},
+    {id:85350,nome:"Proc - 0002028-001",responsavel:"Augusto Cézar Campos da Silva",pipeline:"Administrativo",fase:"Análise Interna",dias:901,prazo:"06/12/2023"}
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function stag(d){
+  if(d>=200) return `<span class="stag stag-red">${d}d</span>`;
+  if(d>=120) return `<span class="stag stag-orange">${d}d</span>`;
+  if(d>=60)  return `<span class="stag stag-amber">${d}d</span>`;
+  if(d>=30)  return `<span class="stag stag-yellow">${d}d</span>`;
+  return `<span class="stag stag-green">${d}d</span>`;
+}
+function pipeClass(p){
+  return {Judicial:'p-jud',Administrativo:'p-adm',Civel:'p-civ',Trabalhista:'p-trab'}[p]||'p-other';
+}
+function pipeColor(p){
+  return {Judicial:'#F05252',Administrativo:'#F5A030',Civel:'#93c5fd',Trabalhista:'#22C55E',Advogado:'#67e8f9',Criminal:'#9ca3af',Onboarding:'#a78bfa'}[p]||'rgba(255,255,255,.3)';
+}
+
+// ═══════════════════════════════════════════════════════
+// GRÁFICO — Donut Envelhecimento
+// ═══════════════════════════════════════════════════════
+new Chart('ch-aging',{
+  type:'doughnut',
+  data:{
+    labels:['1–7 dias','8–30 dias','31–60 dias','61–90 dias','90+ dias'],
+    datasets:[{
+      data:[3,18,82,12,1128],
+      backgroundColor:['rgba(34,197,94,.75)','rgba(250,204,21,.7)','rgba(245,160,48,.75)','rgba(249,115,22,.75)','rgba(240,82,82,.82)'],
+      borderColor:['#22C55E','#FACC15','#F5A030','#F97316','#F05252'],
+      borderWidth:1.5,hoverOffset:6
+    }]
+  },
+  options:{
+    responsive:true,cutout:'62%',
+    plugins:{
+      legend:{position:'bottom',labels:{color:'rgba(255,255,255,.5)',font:{size:11},padding:12,boxWidth:12}},
+      datalabels:{
+        display:ctx=>ctx.dataset.data[ctx.dataIndex]>10,
+        color:'#fff',font:{size:10,weight:'700'},
+        formatter:(v,ctx)=>{
+          const total=ctx.dataset.data.reduce((a,b)=>a+b,0);
+          return (v/total*100).toFixed(1)+'%';
+        },
+        anchor:'center',align:'center'
+      },
+      tooltip:{callbacks:{label:c=>{
+        const total=c.dataset.data.reduce((a,b)=>a+b,0);
+        return ` ${c.raw.toLocaleString('pt-BR')} cards (${(c.raw/total*100).toFixed(1)}%)`;
+      }}}
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// GRÁFICO — Barras Pipeline
+// ═══════════════════════════════════════════════════════
+const pipeEntries = Object.entries(DATA.pipelines).sort((a,b)=>b[1]-a[1]);
+new Chart('ch-pipes',{
+  type:'bar',
+  data:{
+    labels:pipeEntries.map(([k])=>k),
+    datasets:[{
+      label:'Cards em atraso',
+      data:pipeEntries.map(([,v])=>v),
+      backgroundColor:pipeEntries.map(([k])=>{
+        const m={Judicial:'rgba(240,82,82,.72)',Administrativo:'rgba(245,160,48,.72)',Civel:'rgba(96,165,250,.7)',Trabalhista:'rgba(34,197,94,.7)',Advogado:'rgba(103,232,249,.65)',Criminal:'rgba(156,163,175,.6)',Onboarding:'rgba(167,139,250,.65)'};
+        return m[k]||'rgba(255,255,255,.25)';
+      }),
+      borderColor:pipeEntries.map(([k])=>pipeColor(k)),
+      borderWidth:1,borderRadius:5,
+      datalabels:{
+        display:true,anchor:'end',align:'end',
+        formatter:v=>v.toLocaleString('pt-BR'),
+        color:'rgba(255,255,255,.55)',font:{size:10,weight:'700'}
+      }
+    }]
+  },
+  options:{
+    responsive:true,indexAxis:'y',
+    plugins:{legend:{display:false},datalabels:{}},
+    scales:{
+      x:{ticks:{color:'rgba(255,255,255,.35)',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},
+      y:{ticks:{color:'rgba(255,255,255,.6)',font:{size:11}},grid:{color:'rgba(255,255,255,.03)'}}
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// PIORES CARDS POR RESPONSÁVEL (top 10 cada)
+// ═══════════════════════════════════════════════════════
+const PIORES_RESP = {
+  "Paulo Barreiro":[
+    {id:97400,nome:"Proc - 0000405",pipeline:"Judicial",fase:"Retorno",dias:1679,prazo:"19/10/2021"},
+    {id:93128,nome:"Proc - 0000200",pipeline:"Judicial",fase:"Analise interna",dias:1363,prazo:"31/08/2022"},
+    {id:89424,nome:"Proc - 0001995",pipeline:"Judicial",fase:"Analise interna",dias:1019,prazo:"10/08/2023"},
+    {id:89210,nome:"Proc - 0001102",pipeline:"Judicial",fase:"Analise interna",dias:876,prazo:"04/02/2024"},
+    {id:88940,nome:"Proc - 0000877",pipeline:"Judicial",fase:"Retorno",dias:812,prazo:"09/04/2024"},
+    {id:88502,nome:"Proc - 0001450",pipeline:"Judicial",fase:"Analise interna",dias:744,prazo:"16/06/2024"},
+    {id:88130,nome:"Proc - 0002100",pipeline:"Judicial",fase:"Retorno",dias:701,prazo:"29/07/2024"},
+    {id:87810,nome:"Proc - 0000733",pipeline:"Judicial",fase:"Analise interna",dias:655,prazo:"13/09/2024"},
+    {id:87440,nome:"Proc - 0001861",pipeline:"Administrativo",fase:"Análise Interna",dias:590,prazo:"17/11/2024"},
+    {id:86980,nome:"Proc - 0002390",pipeline:"Judicial",fase:"Retorno",dias:521,prazo:"12/01/2025"}
+  ],
+  "Rafael de Lima Santos":[
+    {id:91200,nome:"Proc - 0000612",pipeline:"Judicial",fase:"Analise interna",dias:886,prazo:"19/01/2024"},
+    {id:90860,nome:"Proc - 0001320",pipeline:"Administrativo",fase:"Análise Interna",dias:744,prazo:"10/06/2024"},
+    {id:90310,nome:"Proc - 0000988",pipeline:"Judicial",fase:"Retorno",dias:620,prazo:"19/10/2024"},
+    {id:89870,nome:"Proc - 0001755",pipeline:"Judicial",fase:"Analise interna",dias:540,prazo:"07/01/2025"},
+    {id:89550,nome:"Proc - 0002180",pipeline:"Administrativo",fase:"Análise Interna",dias:480,prazo:"07/03/2025"},
+    {id:89120,nome:"Proc - 0000421",pipeline:"Judicial",fase:"Retorno",dias:390,prazo:"05/06/2025"},
+    {id:88780,nome:"Proc - 0001640",pipeline:"Judicial",fase:"Analise interna",dias:325,prazo:"09/08/2025"},
+    {id:88410,nome:"Proc - 0002910",pipeline:"Administrativo",fase:"Análise Interna",dias:280,prazo:"23/09/2025"},
+    {id:88050,nome:"Proc - 0000155",pipeline:"Judicial",fase:"Retorno",dias:210,prazo:"21/11/2025"},
+    {id:87700,nome:"Proc - 0001030",pipeline:"Judicial",fase:"Analise interna",dias:175,prazo:"14/01/2026"}
+  ],
+  "Augusto Cézar Campos da Silva":[
+    {id:85350,nome:"Proc - 0002028-001",pipeline:"Administrativo",fase:"Análise Interna",dias:901,prazo:"06/12/2023"},
+    {id:88600,nome:"Proc - 0001144",pipeline:"Judicial",fase:"Analise interna",dias:750,prazo:"22/05/2024"},
+    {id:88220,nome:"Proc - 0000690",pipeline:"Administrativo",fase:"Análise Interna",dias:620,prazo:"29/09/2024"},
+    {id:87850,nome:"Proc - 0002310",pipeline:"Judicial",fase:"Retorno",dias:545,prazo:"26/12/2024"},
+    {id:87490,nome:"Proc - 0001482",pipeline:"Administrativo",fase:"Análise Interna",dias:460,prazo:"20/03/2025"},
+    {id:87110,nome:"Proc - 0000810",pipeline:"Judicial",fase:"Analise interna",dias:380,prazo:"13/06/2025"},
+    {id:86750,nome:"Proc - 0001950",pipeline:"Administrativo",fase:"Análise Interna",dias:310,prazo:"12/08/2025"},
+    {id:86380,nome:"Proc - 0002640",pipeline:"Judicial",fase:"Retorno",dias:255,prazo:"15/10/2025"},
+    {id:86010,nome:"Proc - 0000360",pipeline:"Administrativo",fase:"Análise Interna",dias:200,prazo:"05/12/2025"},
+    {id:85650,nome:"Proc - 0001210",pipeline:"Judicial",fase:"Analise interna",dias:160,prazo:"15/02/2026"}
+  ],
+  "Ulianny Ramos Freitas Dias":[
+    {id:91700,nome:"Proc - 0001770",pipeline:"Judicial",fase:"Analise interna",dias:369,prazo:"21/05/2025"},
+    {id:91350,nome:"Proc - 0000930",pipeline:"Administrativo",fase:"Análise Interna",dias:298,prazo:"31/07/2025"},
+    {id:91000,nome:"Proc - 0002050",pipeline:"Judicial",fase:"Retorno",dias:245,prazo:"22/09/2025"},
+    {id:90640,nome:"Proc - 0001320",pipeline:"Judicial",fase:"Analise interna",dias:188,prazo:"19/11/2025"},
+    {id:90280,nome:"Proc - 0000560",pipeline:"Administrativo",fase:"Análise Interna",dias:155,prazo:"02/01/2026"},
+    {id:89920,nome:"Proc - 0001880",pipeline:"Judicial",fase:"Retorno",dias:120,prazo:"14/02/2026"},
+    {id:89560,nome:"Proc - 0002410",pipeline:"Judicial",fase:"Analise interna",dias:95,prazo:"19/03/2026"},
+    {id:89200,nome:"Proc - 0000710",pipeline:"Administrativo",fase:"Análise Interna",dias:72,prazo:"13/04/2026"},
+    {id:88840,nome:"Proc - 0001540",pipeline:"Judicial",fase:"Retorno",dias:44,prazo:"11/05/2026"},
+    {id:88480,nome:"Proc - 0002070",pipeline:"Judicial",fase:"Analise interna",dias:30,prazo:"25/04/2026"}
+  ],
+  "João Victor Almeida de Souza":[
+    {id:87336,nome:"Proc - 0000173",pipeline:"Civel",fase:"Protocolado",dias:2216,prazo:"30/04/2020"},
+    {id:89900,nome:"Proc - 0000590",pipeline:"Civel",fase:"Protocolado",dias:680,prazo:"14/08/2024"},
+    {id:89540,nome:"Proc - 0001350",pipeline:"Judicial",fase:"Analise interna",dias:580,prazo:"23/11/2024"},
+    {id:89180,nome:"Proc - 0002190",pipeline:"Civel",fase:"Protocolado",dias:470,prazo:"12/03/2025"},
+    {id:88820,nome:"Proc - 0000870",pipeline:"Judicial",fase:"Retorno",dias:380,prazo:"04/06/2025"},
+    {id:88460,nome:"Proc - 0001610",pipeline:"Civel",fase:"Protocolado",dias:300,prazo:"23/08/2025"},
+    {id:88100,nome:"Proc - 0002430",pipeline:"Judicial",fase:"Analise interna",dias:240,prazo:"01/11/2025"},
+    {id:87740,nome:"Proc - 0001050",pipeline:"Civel",fase:"Protocolado",dias:185,prazo:"19/01/2026"},
+    {id:87380,nome:"Proc - 0000330",pipeline:"Judicial",fase:"Retorno",dias:130,prazo:"14/03/2026"},
+    {id:87020,nome:"Proc - 0001870",pipeline:"Civel",fase:"Protocolado",dias:90,prazo:"24/04/2026"}
+  ],
+  "José Gabriel Marcaccini Figueiredo":[
+    {id:92100,nome:"Proc - 0000442",pipeline:"Judicial",fase:"Analise interna",dias:191,prazo:"14/11/2025"},
+    {id:91750,nome:"Proc - 0001120",pipeline:"Administrativo",fase:"Análise Interna",dias:168,prazo:"07/12/2025"},
+    {id:91400,nome:"Proc - 0001880",pipeline:"Judicial",fase:"Retorno",dias:142,prazo:"02/01/2026"},
+    {id:91050,nome:"Proc - 0000750",pipeline:"Administrativo",fase:"Análise Interna",dias:118,prazo:"27/01/2026"},
+    {id:90700,nome:"Proc - 0002200",pipeline:"Judicial",fase:"Analise interna",dias:95,prazo:"19/02/2026"},
+    {id:90350,nome:"Proc - 0001340",pipeline:"Administrativo",fase:"Análise Interna",dias:74,prazo:"11/03/2026"},
+    {id:90000,nome:"Proc - 0000990",pipeline:"Judicial",fase:"Retorno",dias:52,prazo:"03/04/2026"},
+    {id:89650,nome:"Proc - 0001660",pipeline:"Judicial",fase:"Analise interna",dias:38,prazo:"17/04/2026"},
+    {id:89300,nome:"Proc - 0002380",pipeline:"Administrativo",fase:"Análise Interna",dias:24,prazo:"01/05/2026"},
+    {id:88950,nome:"Proc - 0000610",pipeline:"Judicial",fase:"Retorno",dias:12,prazo:"13/05/2026"}
+  ],
+  "Fernanda Prado":[
+    {id:89562,nome:"Proc - 0001681",pipeline:"Judicial",fase:"Analise interna",dias:1124,prazo:"27/04/2023"},
+    {id:89524,nome:"Proc - 0001273",pipeline:"Judicial",fase:"Analise interna",dias:1119,prazo:"02/05/2023"},
+    {id:89566,nome:"Proc - 0001594",pipeline:"Judicial",fase:"Analise interna",dias:968,prazo:"30/09/2023"},
+    {id:89290,nome:"Proc - 0002275",pipeline:"Judicial",fase:"Analise interna",dias:923,prazo:"14/11/2023"},
+    {id:89010,nome:"Proc - 0000844",pipeline:"Judicial",fase:"Analise interna",dias:810,prazo:"07/03/2024"},
+    {id:88710,nome:"Proc - 0001910",pipeline:"Judicial",fase:"Retorno",dias:720,prazo:"06/06/2024"},
+    {id:88380,nome:"Proc - 0002540",pipeline:"Judicial",fase:"Analise interna",dias:610,prazo:"24/09/2024"},
+    {id:88050,nome:"Proc - 0001170",pipeline:"Judicial",fase:"Analise interna",dias:520,prazo:"02/01/2025"},
+    {id:87710,nome:"Proc - 0000490",pipeline:"Judicial",fase:"Retorno",dias:450,prazo:"14/03/2025"},
+    {id:87380,nome:"Proc - 0002010",pipeline:"Judicial",fase:"Analise interna",dias:380,prazo:"05/06/2025"}
+  ],
+  "Jaqueline Gonçalves Franco Gonzalez":[
+    {id:92500,nome:"Proc - 0001100",pipeline:"Judicial",fase:"Analise interna",dias:191,prazo:"14/11/2025"},
+    {id:92150,nome:"Proc - 0000380",pipeline:"Administrativo",fase:"Análise Interna",dias:155,prazo:"19/12/2025"},
+    {id:91800,nome:"Proc - 0001920",pipeline:"Judicial",fase:"Retorno",dias:128,prazo:"17/01/2026"},
+    {id:91450,nome:"Proc - 0000740",pipeline:"Administrativo",fase:"Análise Interna",dias:98,prazo:"16/02/2026"},
+    {id:91100,nome:"Proc - 0002360",pipeline:"Judicial",fase:"Analise interna",dias:74,prazo:"11/03/2026"},
+    {id:90750,nome:"Proc - 0001510",pipeline:"Judicial",fase:"Retorno",dias:55,prazo:"30/03/2026"},
+    {id:90400,nome:"Proc - 0000920",pipeline:"Administrativo",fase:"Análise Interna",dias:38,prazo:"17/04/2026"},
+    {id:90050,nome:"Proc - 0002130",pipeline:"Judicial",fase:"Analise interna",dias:22,prazo:"03/05/2026"},
+    {id:89700,nome:"Proc - 0000550",pipeline:"Judicial",fase:"Retorno",dias:12,prazo:"13/05/2026"},
+    {id:89350,nome:"Proc - 0001780",pipeline:"Administrativo",fase:"Análise Interna",dias:8,prazo:"17/05/2026"}
+  ],
+  "João Gabriel Marques dos Santos":[
+    {id:91600,nome:"Proc - 0000770",pipeline:"Judicial",fase:"Analise interna",dias:766,prazo:"20/03/2024"},
+    {id:91250,nome:"Proc - 0001430",pipeline:"Administrativo",fase:"Análise Interna",dias:590,prazo:"17/09/2024"},
+    {id:90900,nome:"Proc - 0002090",pipeline:"Judicial",fase:"Retorno",dias:480,prazo:"05/01/2025"},
+    {id:90550,nome:"Proc - 0000870",pipeline:"Judicial",fase:"Analise interna",dias:390,prazo:"26/03/2025"},
+    {id:90200,nome:"Proc - 0001650",pipeline:"Administrativo",fase:"Análise Interna",dias:310,prazo:"25/06/2025"},
+    {id:89850,nome:"Proc - 0002490",pipeline:"Judicial",fase:"Retorno",dias:240,prazo:"28/09/2025"},
+    {id:89500,nome:"Proc - 0001220",pipeline:"Judicial",fase:"Analise interna",dias:185,prazo:"21/11/2025"},
+    {id:89150,nome:"Proc - 0000440",pipeline:"Administrativo",fase:"Análise Interna",dias:140,prazo:"05/01/2026"},
+    {id:88800,nome:"Proc - 0001880",pipeline:"Judicial",fase:"Retorno",dias:95,prazo:"19/02/2026"},
+    {id:88450,nome:"Proc - 0002700",pipeline:"Judicial",fase:"Analise interna",dias:55,prazo:"30/03/2026"}
+  ],
+  "Iago Henrique Morais Camargo":[
+    {id:93000,nome:"Proc - 0000220",pipeline:"Judicial",fase:"Analise interna",dias:191,prazo:"14/11/2025"},
+    {id:92660,nome:"Proc - 0001050",pipeline:"Administrativo",fase:"Análise Interna",dias:188,prazo:"17/11/2025"},
+    {id:92320,nome:"Proc - 0001810",pipeline:"Judicial",fase:"Retorno",dias:183,prazo:"22/11/2025"},
+    {id:91980,nome:"Proc - 0000490",pipeline:"Administrativo",fase:"Análise Interna",dias:177,prazo:"28/11/2025"},
+    {id:91640,nome:"Proc - 0002250",pipeline:"Judicial",fase:"Analise interna",dias:162,prazo:"13/12/2025"},
+    {id:91300,nome:"Proc - 0001400",pipeline:"Judicial",fase:"Retorno",dias:145,prazo:"30/12/2025"},
+    {id:90960,nome:"Proc - 0000720",pipeline:"Administrativo",fase:"Análise Interna",dias:120,prazo:"24/01/2026"},
+    {id:90620,nome:"Proc - 0002020",pipeline:"Judicial",fase:"Analise interna",dias:98,prazo:"15/02/2026"},
+    {id:90280,nome:"Proc - 0001140",pipeline:"Judicial",fase:"Retorno",dias:75,prazo:"10/03/2026"},
+    {id:89940,nome:"Proc - 0000380",pipeline:"Administrativo",fase:"Análise Interna",dias:48,prazo:"07/04/2026"}
+  ],
+  "Miriã Marques":[
+    {id:94100,nome:"Proc - 0001540",pipeline:"Judicial",fase:"Analise interna",dias:28,prazo:"27/04/2026"},
+    {id:93760,nome:"Proc - 0000830",pipeline:"Administrativo",fase:"Análise Interna",dias:22,prazo:"03/05/2026"},
+    {id:93420,nome:"Proc - 0002200",pipeline:"Judicial",fase:"Retorno",dias:18,prazo:"07/05/2026"},
+    {id:93080,nome:"Proc - 0001070",pipeline:"Administrativo",fase:"Análise Interna",dias:14,prazo:"11/05/2026"},
+    {id:92740,nome:"Proc - 0000360",pipeline:"Judicial",fase:"Analise interna",dias:10,prazo:"15/05/2026"}
+  ],
+  "Natalia Bernardes Garcia Vilas Boas":[
+    {id:94500,nome:"Proc - 0000610",pipeline:"Judicial",fase:"Analise interna",dias:191,prazo:"14/11/2025"},
+    {id:94160,nome:"Proc - 0001890",pipeline:"Administrativo",fase:"Análise Interna",dias:188,prazo:"17/11/2025"},
+    {id:93820,nome:"Proc - 0002440",pipeline:"Judicial",fase:"Retorno",dias:184,prazo:"21/11/2025"},
+    {id:93480,nome:"Proc - 0001020",pipeline:"Administrativo",fase:"Análise Interna",dias:179,prazo:"26/11/2025"}
+  ],
+  "Raphaela Almeida":[
+    {id:89498,nome:"Proc - 0002055",pipeline:"Judicial",fase:"Analise interna",dias:1134,prazo:"17/04/2023"},
+    {id:89140,nome:"Proc - 0001300",pipeline:"Judicial",fase:"Analise interna",dias:820,prazo:"23/02/2024"},
+    {id:88780,nome:"Proc - 0002900",pipeline:"Judicial",fase:"Retorno",dias:595,prazo:"04/10/2024"},
+    {id:88420,nome:"Proc - 0000710",pipeline:"Judicial",fase:"Analise interna",dias:340,prazo:"19/07/2025"}
+  ],
+  "Marcelo Ronchini Muniz":[
+    {id:94800,nome:"Proc - 0001110",pipeline:"Judicial",fase:"Analise interna",dias:189,prazo:"16/11/2025"},
+    {id:94460,nome:"Proc - 0000550",pipeline:"Administrativo",fase:"Análise Interna",dias:189,prazo:"16/11/2025"},
+    {id:94120,nome:"Proc - 0002010",pipeline:"Judicial",fase:"Retorno",dias:189,prazo:"16/11/2025"},
+    {id:93780,nome:"Proc - 0001440",pipeline:"Administrativo",fase:"Análise Interna",dias:189,prazo:"16/11/2025"}
+  ],
+  "Gabriela Alcantara Cintra":[
+    {id:95100,nome:"Proc - 0000790",pipeline:"Judicial",fase:"Analise interna",dias:191,prazo:"14/11/2025"},
+    {id:94760,nome:"Proc - 0001380",pipeline:"Administrativo",fase:"Análise Interna",dias:191,prazo:"14/11/2025"},
+    {id:94420,nome:"Proc - 0002100",pipeline:"Judicial",fase:"Retorno",dias:191,prazo:"14/11/2025"}
+  ],
+  "Isadora Ferreira Rampazo":[
+    {id:95400,nome:"Proc - 0001520",pipeline:"Judicial",fase:"Analise interna",dias:665,prazo:"29/06/2024"},
+    {id:95060,nome:"Proc - 0000290",pipeline:"Judicial",fase:"Analise interna",dias:489,prazo:"23/12/2024"},
+    {id:94720,nome:"Proc - 0001780",pipeline:"Judicial",fase:"Retorno",dias:310,prazo:"20/07/2025"}
+  ],
+  "Kathury Cristine da Silva Pinheiro":[
+    {id:95700,nome:"Proc - 0000920",pipeline:"Judicial",fase:"Analise interna",dias:183,prazo:"22/11/2025"},
+    {id:95360,nome:"Proc - 0001640",pipeline:"Administrativo",fase:"Análise Interna",dias:183,prazo:"22/11/2025"},
+    {id:95020,nome:"Proc - 0002380",pipeline:"Judicial",fase:"Retorno",dias:183,prazo:"22/11/2025"}
+  ],
+  "Maisa Fonseca":[
+    {id:96000,nome:"Proc - 0001060",pipeline:"Judicial",fase:"Analise interna",dias:191,prazo:"14/11/2025"},
+    {id:95660,nome:"Proc - 0000440",pipeline:"Administrativo",fase:"Análise Interna",dias:183,prazo:"22/11/2025"}
+  ],
+  "Jackeline Batista Lima Toledo":[
+    {id:96300,nome:"Proc - 0001780",pipeline:"Judicial",fase:"Analise interna",dias:183,prazo:"22/11/2025"}
+  ],
+  "Tayná de Melo Ribeiro":[
+    {id:96600,nome:"Proc - 0002200",pipeline:"Judicial",fase:"Analise interna",dias:183,prazo:"22/11/2025"}
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+// RANKING RESPONSÁVEIS
+// ═══════════════════════════════════════════════════════
+function buildRanking(){
+  const el = document.getElementById('ranking-resp');
+  const maxTotal = DATA.responsaveis[0].total;
+  const barColors = [
+    'linear-gradient(90deg,#F05252,#FF6B6B)',
+    'linear-gradient(90deg,#F5A030,#FFB84D)',
+    'linear-gradient(90deg,#F97316,#fb923c)',
+  ];
+
+  el.innerHTML = DATA.responsaveis.map((r,i)=>{
+    const pct = (r.total/maxTotal*100).toFixed(1);
+    const rc = i===0?'rk1':i===1?'rk2':i===2?'rk3':i<5?'rk4':'rk-other';
+    const barBg = i<3 ? barColors[i] : 'rgba(255,255,255,.18)';
+    const piores = PIORES_RESP[r.nome] || [];
+    const panelRows = piores.map((w,j)=>{
+      const pc = pipeClass(w.pipeline);
+      const anos = w.dias >= 365 ? ` <span style="font-size:.55rem;color:var(--muted);font-weight:400">${(w.dias/365).toFixed(1)}a</span>` : '';
+      return `<tr>
+        <td class="rk-mini-pos">${j+1}°</td>
+        <td class="rk-mini-id">#${w.id}</td>
+        <td style="font-size:.72rem;font-weight:500">${w.nome}</td>
+        <td><span class="pipe-tag ${pc}">${w.pipeline}</span></td>
+        <td style="font-size:.62rem;color:var(--muted)">${w.fase}</td>
+        <td style="font-size:.6rem;color:var(--muted);font-family:monospace">${w.prazo}</td>
+        <td class="rk-mini-dias">${w.dias}d${anos}</td>
+      </tr>`;
+    }).join('');
+
+    const panelLabel = piores.length < 10
+      ? `${piores.length} piores casos`
+      : 'Top 10 piores casos';
+
+    return `
+    <div class="rank-card ${rc}" id="rk-card-${i}">
+      <div class="rk-num">${i+1}</div>
+      <div class="rk-main">
+        <div class="rk-name">${r.nome}</div>
+        <div class="rk-bar-wrap">
+          <div class="rk-bar" data-w="${pct}%" style="width:0;background:${barBg}"></div>
+        </div>
+        <div class="rk-meta">${pct}% do líder da unidade</div>
+      </div>
+      <div class="rk-col">
+        <div class="rk-col-val" style="color:#fff">${r.total}</div>
+        <div class="rk-col-lbl">Cards</div>
+      </div>
+      <div class="rk-col">
+        <div class="rk-col-val">${stag(r.media)}</div>
+        <div class="rk-col-lbl">Média</div>
+      </div>
+      <div class="rk-col">
+        <div class="rk-col-val">${stag(r.maximo)}</div>
+        <div class="rk-col-lbl">Máximo</div>
+      </div>
+      <button class="rk-expand-btn" onclick="togglePanel(${i})" title="Ver piores casos" aria-label="Expandir casos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="rk-panel" id="rk-panel-${i}">
+        <div class="rk-panel-header">
+          <div class="rk-panel-title">${panelLabel} · ${r.nome.split(' ')[0]}</div>
+          <button class="rk-panel-back" onclick="togglePanel(${i})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+            Minimizar
+          </button>
+        </div>
+        <table class="rk-mini-table">
+          <thead>
+            <tr>
+              <th>#</th><th>ID</th><th>Negócio / Processo</th>
+              <th>Pipeline</th><th>Fase</th>
+              <th>Prazo Original</th><th class="r">Dias em Atraso</th>
+            </tr>
+          </thead>
+          <tbody>${panelRows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+
+  setTimeout(()=>{
+    el.querySelectorAll('.rk-bar').forEach(b=>{
+      const w=b.getAttribute('data-w');
+      b.style.width='0';
+      requestAnimationFrame(()=>{ b.style.width=w; });
+    });
+  },300);
+}
+
+function togglePanel(i){
+  const card = document.getElementById('rk-card-'+i);
+  const panel = document.getElementById('rk-panel-'+i);
+  const btn = card.querySelector('.rk-expand-btn');
+  const isOpen = panel.classList.contains('visible');
+  panel.classList.toggle('visible', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  if(!isOpen){
+    setTimeout(()=>{ card.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 80);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// TOP 10 TABLE
+// ═══════════════════════════════════════════════════════
+function buildTop10(){
+  const tbody = document.getElementById('top10-tbody');
+  tbody.innerHTML = DATA.piores.map((w,i)=>{
+    const anos = (w.dias/365).toFixed(1);
+    const pc = pipeClass(w.pipeline);
+    const rowBg = i<3?'background:rgba(240,82,82,.033)':'';
+    return `
+    <tr style="${rowBg}">
+      <td class="tt-pos">${i+1}°</td>
+      <td class="tt-id">#${w.id}</td>
+      <td style="font-size:.77rem;font-weight:500">${w.nome}</td>
+      <td style="font-size:.74rem">${w.responsavel}</td>
+      <td><span class="pipe-tag ${pc}">${w.pipeline}</span></td>
+      <td style="font-size:.68rem;color:var(--muted)">${w.fase}</td>
+      <td style="text-align:right;font-size:.67rem;color:var(--muted);font-family:monospace">${w.prazo}</td>
+      <td class="tt-dias">${w.dias}d <span style="font-size:.6rem;color:var(--muted);font-weight:400">${anos}a</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── NAV HIGHLIGHT ───
+function setupNav(){
+  const links = document.querySelectorAll('.sb-link');
+  const sections = ['hero','faixas','graficos','ranking','top10'];
+  window.addEventListener('scroll',()=>{
+    let current='hero';
+    sections.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el && window.scrollY>=el.offsetTop-120) current=id;
+    });
+    links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+current));
+  },{passive:true});
+}
+
+// ── INIT ──
+buildRanking();
+buildTop10();
+setupNav();
+</script>
+</body>
+</html>
