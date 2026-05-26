@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Maximiano · Painel de Risco Operacional · 25/05/2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root{
+  --dk:#04111F;--nv:#091A2E;--nv2:#0E2441;
+  --red:#F05252;--red2:#FF6B6B;--red-border:rgba(240,82,82,.22);
+  --amber:#F5A030;--amber2:#FFB84D;
+  --orange:#F97316;
+  --green:#22C55E;
+  --muted:#6B84A8;
+  --card:#0A1F38;--border:rgba(240,82,82,.18);--border2:rgba(255,255,255,.06);
+  --r:12px;--sb:248px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--dk);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65;overflow-x:hidden;display:flex}
+
+/* SIDEBAR */
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:rgba(9,26,46,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:900;overflow-y:auto}
+.sb-brand{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border)}
+.sb-brand-name{font-weight:800;font-size:.92rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red2);line-height:1.2}
+.sb-brand-sub{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.sb-period{margin:.8rem 1.2rem;background:rgba(240,82,82,.08);border:1px solid rgba(240,82,82,.2);border-radius:6px;padding:.4rem .75rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red2);font-weight:700;text-align:center;display:flex;align-items:center;gap:.4rem;justify-content:center}
+.sb-period-dot{width:6px;height:6px;border-radius:50%;background:var(--red2);animation:blink 1.5s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.sb-nav{padding:.5rem 0;flex:1}
+.sb-section{padding:.3rem 1.2rem .1rem;font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.6rem;font-weight:700}
+.sb-link{display:flex;align-items:center;gap:.55rem;padding:.45rem 1.2rem;font-size:.73rem;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--red2);background:rgba(240,82,82,.06);border-left-color:var(--red2)}
+.sb-link svg{width:14px;height:14px;opacity:.6;flex-shrink:0}
+.sb-link:hover svg,.sb-link.active svg{opacity:1}
+.sb-divider{height:1px;background:var(--border);margin:.6rem 1.2rem}
+.sb-unit{display:flex;align-items:center;gap:.55rem;padding:.42rem 1.2rem;font-size:.72rem;color:rgba(255,255,255,.45);text-decoration:none;transition:all .2s}
+.sb-unit:hover{color:#fff;background:rgba(255,255,255,.04)}
+.sb-unit-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sb-stat{padding:.5rem 1.2rem;display:flex;flex-direction:column;gap:.6rem;margin-bottom:.4rem}
+.sb-stat-row{display:flex;justify-content:space-between;align-items:center}
+.sb-stat-lbl{font-size:.6rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.sb-stat-val{font-size:.78rem;font-weight:700;color:var(--red2)}
+.sb-footer{padding:.8rem 1.2rem;border-top:1px solid var(--border);font-size:.58rem;color:var(--muted);text-align:center;line-height:1.5}
+
+/* MAIN */
+#main{margin-left:var(--sb);flex:1;min-width:0}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:5rem 0 4rem;background:radial-gradient(ellipse 70% 55% at 60% 0%,rgba(240,82,82,.14) 0%,transparent 65%),radial-gradient(ellipse 30% 35% at 95% 80%,rgba(245,160,48,.1) 0%,transparent 55%),var(--dk);position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(240,82,82,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(240,82,82,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:1120px;margin:0 auto;padding:0 2.5rem;display:grid;grid-template-columns:1.25fr 1fr;gap:4rem;align-items:center;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(240,82,82,.1);border:1px solid rgba(240,82,82,.28);border-radius:20px;padding:.32rem .9rem;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red2);margin-bottom:1.1rem;font-weight:700}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--red2);animation:blink 1.5s infinite}
+.hero-title{font-weight:900;font-size:clamp(2.8rem,5vw,4.8rem);line-height:.9;color:#fff;letter-spacing:-.025em}
+.hero-title em{color:var(--red2);font-style:normal}
+.hero-alert{margin-top:1.1rem;font-size:.8rem;color:rgba(255,110,110,.85);background:rgba(240,82,82,.07);border:1px solid rgba(240,82,82,.2);border-left:3px solid var(--red);border-radius:6px;padding:.6rem .95rem;line-height:1.55}
+.hero-sub{margin-top:.65rem;font-size:.86rem;color:rgba(255,255,255,.4);max-width:430px;line-height:1.78}
+.hero-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:1.8rem;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.hk{background:rgba(9,26,46,.8);padding:1.1rem 1.3rem;transition:background .2s;position:relative;overflow:hidden}
+.hk::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.hk.hk-red::before{background:linear-gradient(90deg,var(--red),var(--red2))}
+.hk.hk-amber::before{background:linear-gradient(90deg,var(--amber),var(--amber2))}
+.hk.hk-orange::before{background:linear-gradient(90deg,var(--orange),#fb923c)}
+.hk.hk-muted::before{background:rgba(255,255,255,.12)}
+.hk:hover{background:rgba(21,45,80,.85)}
+.hk-val{font-weight:900;font-size:1.75rem;line-height:1;letter-spacing:-.02em}
+.hk.hk-red .hk-val{color:var(--red2)}
+.hk.hk-amber .hk-val{color:var(--amber)}
+.hk.hk-orange .hk-val{color:var(--orange)}
+.hk.hk-muted .hk-val{color:rgba(255,255,255,.5)}
+.hk-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.22rem}
+.hk-sub{font-size:.67rem;color:rgba(255,255,255,.25);margin-top:.12rem}
+
+/* VIS WRAP */
+.hero-vis{display:flex;align-items:center;justify-content:center}
+.vis-wrap{position:relative;width:300px;height:300px}
+.vis-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(240,82,82,.2);animation:spin 45s linear infinite}
+.vis-ring2{position:absolute;inset:28px;border-radius:50%;border:1px dashed rgba(245,160,48,.14);animation:spin 28s linear infinite reverse}
+.vis-ring3{position:absolute;inset:56px;border-radius:50%;border:1px solid rgba(249,115,22,.08);animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.vis-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,rgba(240,82,82,.45),rgba(9,26,46,.96));border:1px solid rgba(240,82,82,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(240,82,82,.18)}
+.vis-core-v{font-weight:900;font-size:2rem;color:var(--red2);line-height:1;letter-spacing:-.03em}
+.vis-core-l{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-top:.2rem;text-align:center;line-height:1.4}
+.vis-dot{position:absolute;width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.5rem;letter-spacing:.04em;text-transform:uppercase;font-weight:700;text-align:center;line-height:1.3}
+.vd1{top:-22px;left:calc(50% - 22px);color:var(--red2)}
+.vd2{bottom:-22px;left:calc(50% - 22px);color:var(--amber)}
+.vd3{left:-22px;top:calc(50% - 22px);color:var(--orange)}
+.vd4{right:-22px;top:calc(50% - 22px);color:rgba(255,255,255,.4)}
+.vis-pulse{position:absolute;width:10px;height:10px;border-radius:50%;animation:pulse-dot 2s ease-in-out infinite}
+.vp1{top:0;left:50%;margin-left:-5px;background:var(--red2);animation-delay:0s}
+.vp2{bottom:0;left:50%;margin-left:-5px;background:var(--amber);animation-delay:.7s}
+.vp3{left:0;top:50%;margin-top:-5px;background:var(--orange);animation-delay:1.4s}
+@keyframes pulse-dot{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-vis{display:none}}
+
+/* LAYOUT */
+section{position:relative;padding:5rem 0}
+.sec-alt{background:var(--nv)}
+.container{max-width:1120px;margin:0 auto;padding:0 2.5rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(240,82,82,.18),transparent)}
+.sec-label{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:.55rem}
+.sec-label::before{content:'';width:16px;height:2px;background:var(--red);border-radius:1px}
+.sec-title{font-weight:900;font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1;letter-spacing:-.02em}
+.sec-title em{color:var(--red2);font-style:normal}
+.sec-body{margin-top:.7rem;color:rgba(255,255,255,.42);max-width:580px;font-size:.87rem;line-height:1.75}
+
+/* KPI STRIP */
+.kpi-strip{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin:2rem 0}
+.ks5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:900px){.ks5{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:rgba(9,26,46,.88);padding:1.25rem .9rem;text-align:center;transition:background .2s;position:relative}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.k-red::after{background:var(--red)}
+.kpi.k-amber::after{background:var(--amber)}
+.kpi.k-orange::after{background:var(--orange)}
+.kpi.k-muted::after{background:rgba(255,255,255,.12)}
+.kpi:hover{background:rgba(21,45,80,.85)}
+.kval{font-weight:900;font-size:1.7rem;line-height:1;letter-spacing:-.02em}
+.kpi.k-red .kval{color:var(--red2)}
+.kpi.k-amber .kval{color:var(--amber)}
+.kpi.k-orange .kval{color:var(--orange)}
+.kpi.k-muted .kval{color:rgba(255,255,255,.45)}
+.klbl{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.25rem}
+.ksub{font-size:.65rem;color:rgba(255,255,255,.25);margin-top:.12rem}
+
+/* FAIXAS */
+.faixas-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin:1.5rem 0 2rem}
+@media(max-width:700px){.faixas-grid{grid-template-columns:repeat(3,1fr)}}
+.faixa-pill{border-radius:10px;padding:1.1rem .8rem;text-align:center;border:1px solid transparent;transition:transform .2s,box-shadow .2s}
+.faixa-pill:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.faixa-num{font-weight:900;font-size:2rem;line-height:1;letter-spacing:-.02em}
+.faixa-lbl{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-top:.25rem}
+.f-green{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.22)}.f-green .faixa-num{color:#22C55E}.f-green .faixa-lbl{color:rgba(34,197,94,.55)}
+.f-yellow{background:rgba(250,204,21,.07);border-color:rgba(250,204,21,.2)}.f-yellow .faixa-num{color:#FACC15}.f-yellow .faixa-lbl{color:rgba(250,204,21,.55)}
+.f-amber{background:rgba(245,160,48,.09);border-color:rgba(245,160,48,.22)}.f-amber .faixa-num{color:var(--amber)}.f-amber .faixa-lbl{color:rgba(245,160,48,.55)}
+.f-orange{background:rgba(249,115,22,.09);border-color:rgba(249,115,22,.22)}.f-orange .faixa-num{color:var(--orange)}.f-orange .faixa-lbl{color:rgba(249,115,22,.55)}
+.f-red{background:rgba(240,82,82,.09);border-color:rgba(240,82,82,.22)}.f-red .faixa-num{color:var(--red2)}.f-red .faixa-lbl{color:rgba(240,82,82,.55)}
+
+/* GRÁFICOS */
+.charts-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:1.5rem;margin:1.5rem 0}
+@media(max-width:800px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:rgba(9,26,46,.6);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem}
+.chart-card-title{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.chart-card-title::before{content:'';width:10px;height:2px;background:var(--red);border-radius:1px}
+
+/* UNIDADE CARDS */
+.ucards{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin:1.5rem 0}
+@media(max-width:700px){.ucards{grid-template-columns:1fr}}
+.ucard{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;transition:border-color .25s,transform .2s,box-shadow .22s;position:relative}
+.ucard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ucard.ur1::before{background:linear-gradient(90deg,var(--red),var(--red2))}
+.ucard.ur2::before{background:linear-gradient(90deg,var(--amber),var(--amber2))}
+.ucard.ur3::before{background:linear-gradient(90deg,var(--orange),#fb923c)}
+.ucard.ur4::before{background:linear-gradient(90deg,rgba(255,255,255,.15),rgba(255,255,255,.08))}
+.ucard:hover{border-color:rgba(240,82,82,.28);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.45)}
+.uc-head{display:flex;align-items:stretch}
+.uc-rank{display:flex;align-items:center;justify-content:center;width:56px;font-weight:900;font-size:1.7rem;border-right:1px solid var(--border2);flex-shrink:0}
+.ur1 .uc-rank{color:var(--red2)}.ur2 .uc-rank{color:var(--amber)}.ur3 .uc-rank{color:var(--orange)}.ur4 .uc-rank{color:rgba(255,255,255,.25)}
+.uc-info{flex:1;padding:1.25rem 1.2rem}
+.uc-name{font-weight:700;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.2rem}
+.uc-total{font-weight:900;font-size:2.2rem;line-height:1;color:#fff;letter-spacing:-.03em}
+.uc-meta{font-size:.7rem;color:var(--muted);margin-top:.3rem}
+.uc-meta b{color:var(--amber);font-weight:700}
+.uc-stats{padding:1rem 1.2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;border-top:1px solid var(--border2);background:rgba(0,0,0,.12)}
+.uc-stat-val{font-weight:800;font-size:1rem;line-height:1}
+.uc-stat-lbl{font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.12rem}
+.uc-pbar{padding:.8rem 1.2rem;border-top:1px solid var(--border2)}
+.pbar-label{display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted);margin-bottom:.45rem;letter-spacing:.04em;text-transform:uppercase}
+.pbar-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:3px;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.uc-faixas{padding:.8rem 1.2rem;display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;border-top:1px solid var(--border2)}
+.uf{text-align:center;padding:.35rem .2rem;border-radius:6px}
+.uf .uf-n{font-size:.92rem;font-weight:900;line-height:1.1;display:block}
+.uf .uf-l{font-size:.52rem;color:rgba(255,255,255,.28);letter-spacing:.04em;display:block;margin-top:.1rem}
+.uf.c-g{background:rgba(34,197,94,.07);color:#22C55E}
+.uf.c-y{background:rgba(250,204,21,.07);color:#FACC15}
+.uf.c-a{background:rgba(245,160,48,.09);color:var(--amber)}
+.uf.c-o{background:rgba(249,115,22,.09);color:var(--orange)}
+.uf.c-r{background:rgba(240,82,82,.09);color:var(--red2)}
+.uc-btn{display:block;padding:.85rem 1.2rem;border-top:1px solid var(--border2);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;background:rgba(240,82,82,.06);color:var(--red2);text-align:center;transition:background .2s,color .2s}
+.uc-btn:hover{background:rgba(240,82,82,.14);color:#fff}
+
+/* RANKING TOP 5 */
+.rank5-grid{display:flex;flex-direction:column;gap:.75rem;margin:1.5rem 0}
+.rank5-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:52px 1fr auto auto auto;align-items:stretch;transition:border-color .2s,transform .15s}
+.rank5-card:hover{border-color:rgba(240,82,82,.22);transform:translateX(3px)}
+.rank5-card.rk1{border-left:3px solid var(--red2)}
+.rank5-card.rk2{border-left:3px solid var(--amber)}
+.rank5-card.rk3{border-left:3px solid var(--orange)}
+.rank5-card.rk4,.rank5-card.rk5{border-left:3px solid rgba(255,255,255,.1)}
+.rk-num{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3rem;padding:.8rem .4rem;border-right:1px solid var(--border2)}
+.rk1 .rk-num{color:var(--red2)}.rk2 .rk-num{color:var(--amber)}.rk3 .rk-num{color:var(--orange)}
+.rk4 .rk-num,.rk5 .rk-num{color:rgba(255,255,255,.18)}
+.rk-main{padding:.85rem 1.1rem;flex:1;min-width:0}
+.rk-name{font-weight:700;font-size:.86rem;color:rgba(255,255,255,.88);margin-bottom:.45rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-bar-wrap{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.rk-bar{height:100%;border-radius:3px;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.rk-meta{font-size:.59rem;color:var(--muted);margin-top:.35rem;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.rk-col{padding:.85rem 1rem;display:flex;flex-direction:column;justify-content:center;text-align:right;border-left:1px solid var(--border2);min-width:80px}
+.rk-col-val{font-weight:800;font-size:1.15rem;line-height:1;letter-spacing:-.01em}
+.rk-col-lbl{font-size:.53rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.12rem}
+.rk-utag{display:inline-block;padding:.08rem .4rem;border-radius:4px;font-size:.58rem;background:rgba(255,255,255,.06);color:rgba(255,255,255,.35);font-weight:600;margin-right:.2rem}
+
+/* TOP 20 TABLE */
+.top20-wrap{overflow-x:auto;margin-top:1.5rem}
+.top20-table{width:100%;border-collapse:collapse;font-size:.79rem}
+.top20-table th{background:rgba(9,26,46,.95);color:var(--red);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;padding:.75rem .9rem;text-align:left;font-weight:700;border-bottom:1px solid rgba(240,82,82,.15)}
+.top20-table th.right{text-align:right}
+.top20-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+.top20-table tbody tr:hover{background:rgba(240,82,82,.04)}
+.top20-table tbody tr:last-child{border-bottom:none}
+.top20-table td{padding:.62rem .9rem;vertical-align:middle}
+.tt-pos{font-size:.66rem;color:var(--muted);font-family:monospace;font-weight:700;width:36px}
+.tt-id{font-size:.65rem;color:rgba(255,255,255,.3);font-family:monospace}
+.tt-dias{font-weight:900;color:var(--red2);text-align:right;font-size:.92rem;white-space:nowrap}
+.tt-unidade{display:inline-block;padding:.1rem .42rem;border-radius:4px;font-size:.58rem;background:rgba(255,255,255,.07);color:rgba(255,255,255,.38);font-weight:600;letter-spacing:.04em}
+.pipe-tag{display:inline-block;padding:.1rem .42rem;border-radius:4px;font-size:.6rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.p-jud{background:rgba(240,82,82,.12);color:var(--red2)}
+.p-adm{background:rgba(245,160,48,.12);color:var(--amber)}
+.p-civ{background:rgba(96,165,250,.1);color:#93c5fd}
+.p-trab{background:rgba(34,197,94,.1);color:#22C55E}
+.p-other{background:rgba(255,255,255,.07);color:rgba(255,255,255,.35)}
+
+footer{border-top:1px solid var(--border2);padding:1.8rem 2rem;text-align:center;font-size:.6rem;color:rgba(255,255,255,.16);letter-spacing:.08em;text-transform:uppercase;margin-top:3rem}
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-brand-name">Maximiano<br>Advogados</div>
+    <div class="sb-brand-sub">Painel de Risco Operacional</div>
+  </div>
+  <div class="sb-period">
+    <span class="sb-period-dot"></span>
+    Situação crítica · 25/05/2026
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Navegação</div>
+    <a class="sb-link active" href="#hero">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Visão Geral
+    </a>
+    <a class="sb-link" href="#faixas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Semáforo de Atraso
+    </a>
+    <a class="sb-link" href="#graficos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+      Gráficos
+    </a>
+    <a class="sb-link" href="#unidades">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
+      Unidades Regionais
+    </a>
+    <a class="sb-link" href="#ranking">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      Ranking Responsáveis
+    </a>
+    <a class="sb-link" href="#top20">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Top 20 Piores
+    </a>
+    <div class="sb-divider"></div>
+    <div class="sb-section">Unidades</div>
+    <a class="sb-unit" href="botelhos.html"><span class="sb-unit-dot" style="background:var(--red2)"></span>Botelhos MG</a>
+    <a class="sb-unit" href="pocos.html"><span class="sb-unit-dot" style="background:var(--amber)"></span>Poços de Caldas</a>
+    <a class="sb-unit" href="caboverde.html"><span class="sb-unit-dot" style="background:var(--orange)"></span>Cabo Verde</a>
+    <a class="sb-unit" href="novaresende.html"><span class="sb-unit-dot" style="background:rgba(255,255,255,.2)"></span>Nova Resende</a>
+    <div class="sb-divider"></div>
+    <div class="sb-section">Números-chave</div>
+    <div class="sb-stat">
+      <div class="sb-stat-row"><span class="sb-stat-lbl">Cards atrasados</span><span class="sb-stat-val">2.578</span></div>
+      <div class="sb-stat-row"><span class="sb-stat-lbl">Média global</span><span class="sb-stat-val">167d</span></div>
+      <div class="sb-stat-row"><span class="sb-stat-lbl">Pior caso</span><span class="sb-stat-val">2.216d</span></div>
+      <div class="sb-stat-row"><span class="sb-stat-lbl">Com 90+ dias</span><span class="sb-stat-val">82,7%</span></div>
+    </div>
+  </nav>
+  <div class="sb-footer">Sistema Cérebro · Jean Barbosa, CEO<br>Maximiano Advogados · 2026</div>
+</div>
+
+<div id="main">
+
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span class="badge-dot"></span>Alerta Operacional · Risco Jurídico</div>
+      <h1 class="hero-title">Gestão de<br><em>Risco</em><br>Operacional</h1>
+      <div class="hero-alert">🚨 <strong>97,9% do portfólio ativo está com prazo vencido.</strong> O escritório acumula <strong>430.526 dias somados</strong> de atraso — em 2.578 cards distribuídos entre 4 unidades regionais.</div>
+      <p class="hero-sub">Diagnóstico consolidado de pendências em atraso — base exportada do Bitrix24 em 25/05/2026. Cada card é um processo, um cliente, uma responsabilidade.</p>
+      <div class="hero-kpis">
+        <div class="hk hk-red"><div class="hk-val">2.578</div><div class="hk-label">Cards em atraso</div><div class="hk-sub">de 2.632 ativos (97,9%)</div></div>
+        <div class="hk hk-red"><div class="hk-val">2.216d</div><div class="hk-label">Pior caso do escritório</div><div class="hk-sub">João Victor · Cível · Botelhos</div></div>
+        <div class="hk hk-amber"><div class="hk-val">167d</div><div class="hk-label">Média global de atraso</div><div class="hk-sub">5,5 meses por card, em média</div></div>
+        <div class="hk hk-orange"><div class="hk-val">1,18 anos</div><div class="hk-label">Tempo operacional perdido</div><div class="hk-sub">430.526 dias acumulados</div></div>
+      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="vis-wrap">
+        <div class="vis-ring"></div><div class="vis-ring2"></div><div class="vis-ring3"></div>
+        <span class="vis-pulse vp1"></span><span class="vis-pulse vp2"></span><span class="vis-pulse vp3"></span>
+        <div class="vis-core">
+          <div class="vis-core-v">167d</div>
+          <div class="vis-core-l">Média global<br>de atraso</div>
+        </div>
+        <div class="vis-dot vd1">2.578<br>Cards</div>
+        <div class="vis-dot vd2">82,7%<br>Crítico</div>
+        <div class="vis-dot vd3">4<br>Unid.</div>
+        <div class="vis-dot vd4" style="color:var(--muted)">15<br>Resp.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<section id="faixas">
+  <div class="container">
+    <div class="sec-label">Semáforo de Atraso</div>
+    <div class="sec-title">Distribuição por <em>Faixa Crítica</em></div>
+    <p class="sec-body">Classificação de todos os 2.578 cards atrasados por tempo de vencimento. A zona vermelha (90+ dias) concentra a esmagadora maioria do risco.</p>
+    <div class="kpi-strip ks5">
+      <div class="kpi k-muted"><div class="kval">2.632</div><div class="klbl">Cards ativos total</div><div class="ksub">base Bitrix24</div></div>
+      <div class="kpi k-red"><div class="kval">97,9%</div><div class="klbl">Em atraso</div><div class="ksub">2.578 de 2.632</div></div>
+      <div class="kpi k-amber"><div class="kval">167d</div><div class="klbl">Média de atraso</div><div class="ksub">por card</div></div>
+      <div class="kpi k-red"><div class="kval">2.216d</div><div class="klbl">Caso mais grave</div><div class="ksub">6,1 anos</div></div>
+      <div class="kpi k-orange"><div class="kval">2.133</div><div class="klbl">Cards 90+ dias</div><div class="ksub">82,7% dos atrasados</div></div>
+    </div>
+    <div class="faixas-grid">
+      <div class="faixa-pill f-green"><div class="faixa-num">55</div><div class="faixa-lbl">1–7 dias</div></div>
+      <div class="faixa-pill f-yellow"><div class="faixa-num">102</div><div class="faixa-lbl">8–30 dias</div></div>
+      <div class="faixa-pill f-amber"><div class="faixa-num">205</div><div class="faixa-lbl">31–60 dias</div></div>
+      <div class="faixa-pill f-orange"><div class="faixa-num">83</div><div class="faixa-lbl">61–90 dias</div></div>
+      <div class="faixa-pill f-red"><div class="faixa-num">2.133</div><div class="faixa-lbl">90+ dias</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<section id="graficos" class="sec-alt">
+  <div class="container">
+    <div class="sec-label">Análise Visual</div>
+    <div class="sec-title">Envelhecimento e <em>Gargalos</em></div>
+    <p class="sec-body">Distribuição do portfólio atrasado por faixa de criticidade e por pipeline operacional.</p>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-card-title">Envelhecimento do Portfólio</div>
+        <canvas id="ch-aging" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Cards por Pipeline — Maior Gargalo</div>
+        <canvas id="ch-pipelines" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<section id="unidades">
+  <div class="container">
+    <div class="sec-label">Grid de Unidades Regionais</div>
+    <div class="sec-title">Auditoria por <em>Unidade</em></div>
+    <p class="sec-body">Clique em "Acessar Auditoria" para navegar ao relatório detalhado de cada unidade regional.</p>
+    <div class="ucards" id="ucards-grid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<section id="ranking" class="sec-alt">
+  <div class="container">
+    <div class="sec-label">Accountability Individual</div>
+    <div class="sec-title">Top 5 Responsáveis com <em>Mais Cards</em> em Atraso</div>
+    <p class="sec-body">Ranking consolidado do escritório inteiro — os advogados com maior volume de pendências vencidas, com média e máximo individual por responsável.</p>
+    <div class="rank5-grid" id="ranking-top5"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<section id="top20">
+  <div class="container">
+    <div class="sec-label">Casos mais graves</div>
+    <div class="sec-title">Top 20 — <em>Maior Tempo</em> em Atraso</div>
+    <p class="sec-body">Os vinte cards com maior número de dias individuais de atraso no escritório inteiro. Cada linha é uma responsabilidade que aguarda resolução urgente.</p>
+    <div class="top20-wrap">
+      <table class="top20-table">
+        <thead>
+          <tr>
+            <th>#</th><th>ID</th><th>Negócio / Processo</th><th>Responsável</th>
+            <th>Pipeline</th><th>Fase</th><th>Unidade</th>
+            <th class="right">Prazo Original</th><th class="right">Dias em Atraso</th>
+          </tr>
+        </thead>
+        <tbody id="top20-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>Maximiano Advogados · Sistema Cérebro · Jean Barbosa, CEO · Documento Interno · Gerado em 25/05/2026</footer>
+</div>
+
+<script>
+Chart.register(ChartDataLabels);
+
+const DATA = {
+  resp_global:[
+    {nome:"Paulo Barreiro",total:890,media:183,maximo:1679,unidades:["Botelhos","Poços de Caldas"]},
+    {nome:"Rafael de Lima Santos",total:336,media:198,maximo:1097,unidades:["Poços de Caldas","Botelhos"]},
+    {nome:"Augusto Cézar Campos da Silva",total:317,media:177,maximo:901,unidades:["Poços de Caldas","Botelhos"]},
+    {nome:"Tayná de Melo Ribeiro",total:165,media:132,maximo:762,unidades:["Cabo Verde"]},
+    {nome:"Jackeline Batista Lima Toledo",total:145,media:149,maximo:459,unidades:["Cabo Verde"]}
+  ],
+  top20:[
+    {id:87336,nome:"Proc - 0000173",responsavel:"João Victor Almeida de Souza",pipeline:"Civel",fase:"Protocolado",dias:2216,prazo:"30/04/2020",unidade:"Botelhos MG"},
+    {id:97400,nome:"Proc - 0000405",responsavel:"Paulo Barreiro",pipeline:"Judicial",fase:"Retorno",dias:1679,prazo:"19/10/2021",unidade:"Botelhos MG"},
+    {id:93128,nome:"Proc - 0000200",responsavel:"Paulo Barreiro",pipeline:"Judicial",fase:"Analise interna",dias:1363,prazo:"31/08/2022",unidade:"Botelhos MG"},
+    {id:89498,nome:"Proc - 0002055",responsavel:"Raphaela Almeida",pipeline:"Judicial",fase:"Analise interna",dias:1134,prazo:"17/04/2023",unidade:"Botelhos MG"},
+    {id:89562,nome:"Proc - 0001681",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:1124,prazo:"27/04/2023",unidade:"Botelhos MG"},
+    {id:89524,nome:"Proc - 0001273",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:1119,prazo:"02/05/2023",unidade:"Botelhos MG"},
+    {id:81828,nome:"Proc - 0001457-001",responsavel:"Rafael de Lima Santos",pipeline:"Administrativo",fase:"Análise Interna",dias:1097,prazo:"24/05/2023",unidade:"Poços de Caldas MG"},
+    {id:89296,nome:"Proc - 0001790",responsavel:"Rafael de Lima Santos",pipeline:"Judicial",fase:"Analise interna",dias:1047,prazo:"13/07/2023",unidade:"Poços de Caldas MG"},
+    {id:82904,nome:"Proc - 0001464-001",responsavel:"Rafael de Lima Santos",pipeline:"Administrativo",fase:"Análise Interna",dias:1029,prazo:"31/07/2023",unidade:"Poços de Caldas MG"},
+    {id:89424,nome:"Proc - 0001995",responsavel:"Paulo Barreiro",pipeline:"Judicial",fase:"Analise interna",dias:1019,prazo:"10/08/2023",unidade:"Botelhos MG"},
+    {id:89566,nome:"Proc - 0001594",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:968,prazo:"30/09/2023",unidade:"Botelhos MG"},
+    {id:89290,nome:"Proc - 0002275",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:923,prazo:"14/11/2023",unidade:"Botelhos MG"},
+    {id:89298,nome:"Proc - 0002139",responsavel:"Rafael de Lima Santos",pipeline:"Judicial",fase:"Analise interna",dias:912,prazo:"25/11/2023",unidade:"Poços de Caldas MG"},
+    {id:85350,nome:"Proc - 0002028-001",responsavel:"Augusto Cézar Campos da Silva",pipeline:"Administrativo",fase:"Análise Interna",dias:901,prazo:"06/12/2023",unidade:"Botelhos MG"},
+    {id:89336,nome:"Proc - 0002407",responsavel:"Rafael de Lima Santos",pipeline:"Judicial",fase:"Analise interna",dias:895,prazo:"12/12/2023",unidade:"Poços de Caldas MG"},
+    {id:89302,nome:"Proc - 0001190",responsavel:"Rafael de Lima Santos",pipeline:"Judicial",fase:"Analise interna",dias:886,prazo:"21/12/2023",unidade:"Botelhos MG"},
+    {id:89520,nome:"Proc - 0002729",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:872,prazo:"04/01/2024",unidade:"Botelhos MG"},
+    {id:89472,nome:"Proc - 0001161",responsavel:"Rafael de Lima Santos",pipeline:"Judicial",fase:"Analise interna",dias:851,prazo:"25/01/2024",unidade:"Poços de Caldas MG"},
+    {id:89382,nome:"Proc - 0002479",responsavel:"Fernanda Prado",pipeline:"Judicial",fase:"Analise interna",dias:845,prazo:"31/01/2024",unidade:"Botelhos MG"},
+    {id:86128,nome:"Proc - 0002973-001",responsavel:"Rafael de Lima Santos",pipeline:"Administrativo",fase:"Análise Interna",dias:843,prazo:"02/02/2024",unidade:"Botelhos MG"}
+  ],
+  unidades:{
+    Botelhos:{total:1243,media:186,maximo:2216,faixas:{"1-7":3,"8-30":18,"31-60":82,"61-90":12,"90+":1128},href:"botelhos.html"},
+    "Poços de Caldas":{total:778,media:173,maximo:1097,faixas:{"1-7":19,"8-30":20,"31-60":38,"61-90":11,"90+":690},href:"pocos.html"},
+    "Cabo Verde":{total:365,media:129,maximo:762,faixas:{"1-7":15,"8-30":30,"31-60":57,"61-90":39,"90+":224},href:"caboverde.html"},
+    "Nova Resende":{total:63,media:153,maximo:191,faixas:{"1-7":0,"8-30":0,"31-60":6,"61-90":7,"90+":50},href:"novaresende.html"}
+  }
+};
+
+function pipeClass(p){return {Judicial:'p-jud',Administrativo:'p-adm',Civel:'p-civ',Trabalhista:'p-trab'}[p]||'p-other';}
+
+// Gráfico Donut
+new Chart('ch-aging',{
+  type:'doughnut',
+  data:{
+    labels:['1–7 dias','8–30 dias','31–60 dias','61–90 dias','90+ dias'],
+    datasets:[{
+      data:[55,102,205,83,2133],
+      backgroundColor:['rgba(34,197,94,.75)','rgba(250,204,21,.7)','rgba(245,160,48,.75)','rgba(249,115,22,.75)','rgba(240,82,82,.82)'],
+      borderColor:['#22C55E','#FACC15','#F5A030','#F97316','#F05252'],
+      borderWidth:1.5,hoverOffset:6
+    }]
+  },
+  options:{
+    responsive:true,cutout:'62%',
+    plugins:{
+      legend:{position:'bottom',labels:{color:'rgba(255,255,255,.5)',font:{size:11},padding:14,boxWidth:12}},
+      datalabels:{
+        display:true,color:'#fff',font:{size:10,weight:'700'},anchor:'center',align:'center',
+        formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return (v/t*100).toFixed(1)+'%';}
+      },
+      tooltip:{callbacks:{label:c=>{const t=c.dataset.data.reduce((a,b)=>a+b,0);return ` ${c.raw.toLocaleString('pt-BR')} cards (${(c.raw/t*100).toFixed(1)}%)` ;}}}
+    }
+  }
+});
+
+// Gráfico Barras Pipeline
+new Chart('ch-pipelines',{
+  type:'bar',
+  data:{
+    labels:['Judicial','Administrativo','Civel','Onboarding','Advogado','Trabalhista','Digital','Serviços','Criminal','Financeiro'],
+    datasets:[{
+      data:[1154,811,311,110,55,55,41,23,9,5],
+      backgroundColor:['rgba(240,82,82,.78)','rgba(245,160,48,.75)','rgba(96,165,250,.75)','rgba(167,139,250,.7)','rgba(103,232,249,.7)','rgba(34,197,94,.7)','rgba(129,140,248,.7)','rgba(255,255,255,.28)','rgba(156,163,175,.6)','rgba(255,255,255,.18)'],
+      borderRadius:5,
+      datalabels:{display:true,anchor:'end',align:'end',formatter:v=>v.toLocaleString('pt-BR'),color:'rgba(255,255,255,.55)',font:{size:10,weight:'700'}}
+    }]
+  },
+  options:{
+    responsive:true,indexAxis:'y',
+    plugins:{legend:{display:false},datalabels:{}},
+    scales:{
+      x:{ticks:{color:'rgba(255,255,255,.35)',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},
+      y:{ticks:{color:'rgba(255,255,255,.6)',font:{size:11}},grid:{color:'rgba(255,255,255,.03)'}}
+    }
+  }
+});
+
+// Cards de Unidades
+function buildUcards(){
+  const grid=document.getElementById('ucards-grid');
+  const entries=Object.entries(DATA.unidades);
+  const maxTotal=entries[0][1].total;
+  const rankClasses=['ur1','ur2','ur3','ur4'];
+  const statColors=['var(--red2)','var(--amber)','var(--orange)','rgba(255,255,255,.35)'];
+  const gradients=['linear-gradient(90deg,var(--red),var(--red2))','linear-gradient(90deg,var(--amber),var(--amber2))','linear-gradient(90deg,var(--orange),#fb923c)','linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,.1))'];
+  const faixaData=[{k:'1-7',cls:'c-g',lbl:'1-7d'},{k:'8-30',cls:'c-y',lbl:'8-30d'},{k:'31-60',cls:'c-a',lbl:'31-60d'},{k:'61-90',cls:'c-o',lbl:'61-90d'},{k:'90+',cls:'c-r',lbl:'90+d'}];
+
+  entries.forEach(([name,u],idx)=>{
+    const rc=rankClasses[idx];
+    const anos=(u.maximo/365).toFixed(1);
+    const pbarPct=(u.total/maxTotal*100).toFixed(1);
+    const criticidade=((u.faixas['90+']/u.total)*100).toFixed(0);
+    const faixasHtml=faixaData.map(f=>`<div class="uf ${f.cls}"><span class="uf-n">${u.faixas[f.k]}</span><span class="uf-l">${f.lbl}</span></div>`).join('');
+    const card=document.createElement('div');
+    card.className=`ucard ${rc}`;
+    card.innerHTML=`
+      <div class="uc-head">
+        <div class="uc-rank">${idx+1}</div>
+        <div class="uc-info">
+          <div class="uc-name">${name}</div>
+          <div class="uc-total">${u.total.toLocaleString('pt-BR')}</div>
+          <div class="uc-meta">cards em atraso · maior: <b>${u.maximo}d</b> (${anos} anos)</div>
+        </div>
+      </div>
+      <div class="uc-stats">
+        <div><div class="uc-stat-val" style="color:${statColors[idx]}">${u.media}d</div><div class="uc-stat-lbl">Média</div></div>
+        <div><div class="uc-stat-val" style="color:var(--red2)">${u.maximo}d</div><div class="uc-stat-lbl">Máximo</div></div>
+        <div><div class="uc-stat-val" style="color:var(--orange)">${u.faixas['90+']}</div><div class="uc-stat-lbl">Com 90+d</div></div>
+        <div><div class="uc-stat-val" style="color:rgba(255,255,255,.45)">${criticidade}%</div><div class="uc-stat-lbl">Crítico</div></div>
+      </div>
+      <div class="uc-pbar">
+        <div class="pbar-label"><span>Criticidade da unidade</span><span>${pbarPct}% do líder</span></div>
+        <div class="pbar-track"><div class="pbar-fill" data-w="${pbarPct}%" style="width:0;background:${gradients[idx]}"></div></div>
+      </div>
+      <div class="uc-faixas">${faixasHtml}</div>
+      <a class="uc-btn" href="${u.href}">Acessar Auditoria da Unidade ➔</a>`;
+    grid.appendChild(card);
+  });
+  setTimeout(()=>{document.querySelectorAll('.pbar-fill').forEach(b=>{const w=b.getAttribute('data-w');b.style.width='0';requestAnimationFrame(()=>{b.style.width=w;});});},300);
+}
+
+// Ranking Top 5
+function buildRankingTop5(){
+  const el=document.getElementById('ranking-top5');
+  const maxTotal=DATA.resp_global[0].total;
+  const barGradients=['linear-gradient(90deg,#F05252,#FF6B6B)','linear-gradient(90deg,#F5A030,#FFB84D)','linear-gradient(90deg,#F97316,#fb923c)','rgba(255,255,255,.22)','rgba(255,255,255,.15)'];
+  el.innerHTML=DATA.resp_global.map((r,i)=>{
+    const pct=(r.total/maxTotal*100).toFixed(1);
+    const rc=`rk${i+1}`;
+    const mColor=r.media>=200?'var(--red2)':r.media>=120?'var(--orange)':'var(--amber)';
+    const xColor=r.maximo>=500?'var(--red2)':r.maximo>=200?'var(--orange)':'var(--amber)';
+    const uTags=r.unidades.map(u=>`<span class="rk-utag">${u}</span>`).join('');
+    return `
+    <div class="rank5-card ${rc}">
+      <div class="rk-num">${i+1}</div>
+      <div class="rk-main">
+        <div class="rk-name">${r.nome}</div>
+        <div class="rk-bar-wrap"><div class="rk-bar" data-w="${pct}%" style="width:0;background:${barGradients[i]}"></div></div>
+        <div class="rk-meta"><span>${pct}% do líder</span>${uTags}</div>
+      </div>
+      <div class="rk-col"><div class="rk-col-val" style="color:#fff">${r.total.toLocaleString('pt-BR')}</div><div class="rk-col-lbl">Cards</div></div>
+      <div class="rk-col"><div class="rk-col-val" style="color:${mColor}">${r.media}d</div><div class="rk-col-lbl">Média</div></div>
+      <div class="rk-col"><div class="rk-col-val" style="color:${xColor}">${r.maximo}d</div><div class="rk-col-lbl">Máximo</div></div>
+    </div>`;
+  }).join('');
+  setTimeout(()=>{el.querySelectorAll('.rk-bar').forEach(b=>{const w=b.getAttribute('data-w');b.style.width='0';requestAnimationFrame(()=>{b.style.width=w;});});},300);
+}
+
+// Top 20
+function buildTop20(){
+  const tbody=document.getElementById('top20-tbody');
+  tbody.innerHTML=DATA.top20.map((w,i)=>{
+    const anos=(w.dias/365).toFixed(1);
+    const esc=w.unidade.replace(' MG','');
+    const pc=pipeClass(w.pipeline);
+    const rowBg=i<3?'background:rgba(240,82,82,.035)':'';
+    return `<tr style="${rowBg}">
+      <td class="tt-pos">${i+1}°</td>
+      <td class="tt-id">#${w.id}</td>
+      <td style="font-size:.78rem;font-weight:500">${w.nome}</td>
+      <td style="font-size:.75rem">${w.responsavel}</td>
+      <td><span class="pipe-tag ${pc}">${w.pipeline}</span></td>
+      <td style="font-size:.69rem;color:var(--muted)">${w.fase}</td>
+      <td><span class="tt-unidade">${esc}</span></td>
+      <td style="text-align:right;font-size:.68rem;color:var(--muted);font-family:monospace">${w.prazo}</td>
+      <td class="tt-dias">${w.dias}d <span style="font-size:.6rem;color:var(--muted);font-weight:400">${anos}a</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// Nav highlight
+function setupNav(){
+  const links=document.querySelectorAll('.sb-link');
+  const sections=['hero','faixas','graficos','unidades','ranking','top20'];
+  window.addEventListener('scroll',()=>{
+    let cur='hero';
+    sections.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-120)cur=id;});
+    links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));
+  },{passive:true});
+}
+
+buildUcards();
+buildRankingTop5();
+buildTop20();
+setupNav();
+</script>
+</body>
+</html>
