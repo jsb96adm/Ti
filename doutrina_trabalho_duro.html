@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Doutrina do Trabalho Duro · Maximiano Advogados</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --cream-dark: #E8E0D0;
+    --cream-deeper: #D9CDB8;
+    --navy: #0D2340;
+    --navy-mid: #16314f;
+    --navy-deep: #081628;
+    --gold: #B8820A;
+    --gold-light: #D4A520;
+    --red: #8B1A1A;
+    --ink: #1A1410;
+    --gray: #6B7280;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .deck { position: relative; width: 100vw; height: 100vh; }
+
+  /* ===== SLIDE BASE ===== */
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 64px 72px 110px;
+    opacity: 0; visibility: hidden;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    overflow-y: auto;
+  }
+  .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
+
+  .slide.navy {
+    background: radial-gradient(ellipse at 30% 20%, var(--navy-mid) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--cream);
+  }
+  .slide.cream {
+    background: radial-gradient(ellipse at 70% 10%, var(--white) 0%, var(--cream) 60%);
+    color: var(--ink);
+  }
+  .slide.dark {
+    background: var(--navy-deep);
+    color: var(--cream);
+  }
+
+  .slide-content { max-width: 920px; width: 100%; position: relative; z-index: 2; }
+
+  /* page-number watermark, editorial style */
+  .slide-number {
+    position: absolute; top: 28px; right: 36px;
+    font-family: 'Playfair Display', serif; font-weight: 900;
+    font-size: 110px; line-height: 1; opacity: 0.05; z-index: 1;
+    user-select: none; pointer-events: none;
+  }
+  .slide.navy .slide-number, .slide.dark .slide-number { color: var(--cream); }
+  .slide.cream .slide-number { color: var(--navy); }
+
+  /* ===== EYEBROW ===== */
+  .eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 30px;
+  }
+  .eyebrow::before, .eyebrow::after { content: ''; flex: 0 0 36px; height: 1px; opacity: 0.45; }
+  .slide.navy .eyebrow, .slide.dark .eyebrow { color: var(--gold-light); }
+  .slide.navy .eyebrow::before, .slide.navy .eyebrow::after,
+  .slide.dark .eyebrow::before, .slide.dark .eyebrow::after { background: var(--gold-light); }
+  .slide.cream .eyebrow { color: var(--gold); }
+  .slide.cream .eyebrow::before, .slide.cream .eyebrow::after { background: var(--gold); }
+
+  /* ===== COVER ===== */
+  .deck-title {
+    font-family: 'Playfair Display', serif; font-weight: 900;
+    font-size: clamp(40px, 7.5vw, 86px); line-height: 1.08; margin-bottom: 24px;
+  }
+  .deck-title em { color: var(--gold-light); font-style: normal; }
+  .deck-sub {
+    font-family: 'Source Serif 4', serif; font-style: italic; font-size: clamp(15px, 1.8vw, 20px);
+    color: rgba(245,240,232,0.65); max-width: 620px; line-height: 1.7;
+  }
+  .deck-foot {
+    margin-top: 60px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(245,240,232,0.35);
+  }
+
+  /* ===== VERSE BLOCKS ===== */
+  .verse {
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400;
+    font-size: clamp(19px, 2.5vw, 30px); line-height: 1.55; margin-bottom: 14px;
+  }
+  .verse-ref {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    opacity: 0.55; margin-bottom: 36px;
+  }
+  .verse-ref:last-of-type { margin-bottom: 0; }
+  .slide.cream .verse { color: var(--navy); }
+
+  /* ===== DESTAQUE ===== */
+  .destaque-banner {
+    font-family: 'Playfair Display', serif; font-weight: 900; font-style: normal;
+    font-size: clamp(24px, 4.4vw, 46px); line-height: 1.25;
+    text-align: center; letter-spacing: 0.5px;
+    padding: 32px 40px; margin-top: 32px;
+    border: 2px solid var(--gold); border-radius: 6px;
+    color: var(--gold-light);
+  }
+  .slide.cream .destaque-banner { color: var(--red); border-color: var(--red); }
+
+  .destaque-line {
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700;
+    font-size: clamp(20px, 2.8vw, 32px); line-height: 1.45;
+    padding: 28px 32px; margin-top: 28px;
+    border-left: 4px solid var(--gold); 
+  }
+  .slide.cream .destaque-line { border-left-color: var(--red); color: var(--navy); }
+
+  /* ===== ANT LESSONS (slide 1) ===== */
+  .ant-icon { width: 56px; height: 56px; margin-bottom: 18px; opacity: 0.85; }
+  .teach-list { display: flex; flex-direction: column; gap: 16px; margin-top: 36px; }
+  .teach-item { display: flex; align-items: baseline; gap: 20px; }
+  .teach-item .num {
+    font-family: 'DM Mono', monospace; font-weight: 500; font-size: 14px; color: var(--gold-light);
+    min-width: 32px; flex-shrink: 0;
+  }
+  .teach-item .txt { font-family: 'Source Serif 4', serif; font-size: clamp(17px, 2vw, 22px); }
+
+  /* ===== GENERIC GRIDS ===== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 48px; }
+  @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; gap: 12px; } }
+
+  /* sinais de alerta */
+  .alert-title {
+    font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(24px, 3.4vw, 38px);
+    margin-bottom: 30px;
+  }
+  .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; }
+  .alert-item .num {
+    font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gold);
+    min-width: 26px; padding-top: 2px; flex-shrink: 0;
+  }
+  .alert-item .txt { font-size: clamp(13.5px, 1.5vw, 16px); line-height: 1.55; }
+
+  /* 3 pilares */
+  .pillars { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; margin-top: 8px; }
+  @media (max-width: 760px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    border-top: 3px solid var(--gold);
+    padding-top: 20px;
+  }
+  .pillar h3 {
+    font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+  .pillar .q {
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(15px, 1.7vw, 19px);
+    line-height: 1.5; margin-bottom: 14px;
+  }
+  .pillar .refs {
+    font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 1.5px; text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* 10 verdades */
+  .truths-title {
+    font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(24px, 3.4vw, 38px);
+    margin-bottom: 30px;
+  }
+  .truth-item {
+    display: flex; gap: 14px; align-items: baseline; padding: 9px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .slide.navy .truth-item, .slide.dark .truth-item { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .truth-item .num { font-family: 'DM Mono', monospace; font-size: 12px; opacity: 0.4; min-width: 26px; }
+  .truth-item .txt { font-size: clamp(14px, 1.6vw, 17px); }
+  .truth-item.star { border-left: 3px solid var(--gold); padding-left: 12px; margin-left: -15px; }
+  .truth-item.star .num { color: var(--gold); opacity: 1; font-weight: 700; }
+  .truth-item.star .txt { font-weight: 600; }
+
+  /* slide 7 - tres verdades em destaque */
+  .three-title {
+    font-family: 'Playfair Display', serif; font-weight: 700; font-style: italic;
+    font-size: clamp(22px, 3vw, 32px); margin-bottom: 40px; opacity: 0.85;
+  }
+  .three-list { display: flex; flex-direction: column; gap: 28px; }
+  .three-item { display: flex; align-items: center; gap: 28px; }
+  .three-item .num {
+    font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(34px, 5vw, 56px);
+    color: var(--gold-light); line-height: 1; min-width: 70px;
+  }
+  .three-item .txt {
+    font-family: 'Source Serif 4', serif; font-size: clamp(18px, 2.4vw, 28px); line-height: 1.4;
+  }
+
+  /* perguntas de reflexao */
+  .reflect-list { display: flex; flex-direction: column; gap: 30px; }
+  .reflect-item { display: flex; align-items: flex-start; gap: 24px; }
+  .reflect-item .num {
+    font-family: 'DM Mono', monospace; font-size: 14px; color: var(--gold);
+    border: 1px solid var(--gold); border-radius: 50%; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 4px;
+  }
+  .reflect-item .txt {
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(19px, 2.6vw, 28px); line-height: 1.4;
+  }
+
+  /* fecho */
+  .closing { text-align: center; }
+  .closing .line1 {
+    font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(26px, 4.6vw, 48px);
+    line-height: 1.4; margin-bottom: 22px;
+  }
+  .closing .line2 {
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; font-size: clamp(22px, 4vw, 42px);
+    line-height: 1.4; color: var(--gold-light);
+  }
+  .closing-foot {
+    margin-top: 56px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: rgba(245,240,232,0.4);
+  }
+
+  /* ===== NAV BAR ===== */
+  .nav-bar {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 22px;
+    background: rgba(13,35,64,0.88); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 32px; padding: 10px 22px;
+    z-index: 50;
+  }
+  .nav-arrow, .fs-btn {
+    background: transparent; border: none; color: var(--cream);
+    font-size: 18px; cursor: pointer; line-height: 1;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .nav-arrow:hover, .fs-btn:hover { background: rgba(255,255,255,0.1); }
+  .fs-btn { font-size: 14px; color: rgba(255,255,255,0.5); }
+  .counter {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.55);
+    min-width: 52px; text-align: center;
+  }
+  .pedras { display: flex; gap: 7px; align-items: center; }
+  .pedra {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .pedra.cleared { background: var(--gold-light); }
+  .pedra.current { background: var(--white); transform: scale(1.35); }
+
+  @media (max-width: 760px) {
+    .slide { padding: 40px 28px 100px; }
+    .slide-number { font-size: 64px; top: 16px; right: 18px; }
+    .nav-bar { gap: 12px; padding: 8px 14px; }
+    .pedras { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- SLIDE 0 — COVER -->
+  <section class="slide navy active">
+    <div class="slide-content">
+      <div class="eyebrow">Reunião de Líderes · Maximiano Advogados</div>
+      <h1 class="deck-title">A Doutrina do<br><em>Trabalho Duro</em></h1>
+      <p class="deck-sub">Sete reflexões sobre o que a Bíblia ensina sobre trabalhar — e liderar — com excelência.</p>
+      <div class="deck-foot">Junho 2026 · Uso interno</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 1 — A FORMIGA -->
+  <section class="slide navy">
+    <div class="slide-number">01</div>
+    <div class="slide-content">
+      <svg class="ant-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="32" r="6" stroke="#D4A520" stroke-width="2"/>
+        <circle cx="34" cy="30" r="8" stroke="#D4A520" stroke-width="2"/>
+        <circle cx="48" cy="32" r="9" stroke="#D4A520" stroke-width="2"/>
+        <path d="M27 31 L26 29" stroke="#D4A520" stroke-width="2"/>
+        <path d="M42 31 L40 29" stroke="#D4A520" stroke-width="2"/>
+        <path d="M16 24 L10 16" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+        <path d="M16 40 L10 48" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+        <path d="M32 22 L30 12" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+        <path d="M32 38 L34 50" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+        <path d="M30 30 L20 24" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+        <path d="M30 34 L18 42" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+        <path d="M44 26 L52 16" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+        <path d="M44 38 L52 48" stroke="#D4A520" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="eyebrow">Provérbios 6:6–10</div>
+      <p class="verse">"Aprenda com a formiga, preguiçoso! Observe como ela age e seja sábio. Embora não tenha príncipe, nem autoridade, nem governante, ela trabalha duro durante todo o verão, juntando comida para o inverno. Mas você, preguiçoso, até quando dormirá? Quando sairá da cama? Um pouco mais de sono, mais um cochilo, mais um descanso com os braços cruzados..."</p>
+      <div class="teach-list">
+        <div class="teach-item"><span class="num">01</span><span class="txt">Não tem chefe, nem líder</span></div>
+        <div class="teach-item"><span class="num">02</span><span class="txt">Trabalha duro o tempo todo</span></div>
+        <div class="teach-item"><span class="num">03</span><span class="txt">Se prepara, faz reservas</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2 — O PRINCÍPIO -->
+  <section class="slide navy">
+    <div class="slide-number">02</div>
+    <div class="slide-content">
+      <div class="eyebrow">2 Tessalonicenses 3:10–11</div>
+      <p class="verse">"Se alguém não quer trabalhar, também não coma."</p>
+      <p class="verse">"Contudo, soubemos que alguns de vocês estão vivendo ociosamente, recusando-se a trabalhar e intrometendo-se em assuntos alheios."</p>
+      <div class="destaque-banner">Fofoca é a falta<br>de trabalho duro</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 — NEGLIGÊNCIA -->
+  <section class="slide navy">
+    <div class="slide-number">03</div>
+    <div class="slide-content">
+      <div class="eyebrow">Provérbios 18:9</div>
+      <p class="verse">"Quem é negligente no seu trabalho já é irmão do desperdiçador."</p>
+      <div class="destaque-line">Negligência não é só "não fazer" — é desperdiçar o que foi colocado nas suas mãos.</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 — SINAIS DE ALERTA -->
+  <section class="slide cream">
+    <div class="slide-number">04</div>
+    <div class="slide-content">
+      <div class="eyebrow">Autoavaliação</div>
+      <div class="alert-title">Pergunte-se...</div>
+      <div class="grid-2">
+        <div class="alert-item"><span class="num">01</span><span class="txt">Tenho me apoiado no esforço dos outros quando eu mesmo poderia resolver?</span></div>
+        <div class="alert-item"><span class="num">02</span><span class="txt">Tenho "parecido" ocupado, mais do que realmente entregando?</span></div>
+        <div class="alert-item"><span class="num">03</span><span class="txt">Quando aparece algo sem dono claro, repasso — ou assumo?</span></div>
+        <div class="alert-item"><span class="num">04</span><span class="txt">Minha rotina está afetando meu sono, minha saúde, meu humor?</span></div>
+        <div class="alert-item"><span class="num">05</span><span class="txt">Quando algo não sai, minha primeira resposta é explicação — ou solução?</span></div>
+        <div class="alert-item"><span class="num">06</span><span class="txt">Tenho usado cansaço real como desculpa pra travar, em vez de ajustar e seguir?</span></div>
+        <div class="alert-item"><span class="num">07</span><span class="txt">Meu jeito de trabalhar está sobrecarregando o time que está comigo?</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5 — 3 COISAS -->
+  <section class="slide cream">
+    <div class="slide-number">05</div>
+    <div class="slide-content">
+      <div class="eyebrow">O que trabalho duro exige</div>
+      <div class="pillars">
+        <div class="pillar">
+          <h3>Diligência</h3>
+          <div class="q">"A obra avança com muita energia e êxito."</div>
+          <div class="refs">Pv 10:4 · Ed 5:8 · Pv 27:23</div>
+        </div>
+        <div class="pillar">
+          <h3>Aplicação</h3>
+          <div class="q">"Dedique o coração à minha instrução."</div>
+          <div class="refs">Provérbios 22:17</div>
+        </div>
+        <div class="pillar">
+          <h3>Firmeza</h3>
+          <div class="q">"Tudo que fizer, faça bem feito."</div>
+          <div class="refs">1 Co 15:58 · Ec 9:10</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 — 10 VERDADES -->
+  <section class="slide cream">
+    <div class="slide-number">06</div>
+    <div class="slide-content">
+      <div class="eyebrow">Para reconhecer trabalho duro de verdade</div>
+      <div class="truths-title">10 Verdades sobre o Trabalho Duro</div>
+      <div class="grid-2">
+        <div class="truth-item star"><span class="num">01</span><span class="txt">Não é super delegar</span></div>
+        <div class="truth-item"><span class="num">02</span><span class="txt">Não toma atalhos</span></div>
+        <div class="truth-item"><span class="num">03</span><span class="txt">Não reconhece títulos ou posições</span></div>
+        <div class="truth-item"><span class="num">04</span><span class="txt">Vai gerar promoção</span></div>
+        <div class="truth-item"><span class="num">05</span><span class="txt">Abre portas</span></div>
+        <div class="truth-item"><span class="num">06</span><span class="txt">Gera bons frutos</span></div>
+        <div class="truth-item"><span class="num">07</span><span class="txt">É reconhecido como sacrifício</span></div>
+        <div class="truth-item star"><span class="num">08</span><span class="txt">Não é microgerenciamento, tentando fazer tudo sozinho</span></div>
+        <div class="truth-item star"><span class="num">09</span><span class="txt">Vai remover toda pedra diante de você</span></div>
+        <div class="truth-item"><span class="num">10</span><span class="txt">Vai trazer grande realização</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7 — APLICAÇÃO PRÁTICA -->
+  <section class="slide navy">
+    <div class="slide-number">07</div>
+    <div class="slide-content">
+      <div class="eyebrow">Três verdades, um convite</div>
+      <div class="three-list">
+        <div class="three-item"><span class="num">01</span><span class="txt">Não é super delegar</span></div>
+        <div class="three-item"><span class="num">08</span><span class="txt">Não é microgerenciamento</span></div>
+        <div class="three-item"><span class="num">09</span><span class="txt">Vai remover toda pedra diante de você</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8 — PERGUNTAS DE REFLEXÃO -->
+  <section class="slide cream">
+    <div class="slide-number">08</div>
+    <div class="slide-content">
+      <div class="eyebrow">Para levar essa semana</div>
+      <div class="reflect-list">
+        <div class="reflect-item"><span class="num">1</span><span class="txt">O que eu estou produzindo?</span></div>
+        <div class="reflect-item"><span class="num">2</span><span class="txt">O que eu estou ajudando a prosperar?</span></div>
+        <div class="reflect-item"><span class="num">3</span><span class="txt">Onde eu estou dando desculpa?</span></div>
+        <div class="reflect-item"><span class="num">4</span><span class="txt">Quais são meus níveis de resultado, hoje, de verdade?</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 9 — FECHO -->
+  <section class="slide dark">
+    <div class="slide-number">09</div>
+    <div class="slide-content closing">
+      <div class="line1">Se as respostas forem claras,<br>siga com confiança.</div>
+      <div class="line2">Se não forem... talvez seja hora<br>de remover uma pedra.</div>
+      <div class="closing-foot">Maximiano Advogados · Grupo Pilar</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <button class="nav-arrow" id="prevBtn" aria-label="Anterior">←</button>
+  <div class="pedras" id="pedras"></div>
+  <span class="counter" id="counter">01 / 10</span>
+  <button class="nav-arrow" id="nextBtn" aria-label="Próximo">→</button>
+  <button class="fs-btn" id="fsBtn" aria-label="Tela cheia">⤢</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const pedrasEl = document.getElementById('pedras');
+  for (let i = 0; i < total; i++) {
+    const p = document.createElement('div');
+    p.className = 'pedra';
+    pedrasEl.appendChild(p);
+  }
+  const pedras = document.querySelectorAll('.pedra');
+  let current = 0;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function show(i) {
+    current = Math.max(0, Math.min(total - 1, i));
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === current));
+    document.getElementById('counter').textContent = pad(current + 1) + ' / ' + pad(total);
+    pedras.forEach((p, idx) => {
+      p.classList.toggle('cleared', idx < current);
+      p.classList.toggle('current', idx === current);
+    });
+  }
+
+  document.getElementById('nextBtn').onclick = () => show(current + 1);
+  document.getElementById('prevBtn').onclick = () => show(current - 1);
+  document.getElementById('fsBtn').onclick = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(current + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(current - 1); }
+  });
+
+  show(0);
+</script>
+
+</body>
+</html>
