@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Panorama Maximiano — Onboarding</title>
+<style>
+:root{
+  --dk:#06101E; --nv:#0D1B3E; --nv2:#112252; --nv3:#1A3060;
+  --gd:#F5A623; --gd2:#FFD080; --gd3:rgba(245,166,35,.12);
+  --wh:#FFFFFF; --muted:#7A8FB5; --card:#0F1F45;
+  --border:rgba(245,166,35,.18); --border2:rgba(255,255,255,.07);
+  --green:#1E7A42; --green2:#5FCF8A; --red:#B5303A; --red2:#FF7070;
+  --amber:#C97A1A; --amber2:#FFB84A; --r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--dk);color:var(--wh);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.65;overflow-x:hidden;}
+.f-cond{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;letter-spacing:.02em}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;background:rgba(6,16,30,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-brand{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:.12em;color:var(--gd);text-transform:uppercase;}
+.nav-brand span{color:rgba(255,255,255,.4);margin:0 .5rem}
+.nav-links{display:flex;gap:0;list-style:none;flex-wrap:wrap}
+.nav-links a{padding:.45rem .8rem;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none;border-radius:6px;transition:all .2s;cursor:pointer;font-weight:600;}
+.nav-links a:hover{color:var(--gd);background:rgba(245,166,35,.08)}
+@media(max-width:1100px){.nav-links{display:none}}
+
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(43,92,175,.3) 0%,transparent 70%),radial-gradient(ellipse 35% 35% at 90% 70%,rgba(245,166,35,.1) 0%,transparent 60%),var(--dk);position:relative;overflow:hidden;}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(245,166,35,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,.04) 1px,transparent 1px);background-size:60px 60px;}
+.hero-inner{max-width:900px;margin:0 auto;padding:2rem;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:.4rem 1.2rem;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gd);margin-bottom:2rem;font-weight:700;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gd);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero-title{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:clamp(3rem,8vw,6rem);line-height:.95;letter-spacing:-.01em;color:var(--wh);}
+.hero-title em{color:var(--gd);font-style:normal}
+.hero-sub{margin-top:1.75rem;font-size:1.15rem;font-weight:300;color:rgba(255,255,255,.65);max-width:560px;margin-left:auto;margin-right:auto;line-height:1.7}
+.hero-ceo{margin-top:3rem;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+.hero-ceo span{color:var(--gd)}
+.scroll-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+
+section{position:relative;padding:6rem 0}
+.container{max-width:1140px;margin:0 auto;padding:0 2rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.sec-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.6rem;}
+.sec-label::before{content:'';width:20px;height:2px;background:var(--gd);border-radius:1px}
+.sec-title{font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:clamp(2rem,4vw,3rem);line-height:1;}
+.sec-title em{color:var(--gd);font-style:normal}
+.sec-body{margin-top:.85rem;color:rgba(255,255,255,.55);max-width:640px;font-size:.98rem;line-height:1.75}
+
+.rv{opacity:0;transform:translateY(24px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* PANORAMA cards */
+.pano-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2.5rem}
+.pano-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;text-align:center}
+.pano-num{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:2.2rem;color:var(--gd)}
+.pano-label{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.4rem}
+.pano-note{margin-top:2.5rem;background:rgba(245,166,35,.06);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem 1.75rem;font-size:.95rem;color:rgba(255,255,255,.75);line-height:1.7}
+
+/* ORG */
+.org-wrap{overflow-x:auto;padding:2rem 0}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:2rem}
+.contact-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:.3rem}
+.contact-q{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.contact-a{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.05rem;color:var(--wh)}
+.contact-who{font-size:.8rem;color:var(--gd)}
+
+/* METAS */
+.metas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem}
+.metas-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem;text-align:center;position:relative;overflow:hidden}
+.metas-card.total{border-color:rgba(245,166,35,.4);background:linear-gradient(135deg,rgba(245,166,35,.1),var(--card))}
+.metas-pct{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:2rem}
+.metas-unit{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+.cta-btn{display:inline-flex;align-items:center;gap:.6rem;margin-top:2.5rem;background:linear-gradient(135deg,var(--gd),#c9841a);color:#1a1200;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem;padding:1rem 2rem;border-radius:30px;text-decoration:none;transition:all .25s;box-shadow:0 8px 24px rgba(245,166,35,.25)}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(245,166,35,.4)}
+
+/* BSC */
+.bsc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;margin-top:2.5rem}
+.bsc-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.75rem;border-top:3px solid var(--gd)}
+.bsc-card:nth-child(2){border-top-color:var(--green2)}
+.bsc-card:nth-child(3){border-top-color:#4A90D9}
+.bsc-card:nth-child(4){border-top-color:var(--gd2)}
+.bsc-persp{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gd);font-weight:700}
+.bsc-title{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.3rem;margin-top:.3rem}
+.bsc-desc{margin-top:.75rem;font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.6}
+.bsc-quote{margin-top:.85rem;font-size:.78rem;color:var(--gd2);font-style:italic}
+
+/* DESAFIOS */
+.des-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;margin-top:2.5rem}
+.des-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem}
+.des-icon{width:36px;height:36px;border-radius:8px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:.85rem;color:var(--gd)}
+.des-title{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.05rem}
+.des-desc{margin-top:.5rem;font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.6}
+
+/* CULTURA */
+.cult-banner{background:linear-gradient(135deg,rgba(245,166,35,.12),rgba(26,48,96,.4));border:1px solid var(--border);border-radius:var(--r);padding:2rem;margin-top:2rem;text-align:center}
+.cult-banner-title{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.5rem;color:var(--gd)}
+.cult-banner-sub{margin-top:.5rem;color:rgba(255,255,255,.7);font-size:.95rem}
+.valores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:2.5rem}
+.valor-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:1.4rem;text-align:center}
+.valor-num{font-family:'Arial Narrow',sans-serif;font-weight:900;color:var(--gd);font-size:1.4rem}
+.valor-name{margin-top:.5rem;font-size:.85rem;font-weight:700;color:var(--wh)}
+.versiculo{margin-top:2.5rem;background:rgba(255,255,255,.03);border-left:3px solid var(--gd);border-radius:0 var(--r) var(--r) 0;padding:1.5rem 2rem;font-style:italic;color:rgba(255,255,255,.75);font-size:1rem;line-height:1.8}
+.versiculo cite{display:block;margin-top:.6rem;font-style:normal;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);font-weight:700}
+.crenca-limitante{margin-top:2.5rem;text-align:center;font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.6rem;color:var(--wh);letter-spacing:.01em}
+.crenca-limitante em{color:var(--gd);font-style:normal}
+
+/* PROFISSIONAL — accordion */
+.pr-intro{background:rgba(255,255,255,.03);border-radius:var(--r);padding:1.5rem 1.75rem;margin-top:2rem;font-size:.9rem;color:rgba(255,255,255,.65);line-height:1.7}
+.pr-controls{display:flex;gap:.75rem;margin-top:1.75rem}
+.pr-ctrl-btn{background:rgba(245,166,35,.08);border:1px solid var(--border);color:var(--gd);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:.5rem 1.1rem;border-radius:20px;cursor:pointer;transition:all .2s}
+.pr-ctrl-btn:hover{background:rgba(245,166,35,.15)}
+.pr-list{margin-top:1.25rem}
+.pr-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);margin-bottom:.85rem;overflow:hidden;transition:border-color .2s}
+.pr-card:hover{border-color:rgba(245,166,35,.3)}
+.pr-header{display:flex;align-items:center;gap:1.1rem;padding:1.15rem 1.4rem;cursor:pointer;user-select:none}
+.pr-num{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.6rem;color:rgba(245,166,35,.4);flex-shrink:0;min-width:36px}
+.pr-header-text{flex:1;min-width:0}
+.pr-title{font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.02rem;color:var(--wh);display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
+.pr-star{color:var(--gd);font-size:.85rem}
+.pr-frase{margin-top:.4rem;font-size:.84rem;font-style:italic;color:var(--gd2);line-height:1.5}
+.pr-toggle{font-size:.85rem;color:var(--muted);transition:transform .25s;flex-shrink:0}
+.pr-card.open .pr-toggle{transform:rotate(180deg);color:var(--gd)}
+.pr-body{display:none;padding:0 1.4rem 1.4rem 1.4rem;border-top:1px solid var(--border2)}
+.pr-card.open .pr-body{display:block;animation:prSlide .25s ease}
+@keyframes prSlide{from{opacity:0}to{opacity:1}}
+.pr-body p{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.65;margin-top:.9rem}
+.pr-body b{color:var(--gd2);font-weight:700}
+.pr-signature{margin-top:1rem;font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:1.1rem;color:var(--gd)!important;text-align:center}
+.pr-priority-note{margin-top:2rem;font-size:.78rem;color:var(--muted);text-align:center}
+.pr-priority-note b{color:var(--gd)}
+
+/* ENCERRAMENTO */
+#s-encerramento{background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(245,166,35,.08) 0%,transparent 70%),var(--nv);padding:8rem 0}
+.enc-mark{text-align:center;font-family:Georgia,'Times New Roman',serif;font-size:4rem;color:rgba(245,166,35,.35);line-height:1;margin-bottom:.5rem}
+.enc-quote{max-width:760px;margin:0 auto;text-align:center;font-family:Georgia,'Times New Roman',serif;font-weight:400;font-style:italic;font-size:clamp(1.35rem,2.6vw,1.85rem);line-height:1.6;color:rgba(255,255,255,.92)}
+.enc-quote em{color:var(--gd);font-style:italic}
+.enc-rule{width:56px;height:2px;background:var(--gd);margin:3rem auto;border-radius:2px;opacity:.6}
+.enc-quote2{max-width:680px;margin:0 auto;text-align:center;font-family:'Segoe UI',system-ui,sans-serif;font-weight:400;font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.75;color:rgba(255,255,255,.65)}
+.enc-quote2 em{color:var(--gd2);font-style:normal;font-weight:700}
+.enc-welcome{margin-top:4rem;text-align:center;font-family:'Arial Narrow','Arial',sans-serif;font-weight:900;font-size:1.6rem;letter-spacing:.14em;color:var(--gd);text-transform:uppercase}
+
+footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border2)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">MAXIMIANO<span>|</span>PANORAMA</div>
+  <ul class="nav-links">
+    <li><a onclick="scrollToId('s-panorama')">Panorama</a></li>
+    <li><a onclick="scrollToId('s-org')">Estrutura</a></li>
+    <li><a onclick="scrollToId('s-metas')">Metas</a></li>
+    <li><a onclick="scrollToId('s-bsc')">Régua</a></li>
+    <li><a onclick="scrollToId('s-desafios')">Desafios</a></li>
+    <li><a onclick="scrollToId('s-cultura')">Cultura</a></li>
+    <li><a onclick="scrollToId('s-profissional')">O Profissional</a></li>
+  </ul>
+</nav>
+
+<!-- CAPA -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-badge rv"><span class="badge-dot"></span>Onboarding · Novos Advogados</div>
+    <h1 class="hero-title rv" style="transition-delay:.1s">PANORAMA<br><em>MAXIMIANO</em></h1>
+    <p class="hero-sub rv" style="transition-delay:.2s">Onde estamos. Para onde vamos. Como fazemos.</p>
+    <div class="hero-ceo rv" style="transition-delay:.3s">CEO: <span>Jean Barbosa</span></div>
+  </div>
+  <div class="scroll-cue">↓ role para começar</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PANORAMA -->
+<section id="s-panorama">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">01 — ONDE ESTAMOS</div>
+      <h2 class="sec-title">A MAXIMIANO <em>HOJE</em></h2>
+      <p class="sec-body">Uma banca que cresceu com a Dra. Raphaela e que, nos últimos meses, passou a estruturar sua gestão de forma profissional — dashboards, indicadores, governança. Vocês estão entrando numa fase de maturidade.</p>
+    </div>
+    <div class="pano-grid rv" style="transition-delay:.1s">
+      <div class="pano-card"><div class="pano-num">4</div><div class="pano-label">Unidades Físicas</div></div>
+      <div class="pano-card"><div class="pano-num">+1</div><div class="pano-label">Canal Digital</div></div>
+      <div class="pano-card"><div class="pano-num">~50</div><div class="pano-label">Colaboradores</div></div>
+      <div class="pano-card"><div class="pano-num">SN</div><div class="pano-label">Simples Nacional</div></div>
+    </div>
+    <div class="pano-note rv" style="transition-delay:.2s">
+      Botelhos · Poços de Caldas · Cabo Verde · Nova Resende + Canal Digital (inside sales), com foco em previdenciário e cível — atuação regida pelo <b>TRF6</b> e Turmas Recursais da Seção Judiciária de Minas Gerais.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ESTRUTURA -->
+<section id="s-org">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">02 — ESTRUTURA</div>
+      <h2 class="sec-title">ORGANOGRAMA <em>ATUALIZADO</em></h2>
+      <p class="sec-body">Estrutura formal da Maximiano — Julho 2026. Em destaque verde, os novos integrantes de 2026, entre eles vocês três.</p>
+    </div>
+    <div class="org-wrap rv" style="transition-delay:.1s">
+      <div style="overflow-x:auto;padding:1rem 0">
+<svg id="org-svg" viewBox="0 0 1700 980" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:1200px;height:auto;font-family:'Segoe UI',system-ui,sans-serif">
+          <defs>
+            <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!--
+            LAYOUT PLAN (box width=150, gap=30 between boxes)
+            L2 centers (7 nodes, step=180):
+              Elisa       cx=85   box x=10
+              Consultores cx=265  box x=190
+              Rodrigo     cx=445  box x=370
+              Unidades    cx=625  box x=550   ← subtree hangs here
+              Geovani     cx=925  box x=850   ← pushed right, gap=300 from Unidades
+              Renato      cx=1105 box x=1030
+              Débora      cx=1285 box x=1210
+
+            Unidades subtree max-right = Nova Resende staff right edge
+              Nova Resende x=410, staff right = 492+130 = 622
+              Cabo Verde   x=560, staff right = 559+142 = 701
+              → all inside 0–750 safe zone, well left of Geovani=850
+          -->
+
+          <!-- ===== LEVEL 0: CONSELHO ===== -->
+          <line x1="700" y1="56" x2="700" y2="84" stroke="rgba(245,166,35,.4)" stroke-width="1.5"/>
+          <g transform="translate(570,8)">
+            <rect width="260" height="48" rx="8" fill="rgba(245,166,35,.16)" stroke="rgba(245,166,35,.5)" stroke-width="1.2" filter="url(#glow)"/>
+            <text x="130" y="20" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">RAPHAELA ALMEIDA</text>
+            <text x="130" y="36" text-anchor="middle" fill="rgba(245,166,35,.85)" font-size="8.5" letter-spacing="2">CONSELHO &amp; CVO</text>
+          </g>
+
+          <!-- ===== LEVEL 1: CEO ===== -->
+          <line x1="700" y1="136" x2="700" y2="162" stroke="rgba(245,166,35,.35)" stroke-width="1.5"/>
+          <!-- Bus line spans all L2 centers: 85 → 1285 -->
+          <line x1="85" y1="162" x2="1140" y2="162" stroke="rgba(245,166,35,.18)" stroke-width="1"/>
+          <g transform="translate(570,84)">
+            <rect width="260" height="52" rx="8" fill="rgba(245,166,35,.22)" stroke="rgba(245,166,35,.65)" stroke-width="1.5" filter="url(#glow)"/>
+            <text x="130" y="23" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">JEAN BARBOSA</text>
+            <text x="130" y="40" text-anchor="middle" fill="rgba(245,166,35,.9)" font-size="9" letter-spacing="2.5">CEO</text>
+          </g>
+
+          <!-- ===== LEVEL 2 DROP LINES ===== -->
+          <line x1="85"   y1="162" x2="85"   y2="188" stroke="rgba(245,166,35,.18)" stroke-width="1"/>
+          <line x1="265"  y1="162" x2="265"  y2="188" stroke="rgba(245,166,35,.18)" stroke-width="1"/>
+          <line x1="445"  y1="162" x2="445"  y2="188" stroke="rgba(245,166,35,.22)" stroke-width="1.5"/>
+          <line x1="820"  y1="162" x2="820"  y2="188" stroke="rgba(245,166,35,.18)" stroke-width="1"/>
+          <line x1="985" y1="162" x2="985"  y2="188" stroke="rgba(245,166,35,.18)" stroke-width="1"/>
+          <line x1="1140" y1="162" x2="1140" y2="188" stroke="rgba(245,166,35,.18)" stroke-width="1"/>
+
+          <!-- ELISA cx=85 -->
+          <g transform="translate(10,188)">
+            <rect width="150" height="48" rx="7" fill="rgba(17,34,82,.9)" stroke="rgba(255,255,255,.13)" stroke-width="1"/>
+            <text x="75" y="20" text-anchor="middle" fill="#fff" font-size="9.5" font-weight="700">ELISA SEMENTILE</text>
+            <text x="75" y="35" text-anchor="middle" fill="rgba(245,166,35,.7)" font-size="8" letter-spacing="1">HEAD RH</text>
+          </g>
+
+          <!-- CONSULTORES cx=265 -->
+          <g transform="translate(190,188)">
+            <rect width="150" height="48" rx="7" fill="rgba(17,34,82,.6)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+            <text x="75" y="20" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="9.5" font-weight="700">CONSULTORES</text>
+            <text x="75" y="35" text-anchor="middle" fill="rgba(245,166,35,.45)" font-size="8" letter-spacing="1">EXTERNOS</text>
+          </g>
+
+          <!-- UNIDADES cx=445 (trocado com Rodrigo) -->
+          <g transform="translate(370,188)">
+            <rect width="150" height="48" rx="7" fill="rgba(245,166,35,.13)" stroke="rgba(245,166,35,.35)" stroke-width="1.2"/>
+            <text x="75" y="20" text-anchor="middle" fill="rgba(245,166,35,.95)" font-size="9" font-weight="700" letter-spacing="2">UNIDADES</text>
+            <text x="75" y="35" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="7.5" letter-spacing="1">Jean Barbosa · CEO</text>
+          </g>
+
+          <!-- GEOVANI cx=925 -->
+          <g transform="translate(745,188)">
+            <rect width="150" height="48" rx="7" fill="rgba(17,34,82,.9)" stroke="rgba(255,255,255,.13)" stroke-width="1"/>
+            <text x="75" y="20" text-anchor="middle" fill="#fff" font-size="9.5" font-weight="700">GEOVANI BARBOSA</text>
+            <text x="75" y="35" text-anchor="middle" fill="rgba(245,166,35,.7)" font-size="8" letter-spacing="1">SUPERVISOR COMERCIAL</text>
+          </g>
+
+          <!-- RENATO cx=1105 -->
+          <g transform="translate(910,188)">
+            <rect width="150" height="48" rx="7" fill="rgba(17,34,82,.9)" stroke="rgba(255,255,255,.13)" stroke-width="1"/>
+            <text x="75" y="20" text-anchor="middle" fill="#fff" font-size="9.5" font-weight="700">RENATO GENTIL</text>
+            <text x="75" y="35" text-anchor="middle" fill="rgba(245,166,35,.7)" font-size="8" letter-spacing="1">HEAD FINANCEIRO</text>
+          </g>
+
+          <!-- DÉBORA cx=1285 -->
+          <g transform="translate(1065,188)">
+            <rect width="150" height="48" rx="7" fill="rgba(17,34,82,.55)" stroke="rgba(255,255,255,.15)" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="75" y="20" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" font-weight="700" letter-spacing="1">A CONTRATAR</text>
+            <text x="75" y="35" text-anchor="middle" fill="rgba(245,166,35,.55)" font-size="8" letter-spacing="1">HEAD MARKETING</text>
+          </g>
+
+          <!-- ===== LEVEL 3 ===== -->
+
+          <!-- GEOVANI → Kathury + Silvio -->
+          <line x1="820" y1="236" x2="820" y2="276" stroke="rgba(245,166,35,.15)" stroke-width="1"/>
+          <g transform="translate(754,276)">
+            <rect width="132" height="40" rx="6" fill="rgba(8,18,45,.9)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+            <text x="66" y="16" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="8.5" font-weight="600">KATHURY PINHEIRO</text>
+            <text x="66" y="30" text-anchor="middle" fill="rgba(245,166,35,.55)" font-size="7" letter-spacing="1">VENDEDORA</text>
+          </g>
+
+          <!-- RENATO → Glauco → Ivana -->
+          <line x1="985" y1="236" x2="985" y2="276" stroke="rgba(245,166,35,.15)" stroke-width="1"/>
+          <g transform="translate(919,276)">
+            <rect width="132" height="40" rx="6" fill="rgba(8,18,45,.9)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+            <text x="66" y="16" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="8.5" font-weight="600">GLAUCO RODRIGUES</text>
+            <text x="66" y="30" text-anchor="middle" fill="rgba(245,166,35,.55)" font-size="7" letter-spacing="1">GESTOR FINANCEIRO</text>
+          </g>
+          <line x1="985" y1="316" x2="985" y2="336" stroke="rgba(245,166,35,.12)" stroke-width="1"/>
+          <g transform="translate(919,336)">
+            <rect width="132" height="40" rx="6" fill="rgba(8,18,45,.85)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+            <text x="66" y="16" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8.5" font-weight="600">IVANA COSTA</text>
+            <text x="66" y="30" text-anchor="middle" fill="rgba(245,166,35,.45)" font-size="7" letter-spacing="1">ASSIST. FINANCEIRO</text>
+          </g>
+
+          <!-- DÉBORA → Fábio -->
+          <line x1="1140" y1="236" x2="1140" y2="276" stroke="rgba(245,166,35,.15)" stroke-width="1"/>
+          <g transform="translate(1074,276)">
+            <rect width="132" height="40" rx="6" fill="rgba(8,18,45,.9)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+            <text x="66" y="16" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="8.5" font-weight="600">FÁBIO SANTOS</text>
+            <text x="66" y="30" text-anchor="middle" fill="rgba(245,166,35,.55)" font-size="7" letter-spacing="1">ASSIST. MARKETING</text>
+          </g>
+
+          <!-- ===== NATÁLIA — mesma distância do Fábio que Glauco tem (155px gap) ===== -->
+          <path d="M830,110 Q1230,110 1230,256" fill="none" stroke="rgba(95,207,138,.35)" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <line x1="1230" y1="256" x2="1229" y2="256" stroke="rgba(95,207,138,.35)" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <g transform="translate(1229,256)">
+            <rect width="170" height="56" rx="7" fill="rgba(95,207,138,.1)" stroke="rgba(95,207,138,.4)" stroke-width="1.3"/>
+            <text x="85" y="18" text-anchor="middle" fill="rgba(95,207,138,.85)" font-size="7.5" font-weight="700" letter-spacing="1.5">SUCESSO DO CLIENTE</text>
+            <text x="85" y="33" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">NATÁLIA GARCIA</text>
+            <text x="85" y="48" text-anchor="middle" fill="rgba(95,207,138,.7)" font-size="7.5" letter-spacing="1">ASSIST. SUC. CLIENTE</text>
+          </g>
+
+          <!-- ===== UNIDADES subtree (desce de cx=445) ===== -->
+          <line x1="445" y1="236" x2="445" y2="270" stroke="rgba(245,166,35,.2)" stroke-width="1.5"/>
+          <!-- Bus PRÓPRIAS / SÓCIOS — centrado em 445, vai de x=100 a x=640 -->
+          <line x1="100" y1="270" x2="640" y2="270" stroke="rgba(245,166,35,.14)" stroke-width="1"/>
+          <line x1="260" y1="270" x2="260" y2="288" stroke="rgba(245,166,35,.14)" stroke-width="1"/>
+          <line x1="550" y1="270" x2="550" y2="288" stroke="rgba(74,144,217,.2)" stroke-width="1"/>
+
+          <!-- PRÓPRIAS badge cx=260 -->
+          <g transform="translate(150,288)">
+            <rect width="220" height="26" rx="13" fill="rgba(245,166,35,.07)" stroke="rgba(245,166,35,.2)" stroke-width="1"/>
+            <text x="110" y="17" text-anchor="middle" fill="rgba(245,166,35,.75)" font-size="7.5" font-weight="700" letter-spacing="2">UNIDADES PRÓPRIAS</text>
+          </g>
+          <!-- COM SÓCIOS badge cx=550 -->
+          <g transform="translate(450,288)">
+            <rect width="200" height="26" rx="13" fill="rgba(74,144,217,.07)" stroke="rgba(74,144,217,.2)" stroke-width="1"/>
+            <text x="100" y="17" text-anchor="middle" fill="rgba(74,144,217,.8)" font-size="7.5" font-weight="700" letter-spacing="2">UNIDADE COM SÓCIOS</text>
+          </g>
+
+          <!-- PRÓPRIAS → 3 units connectors (Botelhos=60, Poços=200, Nova Resende=340) -->
+          <line x1="260" y1="314" x2="260" y2="330" stroke="rgba(245,166,35,.12)" stroke-width="1"/>
+          <line x1="60"  y1="330" x2="410" y2="330" stroke="rgba(245,166,35,.1)"  stroke-width="1"/>
+          <line x1="60"  y1="330" x2="60"  y2="346" stroke="rgba(245,166,35,.1)"  stroke-width="1"/>
+          <line x1="200" y1="330" x2="200" y2="346" stroke="rgba(245,166,35,.1)"  stroke-width="1"/>
+          <line x1="360" y1="330" x2="360" y2="346" stroke="rgba(245,166,35,.1)"  stroke-width="1"/>
+
+          <!-- BOTELHOS x=(-10) → center=60 -->
+          <g transform="translate(-10,346)">
+            <rect width="140" height="44" rx="7" fill="rgba(17,34,82,.8)" stroke="rgba(245,166,35,.22)" stroke-width="1"/>
+            <text x="70" y="18" text-anchor="middle" fill="rgba(245,166,35,.9)" font-size="8.5" font-weight="700" letter-spacing="1.5">BOTELHOS</text>
+            <text x="70" y="34" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="8.5" font-weight="600">Paulo Barreiro</text>
+          </g>
+          <line x1="60" y1="390" x2="60" y2="408" stroke="rgba(245,166,35,.1)" stroke-width="1"/>
+          <g transform="translate(-25,408)">
+            <rect width="170" height="100" rx="5" fill="rgba(8,18,45,.88)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+            <text x="85" y="15" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="8" font-weight="600">João Victor · Ulianny</text>
+            <text x="85" y="27" text-anchor="middle" fill="rgba(95,207,138,.9)" font-size="8" font-weight="700">Daniel (novo)</text>
+            <text x="85" y="39" text-anchor="middle" fill="rgba(245,166,35,.4)" font-size="7" letter-spacing="0.5">Advogados</text>
+            <text x="85" y="55" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="8" font-weight="600">Miriã</text>
+            <text x="85" y="67" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7">Recepção</text>
+            <text x="85" y="83" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="8" font-weight="600">José Gabriel · Jaqueline</text>
+            <text x="85" y="95" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7">Estagiários</text>
+          </g>
+
+          <!-- POÇOS DE CALDAS x=130 → center=200 -->
+          <g transform="translate(130,346)">
+            <rect width="140" height="44" rx="7" fill="rgba(17,34,82,.8)" stroke="rgba(245,166,35,.22)" stroke-width="1"/>
+            <text x="70" y="18" text-anchor="middle" fill="rgba(245,166,35,.9)" font-size="8" font-weight="700" letter-spacing="1">POÇOS DE CALDAS</text>
+            <text x="70" y="34" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="8.5" font-weight="600">João Gabriel</text>
+          </g>
+          <line x1="200" y1="390" x2="200" y2="408" stroke="rgba(245,166,35,.1)" stroke-width="1"/>
+          <g transform="translate(128,408)">
+            <rect width="144" height="100" rx="5" fill="rgba(8,18,45,.88)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+            <text x="72" y="14" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="7.5" font-weight="600">Iago · Gabriela · Marcelo</text>
+            <text x="72" y="26" text-anchor="middle" fill="rgba(95,207,138,.9)" font-size="7.5" font-weight="700">Vanessa (nova)</text>
+            <text x="72" y="38" text-anchor="middle" fill="rgba(245,166,35,.4)" font-size="7" letter-spacing="0.5">Advogados</text>
+            <text x="72" y="58" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="7.5" font-weight="600">Isadora Rampazo</text>
+            <text x="72" y="70" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7">Recepcionista</text>
+          </g>
+
+          <!-- NOVA RESENDE x=290 → center=360 -->
+          <g transform="translate(290,346)">
+            <rect width="140" height="44" rx="7" fill="rgba(17,34,82,.8)" stroke="rgba(245,166,35,.22)" stroke-width="1"/>
+            <text x="70" y="16" text-anchor="middle" fill="rgba(245,166,35,.9)" font-size="8.5" font-weight="700" letter-spacing="1.5">NOVA RESENDE</text>
+            <text x="70" y="32" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="8" font-weight="600">Rafael · Coordenador</text>
+          </g>
+          <!-- Nova Resende staff — apenas Maisa (Silvio está sob Geovani) -->
+          <line x1="360" y1="390" x2="360" y2="408" stroke="rgba(245,166,35,.1)" stroke-width="1"/>
+          <g transform="translate(295,408)">
+            <rect width="130" height="40" rx="5" fill="rgba(8,18,45,.88)" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+            <text x="65" y="15" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="7.5" font-weight="600">Maisa Silva</text>
+            <text x="65" y="29" text-anchor="middle" fill="rgba(245,166,35,.45)" font-size="7">Assist. Jur. / Recepção</text>
+          </g>
+
+          <!-- CABO VERDE cx=550, x=480 → right edge=620 (well left of Geovani cx=925) -->
+          <line x1="550" y1="314" x2="550" y2="346" stroke="rgba(74,144,217,.15)" stroke-width="1"/>
+          <g transform="translate(480,346)">
+            <rect width="140" height="44" rx="7" fill="rgba(13,27,62,.9)" stroke="rgba(74,144,217,.3)" stroke-width="1"/>
+            <text x="70" y="18" text-anchor="middle" fill="rgba(74,144,217,.9)" font-size="8.5" font-weight="700" letter-spacing="1.5">CABO VERDE</text>
+            <text x="70" y="34" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="7.5">Tayná · Jackeline</text>
+          </g>
+          <line x1="550" y1="390" x2="550" y2="408" stroke="rgba(74,144,217,.15)" stroke-width="1"/>
+          <g transform="translate(479,408)">
+            <rect width="142" height="116" rx="5" fill="rgba(8,18,45,.88)" stroke="rgba(74,144,217,.08)" stroke-width="1"/>
+            <text x="71" y="16" text-anchor="middle" fill="rgba(95,207,138,.9)" font-size="7.5" font-weight="700">Joyce (nova · advogada)</text>
+            <text x="71" y="32" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="7.5" font-weight="600">Giovane Lopes</text>
+            <text x="71" y="44" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7">Assistente Jurídico</text>
+            <text x="71" y="60" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="7.5" font-weight="600">Pedro Boldrin</text>
+            <text x="71" y="72" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7">Estagiário</text>
+            <text x="71" y="88" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="7.5" font-weight="600">Fernanda Lima</text>
+            <text x="71" y="100" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="7">Recepcionista</text>
+          </g>
+
+          <!-- ===== LEGEND ===== -->
+          <g transform="translate(20,900)">
+            <rect width="13" height="13" rx="2" fill="rgba(245,166,35,.2)" stroke="rgba(245,166,35,.5)" stroke-width="1"/>
+            <text x="20" y="12" fill="rgba(255,255,255,.55)" font-size="13">Executivo</text>
+            <rect x="130" width="13" height="13" rx="2" fill="rgba(17,34,82,.9)" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+            <text x="150" y="12" fill="rgba(255,255,255,.55)" font-size="13">Heads / Líderes</text>
+            <rect x="310" width="13" height="13" rx="2" fill="rgba(95,207,138,.1)" stroke="rgba(95,207,138,.5)" stroke-width="1"/>
+            <text x="330" y="12" fill="rgba(255,255,255,.55)" font-size="13">Nova Área / Novo Integrante 2026</text>
+            <line x1="460" y1="6" x2="490" y2="6" stroke="rgba(95,207,138,.5)" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="498" y="12" fill="rgba(255,255,255,.55)" font-size="13">Subordinação direta CEO</text>
+            <rect x="740" width="13" height="13" rx="2" fill="rgba(74,144,217,.1)" stroke="rgba(74,144,217,.45)" stroke-width="1"/>
+            <text x="760" y="12" fill="rgba(255,255,255,.55)" font-size="13">Unidade com Sócios</text>
+          </g>
+
+        </svg>
+      </div>
+    </div>
+    <div class="rv" style="transition-delay:.2s;margin-top:2.5rem">
+      <div class="sec-label" style="margin-bottom:0">DÚVIDA? PROCURE:</div>
+    </div>
+    <div class="contact-grid rv" style="transition-delay:.25s">
+      <div class="contact-card"><div class="contact-q">Dúvida jurídica / tese</div><div class="contact-a">Líder da sua unidade</div></div>
+      <div class="contact-card"><div class="contact-q">Sistema / Bitrix</div><div class="contact-a">Bruna</div><div class="contact-who">Sucesso do Cliente / Sistemas</div></div>
+      <div class="contact-card"><div class="contact-q">Financeiro</div><div class="contact-a">Glauco</div><div class="contact-who">sob Renato Gentil</div></div>
+      <div class="contact-card"><div class="contact-q">RH</div><div class="contact-a">Elisa Sementile</div><div class="contact-who">Head RH</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- METAS -->
+<section id="s-metas">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">03 — PARA ONDE VAMOS</div>
+      <h2 class="sec-title">METAS <em>2026</em></h2>
+      <p class="sec-body">Acompanhamento mensal de todas as unidades. Resultado consolidado de janeiro a junho de 2026:</p>
+    </div>
+    <div class="metas-grid rv" style="transition-delay:.1s">
+      <div class="metas-card total"><div class="metas-pct" style="color:var(--gd)">115,6%</div><div class="metas-unit">Consolidado Geral</div></div>
+      <div class="metas-card"><div class="metas-pct" style="color:var(--green2)">127,7%</div><div class="metas-unit">Botelhos</div></div>
+      <div class="metas-card"><div class="metas-pct" style="color:var(--green2)">118,4%</div><div class="metas-unit">Poços de Caldas</div></div>
+      <div class="metas-card"><div class="metas-pct" style="color:var(--green2)">115,5%</div><div class="metas-unit">Cabo Verde</div></div>
+      <div class="metas-card"><div class="metas-pct" style="color:var(--amber2)">90,8%</div><div class="metas-unit">Nova Resende</div></div>
+      <div class="metas-card"><div class="metas-pct" style="color:var(--amber2)">73,6%</div><div class="metas-unit">Canal Digital</div></div>
+    </div>
+    <p class="rv" style="transition-delay:.15s;margin-top:1.5rem;font-size:.85rem;color:rgba(255,255,255,.5)">R$ 6,25M realizados sobre R$ 5,41M de meta consolidada. O Canal Digital ainda está em curva de maturação — é oportunidade, não problema.</p>
+    <div class="rv" style="transition-delay:.2s;text-align:center">
+      <a class="cta-btn" href="https://jsb96adm.github.io/maximiano_relatorios-financeiros/Maximiano_Acompanhamento_Mensal.html" target="_blank">↗ Abrir painel completo ao vivo</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BSC / RÉGUA -->
+<section id="s-bsc">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">04 — COMO MEDIMOS</div>
+      <h2 class="sec-title">A RÉGUA <em>QUE USAMOS</em></h2>
+      <p class="sec-body">Balanced Scorecard — 4 perspectivas. O PDI de vocês nasce dessas 4 frentes: não é papel solto, é conectado com o que a empresa mede.</p>
+    </div>
+    <div class="bsc-grid rv" style="transition-delay:.1s">
+      <div class="bsc-card">
+        <div class="bsc-persp">Financeira</div>
+        <div class="bsc-title">Crescimento Exponencial</div>
+        <div class="bsc-desc">Vendas, conversão, protocolos, faturamento, inadimplência.</div>
+        <div class="bsc-quote">Não só quanto vendemos — quanto vira processo protocolado e recebido.</div>
+      </div>
+      <div class="bsc-card">
+        <div class="bsc-persp">Clientes</div>
+        <div class="bsc-title">Clientes Satisfeitos</div>
+        <div class="bsc-desc">CSAT, indicação, índice geral de qualidade do atendimento.</div>
+        <div class="bsc-quote">O cliente também nos avalia — e isso entra na régua.</div>
+      </div>
+      <div class="bsc-card">
+        <div class="bsc-persp">Processos Internos</div>
+        <div class="bsc-title">Eficiência Operacional</div>
+        <div class="bsc-desc">Tempo de atendimento, prazo de protocolo, sucesso em concessão/procedência.</div>
+        <div class="bsc-quote">Rapidez e taxa de sucesso, não só volume.</div>
+      </div>
+      <div class="bsc-card">
+        <div class="bsc-persp">Aprendizado &amp; Crescimento</div>
+        <div class="bsc-title">Desenvolvimento de Pessoas</div>
+        <div class="bsc-desc">Horas de treinamento, turnover, absenteísmo.</div>
+        <div class="bsc-quote">O crescimento de vocês também é indicador da empresa.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DESAFIOS -->
+<section id="s-desafios">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">05 — SEM ESCONDER</div>
+      <h2 class="sec-title">O QUE AINDA <em>ESTAMOS RESOLVENDO</em></h2>
+      <p class="sec-body">Reconhecer o que não está redondo é parte de trabalhar aqui.</p>
+    </div>
+    <div class="des-grid rv" style="transition-delay:.1s">
+      <div class="des-card"><div class="des-icon">⟳</div><div class="des-title">Transição de sistema</div><div class="des-desc">Migração de CRM e jurídico gera desgaste no curto prazo, mas estamos evoluindo.</div></div>
+      <div class="des-card"><div class="des-icon">⇄</div><div class="des-title">Padronização entre unidades</div><div class="des-desc">Cada unidade ainda tem ritmo próprio. Uma régua única de gestão está em construção.</div></div>
+      <div class="des-card"><div class="des-icon">↗</div><div class="des-title">Canal Digital em maturação</div><div class="des-desc">Cresceu, mas ainda não emplacou todo o potencial — atenção e investimento aqui.</div></div>
+      <div class="des-card"><div class="des-icon">⏱</div><div class="des-title">Tempo de ciclo</div><div class="des-desc">Reduzir o tempo entre venda, protocolo e concessão é ganho direto pro cliente e pro caixa.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CULTURA -->
+<section id="s-cultura">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">06 — COMO PENSAMOS AQUI</div>
+      <h2 class="sec-title">CULTURA <em>&amp; VALORES</em></h2>
+    </div>
+    <div class="cult-banner rv" style="transition-delay:.1s">
+      <div class="cult-banner-title">Cultura de Crescimento</div>
+      <div class="cult-banner-sub">Buscamos crescer constantemente — e comemoramos nossas conquistas no caminho.</div>
+    </div>
+    <div class="valores-grid rv" style="transition-delay:.15s">
+      <div class="valor-card"><div class="valor-num">01</div><div class="valor-name">Empresa Cristã</div></div>
+      <div class="valor-card"><div class="valor-num">02</div><div class="valor-name">Foco no Cliente</div></div>
+      <div class="valor-card"><div class="valor-num">03</div><div class="valor-name">Senso de Dono</div></div>
+      <div class="valor-card"><div class="valor-num">04</div><div class="valor-name">Justiça</div></div>
+      <div class="valor-card"><div class="valor-num">05</div><div class="valor-name">Autodesenvolvimento</div></div>
+      <div class="valor-card"><div class="valor-num">06</div><div class="valor-name">Prosperidade</div></div>
+      <div class="valor-card"><div class="valor-num">07</div><div class="valor-name">Inovação</div></div>
+      <div class="valor-card"><div class="valor-num">08</div><div class="valor-name">Crescimento</div></div>
+    </div>
+    <div class="versiculo rv" style="transition-delay:.2s">
+      &ldquo;E não nos cansemos de fazer o bem, pois no tempo próprio colheremos, se não desistirmos.&rdquo;
+      <cite>Gálatas 6:9</cite>
+    </div>
+    <div class="crenca-limitante rv" style="transition-delay:.25s">Nada de <em>crença limitante.</em></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- O PROFISSIONAL -->
+<section id="s-profissional">
+  <div class="container">
+    <div class="rv">
+      <div class="sec-label">07 — FECHAMENTO</div>
+      <h2 class="sec-title">O QUE EU ESPERO <em>DE UM PROFISSIONAL</em></h2>
+      <p class="sec-body">Não é sobre como ser um bom advogado previdenciário — isso vocês aprendem com a Dra. Raphaela e com a prática. Isso é sobre o profissional que espero que vocês se tornem, em qualquer área do direito.</p>
+    </div>
+    <div class="pr-intro rv" style="transition-delay:.1s">Técnica se ensina. Caráter, não.</div>
+    <div class="pr-controls rv" style="transition-delay:.15s">
+      <button class="pr-ctrl-btn" onclick="toggleAllPr(true)">Abrir todos ▾</button>
+      <button class="pr-ctrl-btn" onclick="toggleAllPr(false)">Fechar todos ▴</button>
+    </div>
+    <div class="pr-list rv" style="transition-delay:.2s">
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">01</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Confiança vale mais do que talento <span class="pr-star" title="Prioridade se o tempo apertar">★</span></div>
+            <div class="pr-frase">&ldquo;Talento abre a porta. Confiança é o que te mantém dentro da sala.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Já vi gente brilhante não durar 6 meses, e gente mediana virar referência. A diferença nunca foi talento — foi confiança: a certeza de que, quando delego, aquilo vai ser feito sem eu precisar cobrar.</p>
+          <p><b>Na prática:</b> Prefiro o advogado que entrega uma petição correta e no prazo todo mês do que o “gênio” que brilha uma vez e some nas outras dez.</p>
+          <p><b>No previdenciário:</b> Prazo perdido é benefício perdido pro cliente. Confiança aqui é operacional — saber que o processo está andando sem precisar perguntar.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">02</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Técnica se ensina, caráter não <span class="pr-star" title="Prioridade se o tempo apertar">★</span></div>
+            <div class="pr-frase">&ldquo;Eu consigo ensinar sistema. Não consigo ensinar caráter.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Bitrix, prazo processual, jurisprudência — tudo isso se ensina em três meses. Honestidade, compromisso, humildade pra ouvir feedback difícil não saem de treinamento.</p>
+          <p><b>Na prática:</b> Entre um currículo impecável e arrogante e outro mais simples que admite o que não sabe, fico com o segundo — o que falta tecnicamente eu ensino.</p>
+          <p><b>No previdenciário:</b> Cliente que perdeu um benefício, muitas vezes vulnerável, precisa de alguém com caráter pra tratá-lo com respeito mesmo quando a resposta não é a que ele queria.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">03</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Problemas vêm com proposta junto</div>
+            <div class="pr-frase">&ldquo;Não me traga o problema sozinho. Traga o problema com uma sugestão de solução.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Todo mundo enxerga problema. Poucos pensam em solução antes de levar pro líder. Trazer proposta junto mostra que você já pensou como dono, não como espectador.</p>
+          <p><b>Na prática:</b> “O sistema trava no protocolo” é reclamação. “O sistema trava no protocolo, mais no fim do dia — sugiro gerar de manhã até o TI resolver” é proposta.</p>
+          <p><b>No previdenciário:</b> Se a perícia atrasa, quem só relata o problema entrega frustração. Quem chega com alternativa entrega solução.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">04</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Tenha senso de dono <span class="pr-star" title="Prioridade se o tempo apertar">★</span></div>
+            <div class="pr-frase">&ldquo;Se não existe dono do problema, o problema vira dono da empresa.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Dono não é cargo, é atitude — é olhar pra um processo torto e não passar reto, mesmo quando ninguém está olhando.</p>
+          <p><b>Na prática:</b> Ver uma pasta desorganizada ou um prazo vencendo numa área que não é sua, e resolver, em vez de pensar “não é comigo”.</p>
+          <p><b>No previdenciário:</b> O processo passa por várias mãos — captação, protocolo, concessão. Dono é quem acompanha o cliente do início ao fim, mesmo fora da própria etapa.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">05</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Seja protagonista</div>
+            <div class="pr-frase">&ldquo;Ninguém constrói carreira sendo coadjuvante da própria vida profissional.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Protagonista toma a frente, levanta a mão. Coadjuvante espera instrução pra tudo — e isso não significa agir sem alinhamento, significa não terceirizar sua trajetória.</p>
+          <p><b>Na prática:</b> Em vez de esperar a avaliação anual, o protagonista pergunta antes: “como estou indo? o que posso melhorar?”</p>
+          <p><b>No previdenciário:</b> O advogado protagonista não espera o cliente ligar desesperado — ele liga antes, atualiza, se antecipa.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">06</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Crescimento contínuo é obrigatório</div>
+            <div class="pr-frase">&ldquo;Quem para de aprender começa a ficar para trás — mesmo parado, o mundo continua andando.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Direito muda, entendimento do INSS muda. Quem acha que “já sabe o suficiente” já começou a regredir.</p>
+          <p><b>Na prática:</b> Separar um horário fixo por semana pra leitura técnica e acompanhar mudanças das Turmas Recursais.</p>
+          <p><b>No previdenciário:</b> Legislação previdenciária muda com frequência. Quem não atualiza aplica tese ultrapassada sem perceber.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">07</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Comunicação resolve quase tudo</div>
+            <div class="pr-frase">&ldquo;A maioria dos problemas que eu vejo na empresa não são técnicos. São de comunicação.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Prazo perdido, cliente insatisfeito, retrabalho — na origem, quase sempre tem uma comunicação que não aconteceu ou aconteceu mal.</p>
+          <p><b>Na prática:</b> Avisar com antecedência que um prazo está apertado é comunicação. Deixar estourar e explicar depois não é.</p>
+          <p><b>No previdenciário:</b> A insatisfação do cliente raramente vem do processo estar lento — vem de ele não saber que está lento.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">08</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Excelência é um hábito <span class="pr-star" title="Prioridade se o tempo apertar">★</span></div>
+            <div class="pr-frase">&ldquo;Excelência não é fazer algo extraordinário uma vez. É fazer o básico muito bem, todos os dias.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Ninguém constrói reputação com golpe de sorte. Constrói com consistência — revisar a petição, responder no prazo, chegar preparado, sempre.</p>
+          <p><b>Na prática:</b> Revisar a peça antes de protocolar mesmo sob pressão de prazo é excelência. Fazer isso “quando dá tempo” é inconsistência.</p>
+          <p><b>No previdenciário:</b> Com 50, 80, 100 casos na mesa, excelência é o padrão sustentado — não o processo perfeito ocasional.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">09</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Velocidade com qualidade gera resultado</div>
+            <div class="pr-frase">&ldquo;Rápido sem qualidade é retrabalho. Qualidade sem rapidez é oportunidade perdida.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Devagar demais, o cliente perde paciência. Rápido e errado, a gente perde tempo dobrado corrigindo.</p>
+          <p><b>Na prática:</b> Reduzir o tempo entre venda e protocolo sem abrir mão da qualidade da documentação.</p>
+          <p><b>No previdenciário:</b> O tempo entre venda, protocolo e concessão afeta a vida financeira de quem muitas vezes está sem renda esperando o benefício.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">10</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Atitude pesa mais que currículo</div>
+            <div class="pr-frase">&ldquo;Currículo te coloca na entrevista. Atitude te mantém na empresa.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> O currículo mostra o que você fez. A atitude mostra o que você vai fazer daqui pra frente — e é isso que eu contrato.</p>
+          <p><b>Na prática:</b> Aceitar uma tarefa fora da “descrição do cargo” com boa vontade, em vez de reclamar que não é sua função.</p>
+          <p><b>No previdenciário:</b> Casos difíceis e clientes abalados pedem atitude — é o que diferencia quem aguenta a rotina com profissionalismo.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">11</div>
+          <div class="pr-header-text">
+            <div class="pr-title">O cliente está no centro</div>
+            <div class="pr-frase">&ldquo;Se você perder de vista o cliente, você perdeu de vista o motivo de existir da empresa.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> É fácil, na rotina de sistema, prazo e meta, esquecer que do outro lado tem alguém esperando resposta sobre a própria vida.</p>
+          <p><b>Na prática:</b> Antes de fechar um processo como “resolvido”, perguntar: o cliente sabe disso? entendeu isso?</p>
+          <p><b>No previdenciário:</b> Muitos clientes estão vulneráveis — sem renda, doentes, idosos. Colocá-los no centro é simplificar a linguagem e ter paciência.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">12</div>
+          <div class="pr-header-text">
+            <div class="pr-title">O resultado é consequência</div>
+            <div class="pr-frase">&ldquo;Eu não persigo o resultado. Eu persigo o processo bem feito — o resultado é consequência.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Gosto de indicador, meta, DRE — mas não quero ninguém cortando caminho pra chegar no número. Quando o atendimento é bom, o resultado vem como consequência.</p>
+          <p><b>Na prática:</b> Atender bem um caso pequeno constrói indicação e reputação — que trazem resultado maior no médio prazo.</p>
+          <p><b>No previdenciário:</b> Comissão, volume, crescimento do digital — tudo é resultado de contratos bem conduzidos, não meta perseguida isolada da qualidade.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">13</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Quem quer crescer precisa ser ensinável</div>
+            <div class="pr-frase">&ldquo;Eu não procuro quem já sabe tudo. Procuro quem está disposto a aprender.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Ser ensinável é ouvir feedback duro sem se fechar, aceitar fazer diferente mesmo achando que já fazia certo.</p>
+          <p><b>Na prática:</b> Receber feedback sobre uma peça e perguntar “o que ajusto da próxima vez?”, em vez de justificar.</p>
+          <p><b>No previdenciário:</b> A jurisprudência muda, o time mais experiente tem repertório de centenas de casos — ser ensinável é aproveitar isso.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">14</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Pequenas entregas constroem grandes reputações</div>
+            <div class="pr-frase">&ldquo;Confiança é construída em pequenas entregas.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Ninguém confia responsabilidade grande em quem não entregou as pequenas antes.</p>
+          <p><b>Na prática:</b> Retornar um e-mail no mesmo dia, mesmo que só pra dizer “recebi, te retorno até quinta”.</p>
+          <p><b>No previdenciário:</b> Quem cresce pra liderança na Maximiano começou entregando bem casos simples, protocolos corretos, sem pular etapa.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">15</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Liderança não depende de cargo</div>
+            <div class="pr-frase">&ldquo;Seu cargo não define sua liderança.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> Liderança é influência, não posição hierárquica. Vocês não precisam esperar virar sócio ou coordenador pra liderar pelo exemplo.</p>
+          <p><b>Na prática:</b> Puxar o padrão de qualidade da equipe pra cima, mesmo sem “líder” no título.</p>
+          <p><b>No previdenciário:</b> Rafael, hoje líder em Nova Resende, não chegou lá pelo cargo — o cargo veio depois, como reconhecimento.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">16</div>
+          <div class="pr-header-text">
+            <div class="pr-title">Tudo comunica</div>
+            <div class="pr-frase">&ldquo;Mesmo quando você não fala nada, você está comunicando alguma coisa.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> A forma como você se veste, atende o telefone, reage a um “não” — tudo comunica quem você é antes de você abrir a boca.</p>
+          <p><b>Na prática:</b> Chegar atrasado sem avisar comunica desorganização, mesmo sem essa intenção.</p>
+          <p><b>No previdenciário:</b> O tom de voz ao explicar uma negativa do INSS comunica ao cliente, muitas vezes mais que o conteúdo jurídico, se ele está em boas mãos.</p>
+          
+        </div>
+      </div>
+      <div class="pr-card" onclick="togglePr(this)">
+        <div class="pr-header">
+          <div class="pr-num">17</div>
+          <div class="pr-header-text">
+            <div class="pr-title">O padrão que você aceita vira cultura <span class="pr-star" title="Prioridade se o tempo apertar">★</span></div>
+            <div class="pr-frase">&ldquo;A cultura é formada pelo padrão que aceitamos — não pelo padrão que declaramos.&rdquo;</div>
+          </div>
+          <div class="pr-toggle">▾</div>
+        </div>
+        <div class="pr-body">
+          <p><b>Por quê:</b> A cultura real é definida pelo que cada líder tolera no dia a dia — não pelo que está escrito na parede.</p>
+          <p><b>Na prática:</b> Um erro tolerado uma vez “porque não teve tempo” volta a acontecer — e na terceira vez, ninguém mais percebe que é erro.</p>
+          <p><b>No previdenciário:</b> Aceitar que “processo às vezes demora sem justificativa e tudo bem” vira cultura de negligência. Exigir prazo e comunicação vira cultura de excelência.</p>
+          <p class="pr-signature">&ldquo;Tudo que você tolera, você promove.&rdquo;</p>
+        </div>
+      </div>
+    </div>
+    <div class="pr-priority-note">★ = os 5 princípios mais fortes, caso o tempo aperte</div>
+  </div>
+</section>
+
+<!-- ENCERRAMENTO -->
+<section id="s-encerramento">
+  <div class="container">
+    <div class="enc-mark rv">&ldquo;</div>
+    <div class="enc-quote rv" style="transition-delay:.05s">
+      Vocês não foram contratados apenas para exercer a advocacia.
+      Vocês foram contratados para <em>construir uma empresa melhor.</em>
+    </div>
+    <div class="enc-rule rv" style="transition-delay:.1s"></div>
+    <div class="enc-quote2 rv" style="transition-delay:.15s">
+      Eu acredito que <em>pessoas comuns</em>, alinhadas por uma cultura forte, conseguem construir <em>resultados extraordinários.</em>
+    </div>
+    <div class="enc-welcome rv" style="transition-delay:.3s">Bem-vindos à Maximiano</div>
+  </div>
+</section>
+
+<footer>
+  © MAXIMIANO ADVOGADOS &nbsp;·&nbsp; ONBOARDING &nbsp;·&nbsp; JULHO 2026
+</footer>
+
+<script>
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function togglePr(card){card.classList.toggle('open')}
+function toggleAllPr(open){document.querySelectorAll('.pr-card').forEach(c=>c.classList.toggle('open',open))}
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
