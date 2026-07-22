@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caminho para Medicina em Campinas · Guia da Família</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D2340;
+    --navy-mid: #1A3A5C;
+    --blue: #1E5FA8;
+    --blue-light: #3B7FCC;
+    --gold: #C8952A;
+    --gold-light: #E8B84B;
+    --cream: #F9F5EF;
+    --cream-dark: #EDE8DF;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --gray-light: #F3F4F6;
+    --green: #166534;
+    --green-bg: #f0fdf4;
+    --green-border: #86efac;
+    --red: #991B1B;
+    --red-bg: #fef2f2;
+    --red-border: #fca5a5;
+    --amber: #92400E;
+    --amber-bg: #fef3c7;
+    --amber-border: #fcd34d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--navy); line-height: 1.6; }
+  a { color: var(--blue); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0F1F38 0%, var(--navy-mid) 60%, #0F3060 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+  .hero-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .hero-brand {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 3px; color: rgba(255,255,255,0.4); text-transform: uppercase;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--gold-light); font-size: 12px; font-weight: 600;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.5px;
+  }
+  .hero-main { padding: 40px 48px 48px; display: flex; gap: 28px; align-items: flex-start; }
+  .hero-icon {
+    width: 72px; height: 72px; border-radius: 16px;
+    background: rgba(200,149,42,0.2); border: 2px solid rgba(200,149,42,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; flex-shrink: 0;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold-light); margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3.5vw, 42px); font-weight: 900;
+    color: var(--white); line-height: 1.15; margin-bottom: 10px;
+  }
+  .hero h1 em { color: var(--gold-light); font-style: normal; }
+  .hero-sub { font-size: 14.5px; color: rgba(255,255,255,0.6); max-width: 640px; }
+  @media (max-width: 600px) {
+    .hero-main { flex-direction: column; gap: 16px; padding: 24px 20px 32px; }
+    .hero-top { padding: 14px 20px; flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+
+  /* ── ALERTA TOPO ── */
+  .alerta-config {
+    background: var(--amber-bg); border-bottom: 2px solid var(--gold);
+    padding: 16px 48px; display: flex; align-items: center; gap: 14px;
+  }
+  .alerta-icon { font-size: 22px; flex-shrink: 0; }
+  .alerta-text { font-size: 13.5px; color: var(--amber); line-height: 1.5; }
+  .alerta-text strong { color: #78350f; }
+  @media (max-width: 600px) { .alerta-config { padding: 14px 20px; } }
+
+  /* ── SUMÁRIO ── */
+  .toc-bar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--navy); border-bottom: 3px solid var(--gold);
+    padding: 10px 24px; overflow-x: auto; white-space: nowrap;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(13,35,64,0.25);
+  }
+  .toc-bar a {
+    display: inline-block; color: var(--gold-light); text-decoration: none;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.4px;
+    text-transform: uppercase; padding: 8px 14px; border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+  .toc-bar a:hover { background: rgba(232,184,75,0.12); color: #fff; }
+
+  /* ── MAIN ── */
+  .main { max-width: 980px; margin: 0 auto; padding: 40px 32px 80px; }
+  @media (max-width: 600px) { .main { padding: 24px 16px 60px; } }
+
+  /* ── SECTION ── */
+  .section {
+    background: var(--white); border: 1px solid var(--cream-dark);
+    border-radius: 14px; padding: 32px 36px; margin-bottom: 28px;
+    box-shadow: 0 1px 4px rgba(13,35,64,0.05);
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+    padding-bottom: 16px; border-bottom: 2px solid var(--cream-dark);
+  }
+  .section-icon {
+    width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .s-gold { background: linear-gradient(135deg, var(--gold), var(--gold-light)); }
+  .s-blue { background: linear-gradient(135deg, var(--blue), var(--blue-light)); }
+  .s-green { background: linear-gradient(135deg, #166534, #22c55e); }
+  .s-red { background: linear-gradient(135deg, #991b1b, #ef4444); }
+  .s-navy { background: linear-gradient(135deg, var(--navy), var(--navy-mid)); }
+  .section-title {
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--navy);
+  }
+  .section-desc { font-size: 12.5px; color: var(--gray); margin-top: 2px; }
+
+  h3.sub-title {
+    font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700;
+    color: var(--navy); margin: 28px 0 12px; padding-left: 12px;
+    border-left: 3px solid var(--gold);
+  }
+  h4 { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--navy); margin-bottom: 8px; }
+  p { margin: 0 0 12px; font-size: 14.5px; color: #374151; }
+
+  /* ── TABELAS ── */
+  .table-wrap { overflow-x: auto; margin: 16px 0 20px; border-radius: 10px; box-shadow: 0 1px 4px rgba(13,35,64,0.06); }
+  table {
+    width: 100%; border-collapse: collapse; font-size: 13px; background: var(--white);
+  }
+  th, td { border: 1px solid var(--cream-dark); padding: 11px 14px; text-align: left; vertical-align: top; }
+  th {
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid)); color: var(--gold-light);
+    font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.5px;
+  }
+  tr:nth-child(even) td { background: var(--cream); }
+  tr:hover td { background: var(--gray-light); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block; padding: 3px 12px; border-radius: 999px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: #4a3300;
+  }
+  .badge.planob { background: linear-gradient(135deg, var(--blue), var(--blue-light)); color: #fff; }
+  .badge.info { background: var(--gray-light); color: var(--gray); }
+
+  /* ── CALLOUTS ── */
+  .callout { border-radius: 10px; padding: 16px 20px; margin: 18px 0; font-size: 13.5px; line-height: 1.6; border: 1px solid; display: flex; gap: 12px; }
+  .callout-icon { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; flex-shrink: 0; padding-top: 2px; white-space: nowrap; }
+  .callout-warning { background: var(--red-bg); border-color: var(--red-border); }
+  .callout-warning .callout-icon { color: var(--red); }
+  .callout-warning strong { color: var(--red); }
+  .callout-tip { background: var(--amber-bg); border-color: var(--amber-border); }
+  .callout-tip .callout-icon { color: var(--amber); }
+  .callout-tip strong { color: var(--amber); }
+  .callout-ok { background: var(--green-bg); border-color: var(--green-border); }
+  .callout-ok .callout-icon { color: var(--green); }
+  .callout-ok strong { color: var(--green); }
+
+  /* ── RESUMO CARDS ── */
+  .resumo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; }
+  @media (max-width: 700px) { .resumo-grid { grid-template-columns: 1fr; } }
+  .card {
+    border-radius: 12px; padding: 20px 22px; border: 2px solid var(--cream-dark); background: var(--cream);
+  }
+  .card.destaque { background: #fef9e7; border-color: var(--gold); }
+  .card h4 { color: var(--navy); margin-bottom: 6px; }
+  .card p, .card li { font-size: 13px; }
+  .card ul { padding-left: 18px; }
+  .card li { margin-bottom: 6px; }
+
+  /* ── RANKING DE CURSINHOS ── */
+  .rank-card {
+    display: flex; gap: 18px; align-items: flex-start;
+    background: var(--white); border: 1px solid var(--cream-dark); border-radius: 12px;
+    padding: 18px 22px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(13,35,64,0.05);
+  }
+  .rank-card.top1 { border: 2px solid var(--gold); background: #fefaf0; }
+  .rank-card.top2 { border: 2px solid #c9c9c9; }
+  .rank-card.top3 { border: 2px solid #d9a066; }
+  .rank-num {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-weight: 900; font-size: 17px; color: #fff;
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  }
+  .rank-card.top1 .rank-num { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: #4a3300; }
+  .rank-card.top2 .rank-num { background: linear-gradient(135deg, #b7b7b7, #d9d9d9); color: #333; }
+  .rank-card.top3 .rank-num { background: linear-gradient(135deg, #b5723a, #d9a066); color: #3a1f00; }
+  .rank-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .rank-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16.5px; color: var(--navy); }
+  .rank-foco { font-size: 12.5px; color: var(--gray); margin-bottom: 8px; }
+  .rank-aprov {
+    background: var(--cream); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0;
+    padding: 8px 12px; font-size: 12.5px; color: var(--navy); margin-bottom: 6px; line-height: 1.5;
+  }
+  .rank-aprov strong { color: var(--gold-light-text, var(--navy)); }
+  .rank-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .rank-tag {
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+    padding: 3px 10px; border-radius: 999px; background: var(--gray-light); color: var(--gray);
+  }
+
+  /* ── DIVISOR / NICHO CARDS (cursinhos, faculdades) ── */
+  .nicho-card {
+    background: var(--white); border: 1px solid var(--cream-dark);
+    border-radius: 12px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(13,35,64,0.04);
+    padding: 18px 22px;
+  }
+  .nicho-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .nicho-icon { font-size: 18px; }
+  .nicho-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 15.5px; color: var(--navy); }
+  .nicho-sub { font-size: 11.5px; color: var(--gray); margin-bottom: 10px; margin-left: 28px; }
+  .nicho-body { font-size: 13px; color: #374151; margin-left: 28px; }
+  .nicho-body p { font-size: 13px; margin-bottom: 6px; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; margin: 22px 0; padding-left: 30px; border-left: 3px solid var(--gold); }
+  .timeline-item { position: relative; margin-bottom: 24px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -38px; top: 4px; width: 15px; height: 15px; border-radius: 50%;
+    background: var(--navy); border: 3px solid var(--gold-light); box-shadow: 0 0 0 2px var(--white);
+  }
+  .timeline-item .periodo {
+    font-family: 'DM Mono', monospace; font-weight: 700; color: var(--navy); font-size: 12.5px;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;
+  }
+  .timeline-item p { margin-bottom: 0; }
+
+  ul.checklist { list-style: none; padding-left: 0; }
+  ul.checklist li {
+    font-size: 13.5px; padding: 8px 0 8px 26px; position: relative; border-bottom: 1px solid var(--cream-dark);
+  }
+  ul.checklist li:last-child { border: none; }
+  ul.checklist li::before { content: '✓'; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 700; }
+
+  .nota-fonte {
+    font-size: 11.5px; color: var(--gray); background: var(--gray-light); border-radius: 8px;
+    padding: 12px 16px; margin-top: 16px; line-height: 1.6;
+  }
+  .nota-fonte a { color: var(--navy); font-weight: 600; }
+
+  /* ── BUSCA ── */
+  .search-wrap { margin-top: 22px; max-width: 560px; position: relative; }
+  .search-box {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px; padding: 12px 16px;
+  }
+  .search-box svg { flex-shrink: 0; opacity: 0.6; }
+  .search-box input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px;
+  }
+  .search-box input::placeholder { color: rgba(255,255,255,0.45); }
+  .search-hint { margin-top: 8px; font-size: 11.5px; color: rgba(255,255,255,0.4); }
+  .search-results {
+    position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 60;
+    background: var(--white); border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    overflow: hidden; display: none; max-height: 340px; overflow-y: auto;
+  }
+  .search-results.show { display: block; }
+  .search-result-item {
+    display: block; padding: 12px 16px; text-decoration: none;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+  .search-result-item:last-child { border: none; }
+  .search-result-item:hover { background: var(--cream); }
+  .sr-title { font-weight: 700; font-size: 13.5px; color: var(--navy); }
+  .sr-desc { font-size: 11.5px; color: var(--gray); margin-top: 2px; }
+  .search-empty { padding: 16px; font-size: 13px; color: var(--gray); text-align: center; }
+
+  /* ── FAQ ── */
+  .faq-card {
+    background: var(--white); border: 1px solid var(--cream-dark); border-radius: 10px;
+    margin-bottom: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(13,35,64,0.04);
+  }
+  .faq-q {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 15px 18px; cursor: pointer; user-select: none;
+  }
+  .faq-q:hover { background: var(--cream); }
+  .faq-q h4 { margin: 0; font-size: 14px; color: var(--navy); }
+  .faq-chevron { transition: transform 0.2s; color: var(--gold); flex-shrink: 0; }
+  .faq-card.open .faq-chevron { transform: rotate(180deg); }
+  .faq-a { display: none; padding: 0 18px 16px; }
+  .faq-card.open .faq-a { display: block; }
+  .faq-a p { font-size: 13.5px; margin-bottom: 0; }
+
+  /* ── CAMPINAS PARA QUEM CHEGA DE FORA ── */
+  .addr-card {
+    background: var(--cream); border: 1px solid var(--cream-dark); border-radius: 10px;
+    padding: 16px 18px; margin-bottom: 12px;
+  }
+  .addr-card h4 { color: var(--navy); margin-bottom: 4px; }
+  .addr-line { font-size: 12.5px; color: #374151; display: flex; gap: 8px; margin-bottom: 3px; }
+  .addr-line b { color: var(--navy); min-width: 78px; flex-shrink: 0; }
+  .addr-card a.maps-link {
+    display: inline-block; margin-top: 6px; font-size: 11.5px; font-weight: 700;
+    color: var(--blue); text-decoration: none;
+  }
+  .addr-card a.maps-link:hover { text-decoration: underline; }
+
+  /* ── FOOTER ── */
+  .footer-nav {
+    background: linear-gradient(135deg, var(--navy) 0%, #0F3060 100%);
+    border-top: 3px solid var(--gold); padding: 30px 48px;
+    text-align: center;
+  }
+  .footer-text { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--white); }
+  .footer-text span { color: var(--gold-light); }
+  .footer-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px; line-height: 1.6; }
+  .footer-sub a { color: var(--gold-light); }
+  @media (max-width: 600px) { .footer-nav { padding: 24px 20px; } }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-top">
+    <div class="hero-brand">Uso pessoal · Planejamento familiar</div>
+    <div class="hero-tag">📚 Atualizado em julho/2026</div>
+  </div>
+  <div class="hero-main">
+    <div class="hero-icon">🩺</div>
+    <div>
+      <div class="hero-eyebrow">Guia de Ingresso · Medicina</div>
+      <h1>Caminho para <em>Medicina</em><br>em Campinas</h1>
+      <p class="hero-sub">Universidades, vestibulares e cursinhos na região de Campinas (SP) — preparado para a mudança de Poços de Caldas (MG), com foco no Vestibular Unicamp.</p>
+      <div class="search-wrap">
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="searchInput" type="text" placeholder="Buscar um tema... (ex: transferência, mensalidade, bairro, ENEM)">
+        </div>
+        <div class="search-hint">Digite e clique no resultado — a busca leva direto para a seção certa.</div>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ALERTA ── -->
+<div class="alerta-config">
+  <div class="alerta-icon">⚠️</div>
+  <div class="alerta-text">
+    <strong>Antes de tudo:</strong> vagas, mensalidades, notas de corte e datas de editais mudam a cada ciclo. Este material foi pesquisado em julho de 2026 usando o ciclo de ingresso 2026 como referência mais recente disponível. Confirme sempre nos sites oficiais (Comvest, Portal PUC-Campinas) antes de qualquer decisão — os links estão em cada seção.
+  </div>
+</div>
+
+<!-- ── SUMÁRIO ── -->
+<div class="toc-bar">
+  <a href="#resumo">Resumo executivo</a>
+  <a href="#panorama">Panorama</a>
+  <a href="#unicamp">Unicamp</a>
+  <a href="#puc">PUC-Campinas</a>
+  <a href="#outras">Outras opções</a>
+  <a href="#campinas">Conhecendo Campinas</a>
+  <a href="#cursinhos">Cursinhos</a>
+  <a href="#cronograma">Cronograma</a>
+  <a href="#duvidas">Dúvidas frequentes</a>
+</div>
+
+<div class="main">
+
+  <!-- ── RESUMO ── -->
+  <section class="section" id="resumo">
+    <div class="section-header">
+      <div class="section-icon s-gold">🎯</div>
+      <div>
+        <div class="section-title">Resumo Executivo</div>
+        <div class="section-desc">A rota mais realista, em linguagem direta</div>
+      </div>
+    </div>
+
+    <div class="resumo-grid">
+      <div class="card destaque">
+        <h4>🎯 Rota mais realista</h4>
+        <p>Vestibular Unicamp tradicional (ampla concorrência), com PUC-Campinas — vestibular próprio ou nota do ENEM — como plano B. Como a família não se enquadra em critérios de renda, o caminho é 100% baseado em preparação e desempenho na prova, sem depender de bolsa assistencial.</p>
+      </div>
+      <div class="card">
+        <h4>🚫 Por que não Enem-Unicamp nem bolsas por renda</h4>
+        <p>O Enem-Unicamp exige ensino médio <strong>integralmente cursado em escola pública</strong> — como ele estuda em rede privada, essa via está fechada para ele. ProUni, Vestibular Social da PUC-Campinas e bolsas assistenciais também exigem renda familiar per capita baixa, o que não se aplica ao caso dele.</p>
+      </div>
+      <div class="card">
+        <h4>🏥 Prioridade: Unicamp</h4>
+        <p>Vagas de Medicina em Campinas: <strong>85</strong> (vestibular 2026), curso integral. É o curso mais concorrido da Unicamp — 242 candidatos por vaga em 2026. Prova em duas fases (outubro e novembro/dezembro), resultado em janeiro do ano seguinte.</p>
+      </div>
+      <div class="card">
+        <h4>📋 Próximos passos práticos</h4>
+        <ul>
+          <li>Escolher cursinho em Campinas assim que a mudança for confirmada</li>
+          <li>Priorizar cursinhos com foco declarado em Unicamp (Oficina do Estudante, Elite Campinas, Poliedro)</li>
+          <li>Mapear PUC-Campinas e São Leopoldo Mandic como planos B/C, já que têm vestibular próprio + ENEM</li>
+          <li>Ficar de olho nos editais Comvest a partir de julho/agosto do ano do vestibular</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PANORAMA ── -->
+  <section class="section" id="panorama">
+    <div class="section-header">
+      <div class="section-icon s-navy">🏛️</div>
+      <div>
+        <div class="section-title">Panorama das Faculdades</div>
+        <div class="section-desc">Comparativo geral — Medicina em Campinas e região (ciclo 2026)</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Instituição</th>
+        <th>Vagas (Campinas)</th>
+        <th>Formas de ingresso</th>
+        <th>Aceita ENEM p/ vaga regular?</th>
+        <th>Mensalidade aprox.</th>
+        <th>Concorrência</th>
+      </tr>
+      <tr>
+        <td><strong>Unicamp</strong></td>
+        <td>85 vagas</td>
+        <td>Vestibular próprio (Comvest); Enem-Unicamp (só escola pública); Vagas Olímpicas; Provão Paulista (só escola pública)</td>
+        <td>Não para ampla concorrência — só via Enem-Unicamp (restrito a egressos de escola pública)</td>
+        <td>Pública e gratuita</td>
+        <td>~242 candidatos/vaga (2026)</td>
+      </tr>
+      <tr>
+        <td><strong>PUC-Campinas</strong></td>
+        <td>60 vagas (1º sem.) + 60 vagas (2º sem.) via vestibular próprio</td>
+        <td>Vestibular próprio; Nota do ENEM; ProUni/FIES (renda); Vestibular Social (renda, não vale p/ Medicina)</td>
+        <td>Sim, nota mínima 450 pontos e redação não zerada</td>
+        <td>Acima de R$ 10.000/mês <em>(valor exato a confirmar)</em></td>
+        <td>Alta (curso mais disputado da PUC)</td>
+      </tr>
+      <tr>
+        <td><strong>São Leopoldo Mandic</strong></td>
+        <td>180 vagas (prova online) + 8 via ENEM + vagas específicas (IB, Abitur, SAT, Bacc. Français)</td>
+        <td>Vestibular próprio (prova online); ENEM; modalidades internacionais</td>
+        <td>Sim, modalidade específica com número reduzido de vagas</td>
+        <td>~R$ 14.578/mês</td>
+        <td>Alta procura nacional</td>
+      </tr>
+      <tr>
+        <td><strong>UNIP Campinas</strong></td>
+        <td>70 vagas</td>
+        <td>Vestibular próprio; ENEM (verificar edital)</td>
+        <td>Sim, em geral</td>
+        <td>~R$ 10.043/mês</td>
+        <td>Alta</td>
+      </tr>
+    </table>
+    </div>
+
+    <div class="nota-fonte">
+      Fontes: <a href="https://www.comvest.unicamp.br/">Comvest/Unicamp</a> · <a href="https://vestibular.puc-campinas.edu.br/curso/medicina/">Vestibular PUC-Campinas</a> · <a href="https://slmandic.edu.br/">São Leopoldo Mandic</a> · <a href="https://medicina.unip.br/">UNIP Medicina</a>. Pesquisa: julho de 2026 — confirme vagas e valores diretamente nos sites oficiais antes de decidir.
+    </div>
+  </section>
+
+  <!-- ── UNICAMP ── -->
+  <section class="section" id="unicamp">
+    <div class="section-header">
+      <div class="section-icon s-gold">🏥</div>
+      <div>
+        <div class="section-title">Detalhamento Unicamp <span class="badge">Prioridade</span></div>
+        <div class="section-desc">A porta de entrada mais realista — ampla concorrência, sem exigência de renda ou tipo de escola</div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Vestibular Unicamp (via tradicional)</h3>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Item</th><th>Ciclo 2026 (referência mais recente)</th></tr>
+      <tr><td>Vagas de Medicina (campus Campinas)</td><td>85 vagas, curso integral</td></tr>
+      <tr><td>Concorrência</td><td>242 candidatos por vaga (curso mais disputado da Unicamp)</td></tr>
+      <tr><td>Inscrições</td><td>1º de agosto a 8 de setembro (após prorrogação)</td></tr>
+      <tr><td>Taxa de inscrição</td><td>R$ 221,00 (redução de 50% ou isenção total para quem se enquadra em critérios de renda/matrícula em escola)</td></tr>
+      <tr><td>1ª fase</td><td>26 de outubro</td></tr>
+      <tr><td>2ª fase</td><td>30 de novembro e 1º de dezembro</td></tr>
+      <tr><td>Resultado (1ª lista)</td><td>23 de janeiro do ano seguinte</td></tr>
+      <tr><td>Estrutura da prova</td><td>1ª fase: múltipla escolha, todas as áreas. 2ª fase: dois dias de provas dissertativas/discursivas, com redação.</td></tr>
+      <tr><td>Endereço do campus</td><td>Cidade Universitária "Zeferino Vaz" — Distrito de Barão Geraldo, Campinas/SP, CEP 13083-970 (~12 km do centro)</td></tr>
+    </table>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-icon">Atenção</div>
+      <div>Essas datas são do ciclo 2026 (inscrições feitas em 2025). O calendário do ciclo em que ele efetivamente prestará vestibular só sai perto da época — confira sempre em <a href="https://www.comvest.unicamp.br/">comvest.unicamp.br</a>.</div>
+    </div>
+
+    <div class="callout callout-ok">
+      <div class="callout-icon">Mensalidade e bolsas</div>
+      <div>A Unicamp é <strong>universidade pública — não existe mensalidade</strong>. A universidade oferece bolsas-permanência (moradia, alimentação, transporte) para alunos de baixa renda já matriculados, mas isso é um programa de assistência estudantil, não um critério de ingresso — não afeta a entrada dele de forma alguma, é só bom saber que existe caso algum colega precise.</div>
+    </div>
+
+    <div class="nicho-card">
+      <div class="nicho-head"><span class="nicho-icon">🚫</span><span class="nicho-name">Enem-Unicamp</span><span class="badge info">Não se aplica a ele</span></div>
+      <div class="nicho-sub">Modalidade restrita a escola pública</div>
+      <div class="nicho-body">
+        <p>Usa a nota do Enem para selecionar estudantes que cursaram <strong>integralmente o ensino médio em escola pública</strong>. Oferece 425 vagas (todos os cursos, ciclo 2026). Como ele estuda em escola particular, essa modalidade está fechada para ele — mesmo fazendo o Enem, não poderá concorrer por essa via.</p>
+      </div>
+    </div>
+
+    <div class="nicho-card">
+      <div class="nicho-head"><span class="nicho-icon">🏅</span><span class="nicho-name">Vagas Olímpicas</span><span class="badge info">Para conhecimento</span></div>
+      <div class="nicho-sub">Complemento, não base do planejamento</div>
+      <div class="nicho-body">
+        <p>Voltada a estudantes premiados em olimpíadas científicas reconhecidas (Matemática, Física, Química, Biologia, Astronomia etc.), com número reduzido de vagas por curso. Se ele tiver destaque em alguma olimpíada de exatas ou biológicas, vale investigar — mas não deve ser a base do planejamento.</p>
+      </div>
+    </div>
+
+    <div class="nicho-card">
+      <div class="nicho-head"><span class="nicho-icon">🏫</span><span class="nicho-name">Provão Paulista</span><span class="badge info">Não se aplica a ele</span></div>
+      <div class="nicho-sub">Também restrito a alunos de escola pública</div>
+      <div class="nicho-body">
+        <p>Iniciativa conjunta de USP, Unicamp e Unesp para ampliar acesso de estudantes de escolas públicas estaduais de SP — prova única, múltipla escolha + redação, aplicada nas próprias escolas estaduais. A Unicamp destinou 327 vagas a essa modalidade no ciclo 2026.</p>
+      </div>
+    </div>
+
+    <div class="nota-fonte">
+      Fontes: <a href="https://www.comvest.unicamp.br/ingresso-2026/vestibular-2026/">Vestibular Unicamp 2026 — Comvest</a> · <a href="https://www.comvest.unicamp.br/ingresso-2026/enem-2026/">Enem-Unicamp 2026 — Comvest</a> · <a href="https://www.comvest.unicamp.br/ingresso-2026/provao-paulista-2026/">Provão Paulista 2026 — Comvest</a> · <a href="https://www.cnnbrasil.com.br/educacao/unicamp-2026-tem-616-mil-inscritos-medicina-e-o-curso-mais-concorrido/">CNN Brasil, set/2025</a>. Pesquisa: julho de 2026.
+    </div>
+  </section>
+
+  <!-- ── PUC-CAMPINAS ── -->
+  <section class="section" id="puc">
+    <div class="section-header">
+      <div class="section-icon s-blue">🎓</div>
+      <div>
+        <div class="section-title">Detalhamento PUC-Campinas <span class="badge planob">Plano B</span></div>
+        <div class="section-desc">Instituição própria, diferente da PUC de Poços de Caldas onde ele estuda hoje</div>
+      </div>
+    </div>
+
+    <p>A PUC-Campinas faz parte da rede de PUCs regionais, mas tem reitoria, editais e processos seletivos próprios, específicos da cidade de Campinas. É uma opção sólida como plano B, por ter vestibular próprio e também aceitar nota do ENEM.</p>
+
+    <h3 class="sub-title">Vestibular próprio</h3>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Item</th><th>Detalhe (Vestibular 1º semestre 2026)</th></tr>
+      <tr><td>Vagas</td><td>60 vagas (1º semestre) + 60 vagas (2º semestre), curso integral</td></tr>
+      <tr><td>Inscrições</td><td>Até 22 de outubro</td></tr>
+      <tr><td>Taxa de inscrição</td><td>R$ 296 (até 11/09) → R$ 333 (até 06/10) → R$ 370 (após, valor integral)</td></tr>
+      <tr><td>Prova</td><td>Prova geral + prova específica, em um único dia (31 de outubro), das 13h às 18h</td></tr>
+      <tr><td>Formato</td><td>Fase única (diferente da Unicamp, que tem 2 fases)</td></tr>
+      <tr><td>Endereço (Campus I — onde fica Medicina)</td><td>Rua Professor Doutor Euryclides de Jesus Zerbini, 1516 — Parque Rural Fazenda Santa Cândida, Campinas/SP, CEP 13087-571</td></tr>
+    </table>
+    </div>
+
+    <h3 class="sub-title">Ingresso por nota do ENEM</h3>
+    <p>Nota mínima exigida: <strong>450 pontos</strong> (média do Enem), com redação não zerada. É possível usar notas de edições entre 2013 e 2025 (verificar regra vigente no edital do ano). Para o 1º semestre de 2026, foram ofertadas vagas via Enem também para Medicina — confirme o número exato no edital vigente, pois costuma variar a cada semestre.</p>
+
+    <div class="callout callout-warning">
+      <div class="callout-icon">Mensalidade</div>
+      <div>O valor de <strong>R$ 6.630/mês</strong> que aparece em vários sites de comparação está <strong>desatualizado</strong> (referência de 2023). Considerando reajustes anuais e o padrão de mercado para Medicina na região — SLMandic (~R$ 14.578) e UNIP (~R$ 10.043) —, a mensalidade da PUC-Campinas para 2026 está <strong>acima de R$ 10.000/mês</strong>. Esse é o valor de referência mais realista para o planejamento financeiro, mas o número exato só é divulgado pela universidade a cada edital — confirme diretamente com a Central de Atendimento ao Aluno (caa@puc-campinas.edu.br / (19) 3343-5836) ou no <a href="https://vestibular.puc-campinas.edu.br/curso/medicina/">portal do curso</a> antes de fechar qualquer conta.</div>
+    </div>
+
+    <h3 class="sub-title">Bolsas e descontos — o que existe e o que não se aplica</h3>
+    <p>A PUC-Campinas tem programas de bolsa e desconto, mas quase todos giram em torno de renda ou de vínculo familiar — vale conhecer para entender por que não ajudam no caso dele:</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Programa</th><th>Como funciona</th><th>Se aplica a ele?</th></tr>
+      <tr><td>ProUni</td><td>Bolsa integral (100%) ou parcial (50%) via nota do Enem, para quem se enquadra no critério de renda do programa federal</td><td>❌ Não — critério de renda</td></tr>
+      <tr><td>Vestibular Social (PUC-Campinas)</td><td>Bolsa de até 100% por análise socioeconômica</td><td>❌ Não — critério de renda <strong>e</strong> não contempla Medicina de qualquer forma</td></tr>
+      <tr><td>FIES</td><td>Financiamento estudantil do governo, pago depois de formado</td><td>❌ Também tem critério de renda/regras próprias — verificar elegibilidade específica</td></tr>
+      <tr><td>Desconto por vínculo familiar</td><td>5% de desconto na mensalidade por cada irmão também matriculado na PUC-Campinas no mesmo ano</td><td>✅ Se houver outro filho da família estudando lá</td></tr>
+      <tr><td>Bolsa/desconto por nota no vestibular ou Enem</td><td>Em alguns cursos, a PUC concede desconto conforme a colocação do candidato no processo seletivo</td><td>🔎 Vale perguntar diretamente se Medicina está incluída nesse programa no edital do ano</td></tr>
+    </table>
+    </div>
+
+    <div class="nota-fonte">
+      Fontes: <a href="https://vestibular.puc-campinas.edu.br/curso/medicina/">Portal do Vestibular PUC-Campinas — Medicina</a> · <a href="https://www.puc-campinas.edu.br/puc-campinas-divulga-datas-do-vestibular-2026/">PUC-Campinas — Datas Vestibular 2026</a> · <a href="https://www.puc-campinas.edu.br/puc-campinas-abre-inscricoes-para-o-vestibular-social-2026/">Vestibular Social 2026</a> · <a href="https://www.puc-campinas.edu.br/financiamento-bolsas/">Bolsas e Financiamento PUC-Campinas</a>. Pesquisa: julho de 2026.
+    </div>
+  </section>
+
+  <!-- ── OUTRAS OPÇÕES ── -->
+  <section class="section" id="outras">
+    <div class="section-header">
+      <div class="section-icon s-green">🏫</div>
+      <div>
+        <div class="section-title">Outras Opções na Região</div>
+        <div class="section-desc">São Leopoldo Mandic e UNIP — reforço para o plano C</div>
+      </div>
+    </div>
+
+    <h3 class="sub-title">São Leopoldo Mandic (SLMandic) — Campinas</h3>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Vagas em Campinas</th><td>180 vagas (prova online, ampla concorrência) + 8 via nota do ENEM + vagas específicas para IB, Abitur, SAT e Baccalauréat Français (3 cada)</td></tr>
+      <tr><th>Prova</th><td>Online, 50 questões de múltipla escolha + redação (ciclo 2026: 22 de outubro)</td></tr>
+      <tr><th>Mensalidade</th><td>~R$ 14.578,00/mês</td></tr>
+      <tr><th>Observação</th><td>Rede com unidades também em Araras e Limeira (região de Campinas) e Arcoverde (PE); 529 vagas somando todas as unidades.</td></tr>
+      <tr><th>Endereço</th><td>Rua da Abolição, 1827 — Ponte Preta, Campinas/SP, CEP 13041-445</td></tr>
+      <tr><th>Bolsas/descontos</th><td>O processo seletivo de Medicina <strong>não contempla bolsas de estudo</strong> — mas há descontos para pagamento antecipado: 3% (semestral), 4% (anual), 7% (à vista total). Financiamento disponível via Pravaler.</td></tr>
+    </table>
+    </div>
+
+    <h3 class="sub-title">UNIP — Campinas</h3>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Vagas</th><td>70 vagas (curso integral, 6 anos/12 semestres)</td></tr>
+      <tr><th>Formas de ingresso</th><td>Vestibular próprio; verificar no edital vigente eventual aproveitamento de nota do ENEM para vaga regular</td></tr>
+      <tr><th>Mensalidade</th><td>~R$ 10.043,02/mês</td></tr>
+      <tr><th>Endereço (Campus II — onde fica Medicina)</th><td>Av. Comendador Enzo Ferrari, 280 — Swift, Campinas/SP, CEP 13043-900</td></tr>
+      <tr><th>Bolsas/descontos</th><td>Concurso de Bolsas da UNIP (bolsas integrais por mérito/desempenho); "Desconto Especial pelo ENEM" (desconto na mensalidade conforme nota); ProUni (100% ou 50%, critério de renda); financiamento via Pravaler.</td></tr>
+    </table>
+    </div>
+
+    <div class="callout callout-ok">
+      <div class="callout-icon">Resumo</div>
+      <div>Para o perfil dele (fora de critério de renda, escola particular), <strong>SLMandic e UNIP</strong> são boas opções de reforço/plano C, com processos seletivos próprios e vagas específicas para diferentes perfis — mas com mensalidades mais altas que a PUC-Campinas. Na UNIP, vale investigar o Concurso de Bolsas e o desconto por nota do ENEM, que não dependem de critério de renda.</div>
+    </div>
+
+    <div class="nota-fonte">
+      Fontes: <a href="https://slmandic.edu.br/comunicados/grupo-mandic-abre-inscricoes-para-o-vestibular-em-medicina-2026">SLMandic — Vestibular Medicina 2026</a> · <a href="https://medicina.unip.br/localidade-campinas.aspx">UNIP Medicina Campinas</a> · <a href="https://www.cnnbrasil.com.br/educacao/unip-abre-inscricoes-para-vestibular-de-medicina-de-2026/">CNN Brasil sobre UNIP 2026</a>. Pesquisa: julho de 2026.
+    </div>
+  </section>
+
+  <!-- ── CONHECENDO CAMPINAS ── -->
+  <section class="section" id="campinas">
+    <div class="section-header">
+      <div class="section-icon s-blue">🗺️</div>
+      <div>
+        <div class="section-title">Conhecendo Campinas</div>
+        <div class="section-desc">Para quem nunca morou na cidade — bairros, endereços e como se localizar</div>
+      </div>
+    </div>
+
+    <p>Campinas é a maior cidade do interior de São Paulo (cerca de 1,3 milhão de habitantes), a ~100 km da capital. É uma cidade universitária de verdade — além da Unicamp, tem PUC-Campinas, UNIP, São Leopoldo Mandic e várias outras faculdades, o que significa muita oferta de república estudantil, transporte, cursinho e vida de estudante em geral. Abaixo, um resumo dos bairros mais relevantes para o caso dele.</p>
+
+    <div class="addr-card">
+      <h4>🩺 Barão Geraldo — onde fica a Unicamp</h4>
+      <div class="addr-line"><b>Endereço:</b> Cidade Universitária "Zeferino Vaz", Distrito de Barão Geraldo, CEP 13083-970</div>
+      <div class="addr-line"><b>Distância:</b> ~12 km do centro de Campinas</div>
+      <div class="addr-line"><b>O que é:</b> Distrito praticamente dedicado à Unicamp — cheio de repúblicas estudantis, restaurantes baratos, bares, e um comércio voltado para estudante. É de longe a região mais comum para morar quem estuda na Unicamp, incluindo Medicina.</div>
+      <a class="maps-link" href="https://goo.gl/maps/1c8Nn7QqLZfNwYbT7" target="_blank">📍 Ver no Google Maps →</a>
+    </div>
+
+    <div class="addr-card">
+      <h4>🎓 Parque das Universidades / Swift — onde ficam PUC-Campinas (Campus I) e UNIP Medicina</h4>
+      <div class="addr-line"><b>PUC Campus I:</b> Rua Prof. Dr. Euryclides de Jesus Zerbini, 1516 — Pq. Rural Fazenda Santa Cândida</div>
+      <div class="addr-line"><b>UNIP Medicina:</b> Av. Comendador Enzo Ferrari, 280 — Swift</div>
+      <div class="addr-line"><b>O que é:</b> Região na zona sul/sudoeste de Campinas, relativamente próxima uma da outra (poucos km de distância), com bom comércio de bairro e fácil acesso por avenidas principais.</div>
+      <a class="maps-link" href="https://goo.gl/maps/Gk5cf7vq6zFxkTHB9" target="_blank">📍 Ver Campus I no Google Maps →</a>
+    </div>
+
+    <div class="addr-card">
+      <h4>🏥 Ponte Preta — onde fica a São Leopoldo Mandic</h4>
+      <div class="addr-line"><b>Endereço:</b> Rua da Abolição, 1827 — Ponte Preta, CEP 13041-445</div>
+      <div class="addr-line"><b>O que é:</b> Bairro central, tradicional, com o famoso estádio do Guarani (time de futebol local) como referência — fácil acesso ao centro da cidade.</div>
+      <a class="maps-link" href="https://www.google.com/maps/search/Rua+da+Aboli%C3%A7%C3%A3o+1827+Ponte+Preta+Campinas" target="_blank">📍 Ver no Google Maps →</a>
+    </div>
+
+    <div class="addr-card">
+      <h4>📚 Onde ficam os cursinhos</h4>
+      <div class="addr-line"><b>Poliedro:</b> unidades Centro e Taquaral</div>
+      <div class="addr-line"><b>Anglo:</b> unidade Galleria (região central)</div>
+      <div class="addr-line"><b>Oficina do Estudante e Elite Campinas:</b> concentrados na região central/Cambuí — vale confirmar o endereço exato da unidade mais próxima de onde a família for morar</div>
+      <div class="addr-line"><b>O que é:</b> os grandes cursinhos de Campinas ficam concentrados nas regiões central e Cambuí (bairro nobre, bem localizado) e Taquaral (perto de um parque bastante conhecido da cidade) — bem diferente de Barão Geraldo, então vale pensar no trajeto cursinho ↔ casa antes de escolher onde morar.</div>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">Dica prática</div>
+      <div>Como o cursinho normalmente fica longe de Barão Geraldo (onde ele provavelmente vai morar/estudar depois, se passar na Unicamp), vale considerar isso na escolha de moradia <strong>durante o período de cursinho</strong> — muita gente que faz cursinho em Campinas mora mais perto do centro/Cambuí/Taquaral nessa fase, e só pensa em Barão Geraldo depois de aprovado.</div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-icon">Vale saber</div>
+      <div>Campinas tem sistema de ônibus municipal (EMTU/Consórcio), mas para quem vem de fora a forma mais comum de locomoção do dia a dia costuma ser aplicativo de transporte ou bicicleta/patinete (Barão Geraldo é bem cicloviário). Recomendamos visitar a cidade com antecedência e passear pelos bairros acima antes de decidir onde morar.</div>
+    </div>
+  </section>
+
+  <!-- ── CURSINHOS ── -->
+  <section class="section" id="cursinhos">
+    <div class="section-header">
+      <div class="section-icon s-red">📚</div>
+      <div>
+        <div class="section-title">Cursinhos Preparatórios em Campinas</div>
+        <div class="section-desc">Comparativo de foco, aprovações divulgadas e modalidade</div>
+      </div>
+    </div>
+
+    <p>Os números de aprovação divulgados por cada cursinho são <strong>dados de marketing dos próprios cursinhos</strong>, não estatísticas oficiais da Comvest — use como indicativo de tradição, não como garantia.</p>
+
+    <div class="rank-card top1">
+      <div class="rank-num">1</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">🥇 Poliedro</span></div>
+        <div class="rank-foco">Rede grande (SP, Campinas, São José dos Campos) — unidades Centro e Taquaral em Campinas</div>
+        <div class="rank-aprov">📊 <strong>704 aprovações na Unicamp</strong> (rede), sendo <strong>46 em Medicina</strong>. Em 2026, <strong>55 das 128 vagas</strong> da 1ª chamada de Medicina da USP-Pinheiros eram de alunos Poliedro — os números mais concretos e específicos encontrados entre todos os cursinhos pesquisados.</div>
+        <div class="rank-tags"><span class="rank-tag">Presencial</span><span class="rank-tag">Online</span><span class="rank-tag">Turma de Medicina</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card top2">
+      <div class="rank-num">2</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">🥈 Oficina do Estudante</span></div>
+        <div class="rank-foco">Fundado em Campinas — forte tradição específica em aprovações na Unicamp</div>
+        <div class="rank-aprov">📊 Divulga listas extensas de aprovados por curso/universidade — <strong>209 aprovados</strong> só na 3ª chamada da Unicamp em uma única unidade. Número concreto, mas sem recorte específico por curso (Medicina) nesta pesquisa.</div>
+        <div class="rank-tags"><span class="rank-tag">Presencial</span><span class="rank-tag">Extensivo</span><span class="rank-tag">Semiextensivo</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card top3">
+      <div class="rank-num">3</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">🥉 Elite Campinas</span></div>
+        <div class="rank-foco">Se posiciona como o que mais aprova na Unicamp e USP da cidade; também funciona como colégio</div>
+        <div class="rank-aprov">📊 Publica painéis de aprovados por ano no site, mas sem números totais consolidados encontrados nesta pesquisa — a comparação direta com Poliedro/Oficina fica prejudicada por falta de dado agregado.</div>
+        <div class="rank-tags"><span class="rank-tag">Presencial</span><span class="rank-tag">Turma de Medicina</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">4</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Objetivo</span></div>
+        <div class="rank-foco">Tradição nacional; modalidades separadas por área (Medicina, Biológicas, Exatas, Humanas)</div>
+        <div class="rank-aprov">📊 Divulga aprovações amplas em vestibulares de elite, mas sem número específico de Unicamp/Medicina para a unidade de Campinas encontrado nesta pesquisa.</div>
+        <div class="rank-tags"><span class="rank-tag">Presencial</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">5</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Anglo</span></div>
+        <div class="rank-foco">Mais de 60 anos de tradição; também atua como colégio — unidade Galleria em Campinas</div>
+        <div class="rank-aprov">📊 Sem números específicos de aprovação em Medicina/Unicamp encontrados nesta pesquisa.</div>
+        <div class="rank-tags"><span class="rank-tag">Presencial</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">6</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Hexag / Hexag Online</span></div>
+        <div class="rank-foco">Especializado em preparação para Medicina (pública e privada)</div>
+        <div class="rank-aprov">📊 Divulga aprovações em Medicina nacionalmente, mas sem recorte específico de Unicamp encontrado — foco é mais amplo (Medicina em geral, não Unicamp especificamente).</div>
+        <div class="rank-tags"><span class="rank-tag">100% online</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">7</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Descomplica</span></div>
+        <div class="rank-foco">Turma específica preparatória para o Vestibular Unicamp, além de turma de Medicina</div>
+        <div class="rank-aprov">📊 Não localizamos números específicos de aprovação em Medicina/Unicamp nesta pesquisa.</div>
+        <div class="rank-tags"><span class="rank-tag">100% online</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">8</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">COC</span></div>
+        <div class="rank-foco">Rede tradicional nacional (60+ anos), presença em Campinas via escolas parceiras — menos voltado especificamente a Unicamp/Medicina</div>
+        <div class="rank-aprov">📊 Não localizamos números específicos de aprovação em Medicina/Unicamp para a unidade de Campinas.</div>
+        <div class="rank-tags"><span class="rank-tag">Presencial</span><span class="rank-tag">Escolas conveniadas</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">9</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Cooperativa do Saber / Cursinho Direcionado</span></div>
+        <div class="rank-foco">Cursinhos populares/sociais em Campinas, voltados a estudantes de baixa renda</div>
+        <div class="rank-aprov">📊 Sem dados de aprovação divulgados — e, pelo próprio perfil (foco social/renda), não é a opção mais alinhada ao caso dele.</div>
+        <div class="rank-tags"><span class="rank-tag">Presencial</span></div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-icon">Sobre o ranking</div>
+      <div>A ordem acima reflete a <strong>quantidade e concretude dos dados de aprovação divulgados</strong> por cada cursinho (Poliedro e Oficina do Estudante têm números específicos; os demais, claims genéricos ou sem dado). Isso não é uma avaliação de qualidade pedagógica — vale testar aula experimental antes de decidir, especialmente entre os 3 primeiros colocados.</div>
+    </div>
+
+    <h3 class="sub-title">Cursinhos 100% online com boas aprovações divulgadas</h3>
+    <p>Além de Hexag e Descomplica (já no ranking acima), pesquisamos outras opções 100% online que divulgam números de aprovação relevantes — úteis como reforço ou opção para quem quer estudar à distância enquanto ainda está em Poços de Caldas, antes da mudança.</p>
+
+    <div class="rank-card">
+      <div class="rank-num">💻</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Aprova Total</span></div>
+        <div class="rank-foco">Foco em Enem e vestibulares (Fuvest, Unesp, Unicamp, Uerj, UFRGS, UFSC e outros) — plano de estudos guiado</div>
+        <div class="rank-aprov">📊 Mais de <strong>18.492 alunos aprovados</strong> ao todo; em 2025, <strong>405 aprovados em Medicina</strong> pelo SiSU, com <strong>57 primeiros lugares</strong> e nota média de 767,87. Divulga também depoimentos específicos de aprovação na Unicamp.</div>
+        <div class="rank-tags"><span class="rank-tag">100% online</span><span class="rank-tag">Turma de Medicina</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">💻</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Kuadro</span></div>
+        <div class="rank-foco">Curso específico para vestibulares concorridos (Fuvest, Unicamp, Enem, particulares) — aulas ao vivo, monitoria e correção de redação</div>
+        <div class="rank-aprov">📊 Mais de <strong>400 aprovados</strong> nas melhores faculdades do país nos últimos 3 anos. Preço divulgado em torno de <strong>R$ 305</strong> (confirmar se é valor mensal ou de pacote) — tem 7 dias grátis para testar.</div>
+        <div class="rank-tags"><span class="rank-tag">100% online</span><span class="rank-tag">Aulas ao vivo</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">💻</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Bernoulli (trilha online)</span></div>
+        <div class="rank-foco">Rede nacional forte em aprovações de Medicina; tem módulo específico de "Revisão Unicamp" para a 2ª fase</div>
+        <div class="rank-aprov">📊 86 aprovações registradas em 2026 até o momento da pesquisa, mas a maior parte do histórico divulgado é mais forte em Minas Gerais/UFMG do que em Unicamp especificamente — vale conferir se a trilha online cobre bem o conteúdo específico da prova da Unicamp.</div>
+        <div class="rank-tags"><span class="rank-tag">100% online</span><span class="rank-tag">Também presencial (fora de Campinas)</span></div>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-num">💻</div>
+      <div>
+        <div class="rank-head"><span class="rank-name">Stoodi</span></div>
+        <div class="rank-foco">Plataforma de massa, foco mais amplo em Enem do que em vestibulares específicos como Unicamp</div>
+        <div class="rank-aprov">📊 Mais de 5 mil videoaulas; não localizamos números específicos de aprovação em Medicina/Unicamp. Plano gratuito limitado ou completo por ~R$ 39,90/mês — bom para reforço de conteúdo básico, mas provavelmente insuficiente como preparação principal para a Unicamp.</div>
+        <div class="rank-tags"><span class="rank-tag">100% online</span><span class="rank-tag">Mais barato</span></div>
+      </div>
+    </div>
+
+    <div class="nota-fonte">
+      Fontes (cursinhos online): <a href="https://aprovatotal.com.br/">Aprova Total</a> · <a href="https://aprovatotal.com.br/lp/medicina/">Aprova Total — Medicina</a> · <a href="https://www.pravaler.com.br/blog/vestibulares/melhores-cursinhos-pre-vestibular-para-medicina/">Pravaler — comparativo de cursinhos para Medicina</a> · <a href="https://www.bernoulli.com.br/pre-vestibular/cursos/salvador/revisao-unicamp/">Bernoulli — Revisão Unicamp</a> · <a href="https://descomplica.com.br/vestibulares/medicina/b/">Descomplica — Medicina</a>. Pesquisa: julho de 2026.
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">Sobre valores</div>
+      <div>Não localizamos tabelas de mensalidade públicas e confiáveis para os cursinhos presenciais (Oficina do Estudante, Elite, Poliedro, COC, Objetivo, Anglo) — a prática do setor é informar valores só mediante contato direto, e costumam oferecer bolsas de até 100% via provas de bolsa ou desempenho em vestibulares anteriores. Cursinhos online costumam ir de ~R$ 60 a R$ 400/mês. Recomendamos contato direto (telefone/WhatsApp/visita) para valores e para agendar uma prova de bolsa.</div>
+    </div>
+
+    <div class="nota-fonte">
+      Fontes: <a href="https://oficinadoestudante.com.br/">Oficina do Estudante</a> · <a href="https://elitecampinas.com.br/aprovacoes/">Elite Campinas — Aprovações</a> · <a href="https://cursopoliedro.com.br/blog/referencia-em-aprovacoes-unicamp-e-einstein/">Poliedro — aprovações Unicamp/Einstein</a> · <a href="https://cursopoliedro.com.br/curso/medicina/">Poliedro — Medicina</a> · <a href="https://coc.com.br/solucoes/pre-vestibular/">COC — Pré-Vestibular</a> · <a href="https://www.curso-objetivo.br/">Objetivo</a> · <a href="https://www.estudenoanglo.com.br/curso-pre-vestibular/">Anglo</a> · <a href="https://cursinhoparamedicina.com.br/">Hexag Medicina</a> · <a href="https://descomplica.com.br/vestibulares/unicamp/">Descomplica — Unicamp</a>. Pesquisa: julho de 2026.
+    </div>
+  </section>
+
+  <!-- ── CRONOGRAMA ── -->
+  <section class="section" id="cronograma">
+    <div class="section-header">
+      <div class="section-icon s-navy">🗓️</div>
+      <div>
+        <div class="section-title">Linha do Tempo Sugerida</div>
+        <div class="section-desc">Estrutura de planejamento — confirme as datas exatas de cada ciclo nos editais</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="periodo">Assim que a mudança para Campinas for definida</div>
+        <p>Visitar/testar os principais cursinhos (Oficina do Estudante, Elite Campinas, Poliedro) — muitos oferecem aula experimental e prova de bolsa. Decidir entre extensivo (2 anos) ou semiextensivo/intensivo (1 ano), conforme a fase de preparação em que ele já estiver.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="periodo">Início do ano letivo (fevereiro)</div>
+        <p>Matrícula no cursinho escolhido (aulas normalmente começam no início de fevereiro).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="periodo">Maio</div>
+        <p>Início do período de solicitação de isenção/redução da taxa de inscrição da Comvest (não se aplica pela renda, mas fique atento a outros critérios, como matrícula em curso pré-vestibular).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="periodo">Julho a setembro</div>
+        <p>Editais do Vestibular Unicamp e da PUC-Campinas costumam ser publicados. Abertura das inscrições para o Vestibular Unicamp, Enem-Unicamp (referência) e Vestibular PUC-Campinas.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="periodo">Setembro a outubro</div>
+        <p>Encerramento das inscrições da PUC-Campinas (vestibular próprio) e da Unicamp. Também é o período de inscrição no ENEM — útil como plano B para PUC-Campinas, SLMandic e demais faculdades privadas.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="periodo">Outubro a novembro</div>
+        <p>1ª fase do Vestibular Unicamp. Prova do Vestibular PUC-Campinas (fase única). Provas do ENEM (normalmente 2 domingos de novembro).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="periodo">Novembro/dezembro</div>
+        <p>2ª fase do Vestibular Unicamp (dois dias de provas dissertativas).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="periodo">Janeiro do ano seguinte</div>
+        <p>Divulgação do resultado da Unicamp (1ª chamada). Resultado do ENEM. Matrículas e chamadas de lista de espera em todas as instituições.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-title">Checklist prático</h3>
+    <ul class="checklist">
+      <li>Confirmar a data efetiva da mudança para Campinas e alinhar com o calendário letivo</li>
+      <li>Agendar provas de bolsa/testes em pelo menos 2-3 cursinhos antes de decidir</li>
+      <li>Cadastrar-se para receber notificações do site da Comvest e da PUC-Campinas sobre abertura de editais</li>
+      <li>Planejar também a inscrição no ENEM do ano do vestibular, como reforço para PUC-Campinas/SLMandic/UNIP</li>
+      <li>Reservar orçamento familiar considerando taxas de inscrição em múltiplos vestibulares — cada um tem taxa própria</li>
+    </ul>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="section" id="duvidas">
+    <div class="section-header">
+      <div class="section-icon s-gold">💬</div>
+      <div>
+        <div class="section-title">Dúvidas Frequentes</div>
+        <div class="section-desc">Respostas simples e diretas — sem jargão de vestibular</div>
+      </div>
+    </div>
+
+    <p>Perguntas básicas para quem está entrando nesse universo agora. Clique em cada uma para ver a resposta.</p>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Posso entrar na universidade por ENEM tendo renda familiar acima de 1,5 salário mínimo?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Sim, mas <strong>sem bolsa</strong>. A nota do ENEM pode ser usada em "ampla concorrência" (pagando a mensalidade normalmente, ou disputando vaga em universidade pública) mesmo com qualquer renda. O que muda com a renda é só o acesso a programas de bolsa como ProUni (renda até 1,5 ou 3 salários mínimos per capita) e FIES — esses sim, têm teto de renda. Ou seja: renda alta não impede de usar o ENEM, só impede de ganhar bolsa por critério social.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Qual a "média de aprovação" da Unicamp — dá pra saber se ele passa?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Não existe uma "média" que garanta aprovação — o vestibular é por <strong>classificação</strong>: passam os candidatos com as melhores notas, até preencher as vagas (85 vagas de Medicina em Campinas). Para se ter noção de dificuldade, em 2026 foram <strong>242 candidatos para cada vaga</strong> de Medicina — é o curso mais concorrido de toda a Unicamp. Não existe nota de corte fixa, ela muda a cada ano conforme o desempenho de todos os candidatos daquele ciclo.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Qual o período de inscrição do vestibular?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Cada instituição tem seu próprio período, e muda todo ano. Como referência do último ciclo (2026): Unicamp abriu inscrições em agosto e fechou em setembro; PUC-Campinas abriu inscrições e fechou em outubro. As datas exatas do ano em que ele vai prestar só saem perto da época — o ideal é acompanhar os sites oficiais (Comvest e Portal PUC-Campinas) a partir de julho do ano do vestibular.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Ele pode entrar no segundo semestre, sem esperar o ano todo?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Depende da instituição. A <strong>Unicamp só tem um vestibular por ano</strong>, com início das aulas em fevereiro/março (não existe entrada de Medicina no meio do ano). Já a <strong>PUC-Campinas oferece vestibular de Medicina duas vezes por ano</strong> — vagas para o 1º semestre e vagas para o 2º semestre — então ali é possível começar em agosto, por exemplo. Vale sempre confirmar no edital do ano, porque isso pode mudar.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>A Unicamp (ou outra universidade) aceita transferência de matrícula vinda de outra faculdade (ex: PUC Minas)?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Para Medicina, transferência entre faculdades é <strong>excepcionalmente difícil</strong> em qualquer universidade do Brasil — as vagas de Medicina são raríssimas e via de regra só existem por lei para casos específicos (ex: servidor público federal removido de cidade, ou vaga que abriu por desistência, através de "transferência ex officio" ou processos internos pontuais). Não é algo que se possa contar como plano — universidades como Unicamp e PUC-Campinas praticamente não abrem vaga de transferência externa para Medicina fora dessas exceções legais. O caminho realista continua sendo prestar vestibular normalmente.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Qual a diferença entre "vestibular próprio" e ENEM? Preciso fazer os dois?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>O <strong>vestibular próprio</strong> é uma prova organizada pela própria universidade (ex: Vestibular Unicamp, Vestibular PUC-Campinas) — cada uma tem sua prova, suas datas e seu processo. O <strong>ENEM</strong> é uma prova nacional única, feita pelo governo, cuja nota pode ser usada por várias faculdades diferentes (inclusive públicas, via Sisu). Como a Unicamp <strong>não aceita ENEM na ampla concorrência</strong> (só via Enem-Unicamp, que é restrito a quem fez todo o ensino médio em escola pública), o caminho dele para a Unicamp é só o vestibular próprio. Já para PUC-Campinas, SLMandic e UNIP, dá pra tentar tanto pelo vestibular próprio quanto pela nota do ENEM — vale fazer os dois como reforço.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>O que é "bolsa" — e por que ele não pode ganhar uma?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>"Bolsa" aqui geralmente quer dizer <strong>desconto na mensalidade de uma faculdade particular</strong>, concedido por programas como ProUni (governo federal) ou Vestibular Social (da própria PUC-Campinas). A grande maioria dessas bolsas exige <strong>renda familiar baixa</strong> (medida em salários mínimos por pessoa da família) — como não é o caso da família dele, essas bolsas por critério social não se aplicam. Existem também bolsas por <strong>mérito</strong> (nota alta no vestibular/ENEM, sem olhar renda) em algumas instituições — essas sim, valem a pena verificar caso a caso (ver tabelas de bolsas em cada seção).</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Precisa fazer cursinho, ou dá pra estudar sozinho?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Não é obrigatório — existem aprovados que estudaram sozinhos — mas para Medicina na Unicamp, com 242 candidatos por vaga, a <strong>grande maioria dos aprovados fez algum tipo de preparação estruturada</strong> (cursinho presencial, online, ou professores particulares). O cursinho ajuda principalmente com: cronograma de estudos, simulados no formato exato da prova, correção de redação, e o "efeito comunidade" de estar cercado de outros candidatos focados no mesmo objetivo. É um investimento que a maioria das famílias nessa posição faz.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Quanto custa fazer faculdade particular de Medicina, e dá pra financiar?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Na região de Campinas, as mensalidades de Medicina em faculdades particulares vão de aproximadamente <strong>R$ 10.000 a R$ 14.500 por mês</strong> (PUC-Campinas, UNIP e SLMandic) — é o curso mais caro que existe. Sim, dá para financiar parte disso via FIES (governo) ou financiadoras privadas como Pravaler, mas ambos têm juros e regras próprias — vale simular com calma antes de contar com essa opção. Por isso a Unicamp (gratuita, por ser pública) continua sendo, de longe, o objetivo mais vantajoso financeiramente.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Existe possibilidade de trancar a matrícula e voltar depois?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Sim, praticamente todas as universidades permitem "trancamento de matrícula" por um período (geralmente até 2 anos, variando por instituição), preservando a vaga do aluno. É diferente de desistir — o aluno volta exatamente de onde parou. Isso não é algo do processo de ingresso, mas sim uma regra acadêmica de cada universidade, que vale a pena confirmar com a secretaria de graduação já matriculado, se algum dia for necessário (ex: problema de saúde, mudança de cidade temporária, etc.).</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Qual a diferença entre a PUC-Campinas e a PUC de Poços de Caldas / PUC Minas?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>São <strong>instituições diferentes e independentes</strong>, apesar do nome parecido. A PUC de Poços de Caldas faz parte da rede da PUC Minas (Pontifícia Universidade Católica de Minas Gerais). A PUC-Campinas é outra instituição, ligada à Arquidiocese de Campinas, com reitoria, mantenedora, editais e processos seletivos totalmente próprios — não há relação de transferência automática ou reconhecimento direto entre elas. Ele vai precisar prestar o vestibular da PUC-Campinas como um candidato normal, do zero.</p></div>
+    </div>
+
+    <div class="faq-card" onclick="this.classList.toggle('open')">
+      <div class="faq-q"><h4>Ele precisa morar perto da faculdade, ou dá pra morar em qualquer bairro?</h4><svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+      <div class="faq-a"><p>Não é obrigatório, mas <strong>faz muita diferença na rotina</strong> — Medicina tem carga horária integral (manhã e tarde), então trajetos longos todo dia cansam bastante. Por isso a maioria dos estudantes de Unicamp mora em Barão Geraldo (bairro onde fica o campus) e a maioria dos estudantes da PUC-Campinas/UNIP busca morar nas regiões próximas ao Campus I/Swift. Ver a seção "Conhecendo Campinas" acima para mais detalhes de cada região.</p></div>
+    </div>
+
+    <div class="nota-fonte">
+      Respostas elaboradas a partir da pesquisa consolidada neste guia (Comvest, PUC-Campinas, SLMandic, UNIP) — em caso de dúvida sobre uma situação específica da família, vale confirmar diretamente com a secretaria de graduação da instituição.
+    </div>
+  </section>
+
+</div><!-- /main -->
+
+<!-- ── FOOTER ── -->
+<div class="footer-nav">
+  <div class="footer-text">Guia <span>Medicina Campinas 2026</span></div>
+  <div class="footer-sub">
+    Pesquisado em julho de 2026 · vagas, valores e datas mudam a cada ciclo — confirme sempre em <a href="https://www.comvest.unicamp.br/">Comvest/Unicamp</a> e <a href="https://vestibular.puc-campinas.edu.br/">Portal Vestibular PUC-Campinas</a>.
+  </div>
+</div>
+
+<script>
+// índice simples de palavras-chave por seção, para a busca apontar para o lugar certo
+const PAGES = [
+  {href:'#resumo', title:'Resumo Executivo', desc:'A rota mais realista, plano B, próximos passos', kw:'resumo rota realista plano b enem-unicamp bolsa renda próximos passos'},
+  {href:'#panorama', title:'Panorama das Faculdades', desc:'Comparativo geral de vagas, valores e formas de ingresso', kw:'panorama comparativo tabela vagas mensalidade valor concorrência unicamp puc slmandic unip'},
+  {href:'#unicamp', title:'Detalhamento Unicamp', desc:'Vestibular, datas, taxa, enem-unicamp, provão paulista', kw:'unicamp comvest vestibular fase data inscrição taxa enem-unicamp escola pública vagas olímpicas provão paulista mensalidade gratuita bolsa permanência'},
+  {href:'#puc', title:'Detalhamento PUC-Campinas', desc:'Vestibular próprio, ENEM, mensalidade, bolsas, prouni', kw:'puc-campinas puc campinas vestibular próprio enem mensalidade valor prouni fies vestibular social bolsa desconto irmão transferência puc minas poços'},
+  {href:'#outras', title:'Outras Opções na Região', desc:'São Leopoldo Mandic e UNIP — vagas, mensalidade, bolsas', kw:'são leopoldo mandic slmandic unip mensalidade bolsa desconto financiamento pravaler vagas endereço'},
+  {href:'#campinas', title:'Conhecendo Campinas', desc:'Bairros, endereços e como se localizar na cidade', kw:'campinas bairro endereço mapa barão geraldo ponte preta swift cambuí taquaral morar onde ficar transporte cidade'},
+  {href:'#cursinhos', title:'Cursinhos Preparatórios', desc:'Ranking com aprovações — presenciais e online', kw:'cursinho ranking poliedro oficina do estudante elite campinas objetivo anglo hexag descomplica aprova total kuadro bernoulli stoodi online aprovação bolsa'},
+  {href:'#cronograma', title:'Linha do Tempo Sugerida', desc:'Cronograma e checklist prático', kw:'cronograma linha do tempo data inscrição checklist quando prazo'},
+  {href:'#duvidas', title:'Dúvidas Frequentes', desc:'Perguntas básicas sobre vestibular, bolsa, transferência, período de inscrição', kw:'dúvida faq pergunta frequente renda enem transferência puc minas segundo semestre trancar matrícula financiar morar bolsa pontualidade desconto'},
+];
+
+function runSearch(term) {
+  const box = document.getElementById('searchResults');
+  if (!term) { box.classList.remove('show'); box.innerHTML = ''; return; }
+  const t = term.toLowerCase();
+  const results = PAGES.filter(p => (p.title + ' ' + p.desc + ' ' + p.kw).toLowerCase().includes(t));
+  box.innerHTML = '';
+  if (results.length === 0) {
+    box.innerHTML = '<div class="search-empty">Nenhum tema encontrado. Tente outra palavra.</div>';
+  } else {
+    results.forEach(p => {
+      const a = document.createElement('a');
+      a.className = 'search-result-item';
+      a.href = p.href;
+      a.innerHTML = `<div class="sr-title">${p.title}</div><div class="sr-desc">${p.desc}</div>`;
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector(p.href).scrollIntoView({behavior:'smooth', block:'start'});
+        box.classList.remove('show');
+        document.getElementById('searchInput').value = '';
+      });
+      box.appendChild(a);
+    });
+  }
+  box.classList.add('show');
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => runSearch(e.target.value.trim()));
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrap')) {
+    document.getElementById('searchResults').classList.remove('show');
+  }
+});
+</script>
+
+</body>
+</html>
